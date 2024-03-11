@@ -285,8 +285,7 @@ class _YearFiltreWidgetState extends State<YearFiltreWidget> {
                 border: Border.all(color: const Color(0xFFE5E5E7))),
             child: Row(
               children: [
-                Text(_btn3SelectedYear,
-                    style: const TextStyle(fontSize: 15)),
+                Text(_btn3SelectedYear, style: const TextStyle(fontSize: 15)),
                 const SizedBox(
                   width: 5,
                 ),
@@ -390,8 +389,7 @@ class _MonthFiltreWidgetState extends State<MonthFiltreWidget> {
                   var currentMonth0 = tableauBordController.currentMonth.value;
                   var showMonth =
                       tableauBordController.listMonth[currentMonth0 - 1];
-                  return Text(showMonth,
-                      style: const TextStyle(fontSize: 15));
+                  return Text(showMonth, style: const TextStyle(fontSize: 15));
                 }),
                 const SizedBox(
                   width: 5,

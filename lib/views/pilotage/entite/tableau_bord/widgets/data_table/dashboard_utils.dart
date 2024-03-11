@@ -203,9 +203,6 @@ class _ContentEditionState extends State<ContentEdition> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   showSnackBar(
                                       "Succès", message, Colors.green));
-                              /*
-                              tableauBordController.consolidation(
-                                  tableauBordController.currentYear.value);*/
                               tableauBordController.updateSuiviDate(
                                   tableauBordController.currentYear.value);
                             } else {

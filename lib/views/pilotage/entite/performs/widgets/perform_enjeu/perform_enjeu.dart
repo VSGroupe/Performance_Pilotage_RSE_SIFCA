@@ -25,7 +25,7 @@ class _PerformanceEnjeuxState extends State<PerformanceEnjeux> {
   final PerformsDataController performsDataController = Get.find();
   final EntitePilotageController entitePilotageController = Get.find();
 
-  void initialisation() async {
+  void initialisationPerformsEnjeux() async {
     final entiteID = entitePilotageController.currentEntite.value;
     final idPerformsA = "${entiteID}_${performsDataController.annee.value}";
     final idPerformsB = "${entiteID}_${performsDataController.annee.value - 1}";
@@ -116,7 +116,7 @@ class _PerformanceEnjeuxState extends State<PerformanceEnjeux> {
 
   @override
   void initState() {
-    initialisation();
+    initialisationPerformsEnjeux();
     super.initState();
   }
 

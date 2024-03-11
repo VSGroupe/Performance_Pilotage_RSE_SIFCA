@@ -25,7 +25,7 @@ class _PerformancePiliersState extends State<PerformancePiliers> {
   final EntitePilotageController entitePilotageController = Get.find();
   final PerformsDataController performsDataController = Get.find();
 
-  void initialisation() async {
+  void initialisationPerformsPiliers() async {
     final entiteID = entitePilotageController.currentEntite.value;
     final idPerformsA = "${entiteID}_${performsDataController.annee.value}";
     final idPerformsB = "${entiteID}_${performsDataController.annee.value - 1}";
@@ -80,7 +80,7 @@ class _PerformancePiliersState extends State<PerformancePiliers> {
 
   @override
   void initState() {
-    initialisation();
+    initialisationPerformsPiliers();
     super.initState();
   }
 

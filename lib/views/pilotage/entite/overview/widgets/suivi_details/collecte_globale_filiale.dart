@@ -30,11 +30,14 @@ class _CollecteGlobaleEntitesState extends State<CollecteGlobaleEntites> {
           await supabase.from('SuiviData').select().gte("annee", year - 1);
       final List entiteList =
           await supabase.from('Entites').select().eq("id_entite", entiteID);
+      //print(entiteList);
       final List affichageEnites = entiteList.first["filtre_entite_id"];
+      //print(affichageEnites);
       for (var kEniteId in affichageEnites) {
         Map<String, dynamic> doc = {"$year": 0, "${year - 1}": 0};
         final ligneAnneeN = suiviDocList.firstWhere((element) =>
             (element["annee"] == year && element["id_entite"] == kEniteId));
+        //print(ligneAnneeN);
         doc["nom"] = ligneAnneeN["nom_entite"];
         num percentage = (ligneAnneeN["indicateur_collectes"] /
             ligneAnneeN["indicateur_total"]);
@@ -55,6 +58,7 @@ class _CollecteGlobaleEntitesState extends State<CollecteGlobaleEntites> {
 
         kEntityInfos.add(doc);
       }
+      print(kEntityInfos);
     } catch (e) {
       setState(() {
         status = -1;
@@ -128,11 +132,11 @@ class _CollecteGlobaleEntitesState extends State<CollecteGlobaleEntites> {
       cells: [
         DataCell(Text(entityInfo["nom"])),
         DataCell(Text(
-          "${(entityInfo["2023"] * 100).toStringAsFixed(2)} %",
+          "${(entityInfo["${year - 1}"] * 100).toStringAsFixed(2)} %",
           style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: entityInfo["2023"] < 30
+              color: entityInfo["${year - 1}"] < 30
                   ? Colors.red
                   : entityInfo["${year - 1}"] < 60
                       ? Colors.yellow
@@ -141,11 +145,11 @@ class _CollecteGlobaleEntitesState extends State<CollecteGlobaleEntites> {
                           : Colors.blue),
         )),
         DataCell(Text(
-          "${(entityInfo["2024"] * 100).toStringAsFixed(2)} %",
+          "${(entityInfo["${year}"] * 100).toStringAsFixed(2)} %",
           style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: entityInfo["2024"] < 30
+              color: entityInfo["${year}"] < 30
                   ? Colors.red
                   : entityInfo["$year"] < 60
                       ? Colors.yellow

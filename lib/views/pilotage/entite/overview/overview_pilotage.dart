@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/views/pilotage/entite/overview/widgets/suivi_details/collectes_mensuelles.dart';
 import '../../../../constants/constant_double.dart';
 import '../../../../widgets/custom_text.dart';
 import 'widgets/suivi_details/collecte_globale_filiale.dart';
@@ -22,11 +23,13 @@ class OverviewPilotage extends StatelessWidget {
           ],
         )),
         SizedBox(width: defaultPadding),
-        SizedBox(width: 320,height: 400,child: Column(
+        SizedBox(width: 320,height: 800,child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomText(text: "Progrès de collecte",weight: FontWeight.bold,),
             SizedBox(height: defaultPadding),
+            CollecteMensuelleEntites(),
+            //SizedBox(height: defaultPadding),
             CollecteGlobaleEntites()
           ],
         ),),

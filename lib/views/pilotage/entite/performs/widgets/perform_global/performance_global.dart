@@ -23,7 +23,7 @@ class _PerformanceGlobaleState extends State<PerformanceGlobale> {
   final PerformsDataController performsDataController = Get.find();
   final EntitePilotageController entitePilotageController = Get.find();
 
-  void initialisation() async {
+  void initialisationPerformsGlobal() async {
     final entiteID = entitePilotageController.currentEntite.value;
     final idPerformGlobal = "${entiteID}_${performsDataController.annee.value}";
     final List responsePerforms =
@@ -91,7 +91,7 @@ class _PerformanceGlobaleState extends State<PerformanceGlobale> {
   // }
   @override
   void initState() {
-    initialisation();
+    initialisationPerformsGlobal();
     super.initState();
   }
 

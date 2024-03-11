@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/views/pilotage/controllers/drop_down_controller.dart';
+import 'package:perf_rse/views/pilotage/controllers/tableau_controller.dart';
 import '../../../../helper/helper_methods.dart';
 import '../../../../widgets/privacy_widget.dart';
 import 'perform_pilotage.dart';
@@ -18,6 +20,8 @@ class _ScreenPilotagePerformState extends State<ScreenPilotagePerform> {
   //bool _isLoaded = false;
   final PerformsDataController performsDataController =
       Get.put(PerformsDataController());
+  final tableauBordController = Get.put(TableauBordController());
+  //final dropDownController = Get.put(DropDownController());
 
   void loadScreen() async {
     performsDataController.isLoading.value = true;
@@ -27,11 +31,16 @@ class _ScreenPilotagePerformState extends State<ScreenPilotagePerform> {
     //   _isLoaded = true;
     // });
   }
+  //ajout
+  // void initIndicateurScreen() async {
+  //   tableauBordController.initialisation(context);
+  // }
 
   @override
   void initState() {
     super.initState();
     loadScreen();
+    //initIndicateurScreen();
   }
 
   @override
@@ -61,21 +70,23 @@ class _ScreenPilotagePerformState extends State<ScreenPilotagePerform> {
               ),
               isLoading
                   ? Expanded(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Center(child: loadingPageWidget(),)
+                      child: Column(
+                        children: [
+                          Expanded(
+                              child: Center(
+                            child: loadingPageWidget(),
+                          )),
+                          const SizedBox(
+                            height: 10,
                           ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const PrivacyWidget(),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ],
+                          const PrivacyWidget(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
                       ),
-                    ) : const Expanded(
+                    )
+                  : const Expanded(
                       child: Column(
                         children: [
                           Expanded(child: PerformPilotage()),

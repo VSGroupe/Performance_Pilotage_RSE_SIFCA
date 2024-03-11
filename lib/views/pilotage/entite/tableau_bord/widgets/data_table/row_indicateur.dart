@@ -294,20 +294,46 @@ class _RowIndicateurState extends State<RowIndicateur> {
                         ),
                         fillColor: MaterialStateProperty.resolveWith((states) =>
                             valide == true ? Colors.green : Colors.transparent),
-                        onChanged: (valeur == null || valide == true)
+                        onChanged: (valeur == null)
                             ? null
                             : (value) async {
-                                setState(() {
-                                  isValidatingRealise = true;
-                                });
-                                final validation = value;
-                                if (validation != null) {
-                                  await validerIndicateur(
-                                      validation,
-                                      valeur,
-                                      widget.indicateur.numero - 1,
-                                      0,
-                                      widget.indicateur.reference);
+                                final acces = await checkAccesValidation();
+                                if (acces) {
+                                  var validation = value;
+                                  if (validation == true) {
+                                    await validerIndicateur(
+                                        validation!,
+                                        valeur,
+                                        widget.indicateur.numero - 1,
+                                        0,
+                                        widget.indicateur.reference);
+                                    tableauBordController.consolidation(
+                                        tableauBordController
+                                            .currentYear.value);
+                                    setState(() {
+                                      isValidatingRealise = true;
+                                    });
+                                  }
+                                  if (validation == false) {
+                                    await annulerValidationIndic(
+                                        validation!,
+                                        widget.indicateur.numero - 1,
+                                        0,
+                                        widget.indicateur.reference);
+                                    tableauBordController.consolidation(
+                                        tableauBordController
+                                            .currentYear.value);
+                                    await tableauBordController
+                                        .updateDataIndicateur();
+                                    setState(() {
+                                      isValidatingRealise = true;
+                                      valide = false;
+                                      valideState = true;
+                                    });
+                                  }
+                                } else {
+                                  _showMyDialog(
+                                      "Vous n'avez pas dorit a cette action");
                                 }
                                 await Future.delayed(
                                     const Duration(seconds: 1));
@@ -585,6 +611,9 @@ class _RowIndicateurState extends State<RowIndicateur> {
                                               widget.indicateur.numero - 1,
                                               currentMonth,
                                               widget.indicateur.reference);
+                                          tableauBordController.consolidation(
+                                        tableauBordController
+                                            .currentYear.value);
                                           setState(() {
                                             isValidatingMonth = true;
                                           });
@@ -595,7 +624,11 @@ class _RowIndicateurState extends State<RowIndicateur> {
                                               widget.indicateur.numero - 1,
                                               currentMonth,
                                               widget.indicateur.reference);
-                                          await tableauBordController.updateDataIndicateur();
+                                            tableauBordController.consolidation(
+                                        tableauBordController
+                                            .currentYear.value);
+                                          await tableauBordController
+                                              .updateDataIndicateur();
                                           setState(() {
                                             isValidatingMonth = false;
                                             valide = false;
