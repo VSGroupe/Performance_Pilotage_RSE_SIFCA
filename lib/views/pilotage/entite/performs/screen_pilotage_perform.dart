@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:perf_rse/views/pilotage/controllers/drop_down_controller.dart';
-import 'package:perf_rse/views/pilotage/controllers/tableau_controller.dart';
 import '../../../../helper/helper_methods.dart';
 import '../../../../widgets/privacy_widget.dart';
 import 'perform_pilotage.dart';
@@ -20,27 +18,17 @@ class _ScreenPilotagePerformState extends State<ScreenPilotagePerform> {
   //bool _isLoaded = false;
   final PerformsDataController performsDataController =
       Get.put(PerformsDataController());
-  final tableauBordController = Get.put(TableauBordController());
-  //final dropDownController = Get.put(DropDownController());
 
   void loadScreen() async {
     performsDataController.isLoading.value = true;
     await Future.delayed(const Duration(seconds: 2));
     performsDataController.isLoading.value = false;
-    // setState(() {
-    //   _isLoaded = true;
-    // });
   }
-  //ajout
-  // void initIndicateurScreen() async {
-  //   tableauBordController.initialisation(context);
-  // }
 
   @override
   void initState() {
     super.initState();
     loadScreen();
-    //initIndicateurScreen();
   }
 
   @override
@@ -90,7 +78,6 @@ class _ScreenPilotagePerformState extends State<ScreenPilotagePerform> {
                       child: Column(
                         children: [
                           Expanded(child: PerformPilotage()),
-                          //Expanded(child: Container()),
                           SizedBox(
                             height: 10,
                           ),

@@ -28,7 +28,7 @@ class _ScreenOverviewPilotageState extends State<ScreenOverviewPilotage> {
   void loadScreen() async {
     final annee = DateTime.now().year;
     final entite = entitePilotageController.currentEntite.value;
-    apiClient.updateSuiviDataEntite(entite,annee);
+    apiClient.updateSuiviDataEntite(entite,annee, null, null, null);
     setState(() {
       _isLoaded = true;
     });

@@ -30,6 +30,12 @@ class _InfosPiloteState extends State<InfosPilote> {
   late String entite;
   late String filiale;
 
+String concatenationListe(List liste) {
+  List<String> strings = liste.map((e) => e.toString()).toList();
+  return strings.join(", ");
+}
+
+
   void initialisation() {
 
     nomTextEditingController.text = profilController.userModel.value.nom;
@@ -42,8 +48,8 @@ class _InfosPiloteState extends State<InfosPilote> {
     fonctionTextEditingController.text = profilController.userModel.value.fonction ?? "";
     paysTextEditingController.text = profilController.userModel.value.pays ?? "";
 
-    entite = profilController.accesPilotageModel.value.nomEntite ??"" ;
-    filiale = profilController.userModel.value.entreprise ?? "";
+    entite = concatenationListe(profilController.accesPilotageModel.value.nomEntite!);
+    filiale = concatenationListe(profilController.userModel.value.entreprise!);
   }
 
 

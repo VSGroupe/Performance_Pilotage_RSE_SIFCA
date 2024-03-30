@@ -17,7 +17,6 @@ class ListeContributeur extends StatefulWidget {
 }
 
 class _ListeContributeurState extends State<ListeContributeur> {
-
   final OverviewPilotageController overviewPilotageController = Get.find();
 
   void loading() async {
@@ -34,11 +33,13 @@ class _ListeContributeurState extends State<ListeContributeur> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 3,
-      shape : RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Obx(() {
-        final List<ContributeurModel> contributeurs = overviewPilotageController.contributeurs;
+        final List<ContributeurModel> contributeurs =
+            overviewPilotageController.contributeurs;
+        //print(contributeurs);
         return Container(
           padding: const EdgeInsets.all(defaultPadding),
           decoration: const BoxDecoration(
@@ -59,49 +60,57 @@ class _ListeContributeurState extends State<ListeContributeur> {
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.symmetric(
                         horizontal: defaultPadding * 1.5,
-                        vertical:
-                        defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
+                        vertical: defaultPadding /
+                            (Responsive.isMobile(context) ? 2 : 1),
                       ),
                     ),
                     onPressed: () {
-                      context.go("/pilotage/espace/sucrivoire-siege/admin",extra: "Contributeurs");
+                      context.go("/pilotage/espace/sucrivoire-siege/admin",
+                          extra: "Contributeurs");
                     },
                     icon: const Icon(Icons.add),
                     label: const Text("Ajouter"),
                   )
                 ],
               ),
-              contributeurs.isEmpty ? const SizedBox(
-                width: double.infinity,
-                height: 270,
-                child: Center(child: SizedBox(width: 50,height: 50,
-                child: CircularProgressIndicator(),)),
-              ) :
-              SizedBox(
-                width: double.infinity,
-                height : 400,
-                child:  DataTable(
-                    columnSpacing: 12,
-                    horizontalMargin: 12,
-                    columns: const [
-                      DataColumn(
-                        label: Text("Nom"),
-                      ),
-                      DataColumn(
-                        label: Text("Filiale"),
-                      ),
-                      DataColumn(
-                        label: Text("Entité"),
-                      ),
-                      DataColumn(
-                        label: Text("Accès"),
-                      ),
-                    ],
-                    rows: List.generate(
-                      contributeurs.length, (index) => contributeursDataRow(contributeurs[index],colors[index%8]),
+              contributeurs.isEmpty
+                  ? const SizedBox(
+                      width: double.infinity,
+                      height: 270,
+                      child: Center(
+                          child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: CircularProgressIndicator(),
+                      )),
                     )
-                ),
-              )
+                  : SizedBox(
+                      width: double.infinity,
+                      height: 400,
+                      child: DataTable(
+                          columnSpacing: 12,
+                          horizontalMargin: 12,
+                          columns: const [
+                            DataColumn(
+                              label: Text("Nom"),
+                            ),
+                            // DataColumn(
+                            //   label: Text("Filiale"),
+                            // ),
+                            DataColumn(
+                              label: Text("Entité"),
+                            ),
+                            // DataColumn(
+                            //   label: Text("Accès"),
+                            // ),
+                            DataColumn(label: Text("Processus"),),
+                          ],
+                          rows: List.generate(
+                            contributeurs.length,
+                            (index) => contributeursDataRow(
+                                contributeurs[index], colors[index % 8]),
+                          )),
+                    )
             ],
           ),
         );
@@ -120,7 +129,7 @@ class _ListeContributeurState extends State<ListeContributeur> {
     Colors.deepPurple
   ];
 
-  DataRow contributeursDataRow(ContributeurModel fileInfo,Color color) {
+  DataRow contributeursDataRow(ContributeurModel fileInfo, Color color) {
     return DataRow(
       cells: [
         DataCell(
@@ -133,23 +142,25 @@ class _ListeContributeurState extends State<ListeContributeur> {
                   shape: BoxShape.circle,
                   color: color,
                 ),
-                child: Center(child: Text("${fileInfo.prenom[0].toUpperCase()}${fileInfo.nom[0].toUpperCase()}",
-                style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)),
+                child: Center(
+                    child: Text(
+                  "${fileInfo.prenom[0].toUpperCase()}${fileInfo.nom[0].toUpperCase()}",
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                )),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text("${fileInfo.prenom} ${fileInfo.nom}") ,
+                child: Text("${fileInfo.prenom} ${fileInfo.nom}"),
               ),
             ],
           ),
         ),
-        DataCell(Text(fileInfo.filiale)),
+        //DataCell(Text(fileInfo.filiale)),
         DataCell(Text(fileInfo.entite)),
-        DataCell(Text(fileInfo.access)),
+        //DataCell(Text(fileInfo.access)),
+        DataCell(Text(fileInfo.processus)),
       ],
     );
   }
 }
-
-
-

@@ -12,7 +12,7 @@ class DataBaseController {
   final supabase = Supabase.instance.client;
 
   static const baseUrl =
-      "http://127.0.0.1:4444"; //"http://127.0.0.1:4444";//"https://test-api-rse.onrender.com" ;
+      "http://127.0.0.1:4444"; //"https://test-api-rse.onrender.com" ;
 
   Future<List<IndicateurModel>> getAllIndicateur() async {
     final List<dynamic> docs = await supabase
@@ -57,41 +57,13 @@ class DataBaseController {
           valeurs: data["valeurs"],
           validations: data["validations"],
           ecarts: data["ecarts"],
-          cibles: data["cibles"]);
-      // if (result.ecarts.isEmpty) {
-      //   result.ecarts = List.generate(280, (_) => null);
-      // }
-      // if (result.cibles.isEmpty){
-      //   result.cibles = List.generate(280, (_) => null);
-      // }
+          cibles: data["cibles"],
+          statusEntity: data["status_entity"]);
       return result;
     } catch (e) {
       return DataIndicateurRowModel.init();
     }
   }
-
-  // Future<EntityPerfomsModel> getEntityPerforms(String idDataIndicateur) async {
-  //   try {
-  //     final List<dynamic> datas = await supabase
-  //         .from('Performance')
-  //         .select()
-  //         .eq('id', idDataIndicateur);
-
-  //     if (datas.isEmpty) {
-  //       return EntityPerfomsModel.init();
-  //     }
-
-  //     final data = datas[0];
-  //     final result = EntityPerfomsModel(
-  //         entite: data["entite"],
-  //         annee: data["annee"],
-  //         performsPiliers: data["performsPiliers"],
-  //         performsEnjeux: data["performsEnjeux"]);
-  //     return result;
-  //   } catch (e) {
-  //     return EntityPerfomsModel.init();
-  //   }
-  // }
 
   Future<bool> updateAPIDatabase(String id) async {
     final Map<String, dynamic> data = {"id": id};
@@ -114,10 +86,14 @@ class DataBaseController {
     }
   }
 
-  Future<bool> updateSuiviDataEntite(String entite, int annee) async {
+  Future<bool> updateSuiviDataEntite(String entite, int annee,
+      String? processus, int? numeroLigne, int? colonne) async {
     final Map<String, dynamic> data = {
       "entite": entite,
       "annee": annee,
+      "processus": processus,
+      "numeroLigne": numeroLigne,
+      "colonne": colonne,
     };
 
     const String apiUrl = "$baseUrl/data-entite-suivi";

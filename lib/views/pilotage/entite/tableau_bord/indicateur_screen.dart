@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/views/pilotage/controllers/profil_pilotage_controller.dart';
 import '../../../../widgets/privacy_widget.dart';
 import '../../controllers/drop_down_controller.dart';
 import '../../controllers/side_menu_controller.dart';
@@ -19,9 +20,9 @@ class IndicateurScreen extends StatefulWidget {
 }
 
 class _IndicateurScreenState extends State<IndicateurScreen> {
-
   final tableauBordController = Get.put(TableauBordController());
   final DropDownController dropDownController = Get.find();
+  final ProfilPilotageController profilPilotageController = Get.find();
 
   final SideMenuController sideMenuController = Get.find();
 
@@ -37,6 +38,9 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool acces = profilPilotageController.accesPilotageModel.value.estAdmin!;
+    List<String>? processUser =
+        profilPilotageController.accesPilotageModel.value.processus!;
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.only(top: 16, left: 10),
@@ -68,33 +72,49 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
                         color: Color(0xFF3C3D3F),
                         fontWeight: FontWeight.bold),
                   ),
-                  Expanded(child: Container(child:  const FiltreTableauBord(),)),
-                  const SizedBox(width: 10,)
+                  const Expanded(
+                      child: FiltreTableauBord()),
+                  const SizedBox(
+                    width: 10,
+                  )
                 ],
               ),
             ),
             //const SizedBox(height: 5),
-            Expanded(child: Column(
+            Expanded(
+                child: Column(
               children: [
                 const CollecteStatus(),
                 const DashBoardHeader(),
                 Expanded(
                     child: Column(
-                      children: [
-                        Obx((){
-                          final isLoading = tableauBordController.isLoading.value;
-                          final status = tableauBordController.statusIntialisation.value;
-                          tableauBordController.filtreListApparente();
-                          return Expanded(
-                              child: Container(child: isLoading ? loadingWidget() : status ? DashBoardListView(indicateurs: tableauBordController.indicateursListApparente)
-                                : const Center(child: Text("Acunnes données")),));
-                        }),
-                        const SizedBox(height: 10),
-                        const PrivacyWidget(),
-                        const SizedBox(height: 10)
-                      ],
-                    )
-                )
+                  children: [
+                    Obx(() {
+                      final isLoading = tableauBordController.isLoading.value;
+                      final status =
+                          tableauBordController.statusIntialisation.value;
+                      if (profilPilotageController
+                          .accesPilotageModel.value.estAdmin!) {
+                        tableauBordController.filtreListApparente();
+                      } else {
+                        tableauBordController.filtreListApparenteOtherUser();
+                      }
+                      return Expanded(
+                          child: Container(
+                        child: isLoading
+                            ? loadingWidget()
+                            : status
+                                ? DashBoardListView(
+                                    indicateurs: tableauBordController
+                                        .indicateursListApparente)
+                                : const Center(child: Text("Acunnes données")),
+                      ));
+                    }),
+                    const SizedBox(height: 10),
+                    const PrivacyWidget(),
+                    const SizedBox(height: 10)
+                  ],
+                ))
               ],
             ))
           ],
@@ -102,6 +122,7 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
       ),
     );
   }
+
 
   Widget loadingWidget() {
     return const Center(
@@ -114,19 +135,14 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
               child: CircularProgressIndicator(
                 color: Colors.grey,
                 strokeWidth: 4,
-              )
-          ),
+              )),
           SizedBox(
               height: 30,
               width: 30,
               child: CircularProgressIndicator(
-                  color: Colors.amber,
-                  strokeWidth: 4
-              )
-          ),
+                  color: Colors.amber, strokeWidth: 4)),
         ],
       ),
     );
   }
-
 }

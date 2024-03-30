@@ -8,7 +8,7 @@ class UserModel {
   String? accesPilotage;
   String? accesEvaluation;
   String? fonction;
-  String? entreprise;
+  List<String>? entreprise;
   String? langue;
   String? addresse;
   String? ville;
@@ -51,7 +51,7 @@ class UserModel {
     accesPilotage: json["acces_pilotage"],
     accesEvaluation: json["acces_evaluation"],
     fonction: json["fonction"],
-    entreprise: json["entreprise"],
+    entreprise: List<String>.from(json["entreprise"].map((x) => x)),
     langue: json["langue"],
     addresse: json["addresse"],
     ville: json["ville"],

@@ -8,7 +8,7 @@ import '../../../models/pilotage/acces_pilotage_model.dart';
 class ProfilPilotageController extends GetxController{
 
   var userModel= UserModel(email:"").obs;
-  var accesPilotageModel= AccesPilotageModel(email:"").obs;
+  var accesPilotageModel= AccesPilotageModel(email:"", entite: []).obs;
   final storage = const FlutterSecureStorage();
   final supabase = Supabase.instance.client;
 

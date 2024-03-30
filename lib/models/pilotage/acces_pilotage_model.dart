@@ -2,16 +2,16 @@ import 'dart:convert';
 
 class AccesPilotageModel {
   String? email;
-  String? entite;
-  String? nomEntite;
-  String? processus;
+  List<String>? entite;
+  List<String>? nomEntite;
+  List<String>? processus;
   bool? estSpectateur;
   bool? estEditeur;
   bool? estValidateur;
   bool? estAdmin;
   bool? estBloque;
   int? niveauAdmin;
-  List<dynamic>? restrictions;
+  List<String>? restrictions;
 
   AccesPilotageModel({
     this.email,
@@ -33,16 +33,16 @@ class AccesPilotageModel {
 
   factory AccesPilotageModel.fromJson(Map<dynamic, dynamic> json) => AccesPilotageModel(
     email: json["email"],
-    entite: json["entite"],
-    nomEntite: json["nom_entite"],
-    processus: json["processus"].toString(),
+    entite: List<String>.from(json["entite"].map((x) => x)), //json["entite"]
+    nomEntite: List<String>.from(json["nom_entite"].map((x) => x)), //
+    processus: List<String>.from(json["processus"].map((x) => x)),
     estSpectateur: json["est_spectateur"],
     estEditeur: json["est_editeur"],
     estValidateur: json["est_validateur"],
     estAdmin: json["est_admin"],
     estBloque: json["est_bloque"],
     niveauAdmin: json["niveau_admin"],
-    restrictions: List<dynamic>.from(json["restrictions"].map((x) => x)
+    restrictions: List<String>.from(json["restrictions"].map((x) => x)
     ),
   );
 

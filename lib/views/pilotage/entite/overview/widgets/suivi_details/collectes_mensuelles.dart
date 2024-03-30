@@ -56,6 +56,7 @@ class _CollecteMensuelleEntites extends State<CollecteMensuelleEntites> {
 
           kEntityInfos.add(doc);
         }
+        //print(kEntityInfos);
       } else {
         last_month = 12;
 
@@ -82,6 +83,7 @@ class _CollecteMensuelleEntites extends State<CollecteMensuelleEntites> {
           kEntityInfos.add(doc);
         }
       }
+      //print("Hello");
     } catch (e) {
       setState(() {
         status = -1;

@@ -122,7 +122,7 @@ class _ContentEditionState extends State<ContentEdition> {
                 SizedBox(
                   width: 20,
                 ),
-                Text("Echec lor de l'édition")
+                Text("Echec lors de l'édition")
               ],
             ),
           );
@@ -204,7 +204,7 @@ class _ContentEditionState extends State<ContentEdition> {
                                   showSnackBar(
                                       "Succès", message, Colors.green));
                               tableauBordController.updateSuiviDate(
-                                  tableauBordController.currentYear.value);
+                                  tableauBordController.currentYear.value, widget.indicator.processus, widget.indicator.numero - 1, widget.colonne);
                             } else {
                               var message =
                                   "La donnée n'a pas été mise à jour.";

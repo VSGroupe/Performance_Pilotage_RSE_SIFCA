@@ -38,20 +38,42 @@ class _LoginPageState extends State<LoginPage> {
   bool onLogging = false;
   bool isLogging = false;
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   Future trackUserLogin(String email) async {
     try {
       final ipAddress = await Ipify.ipv4();
       final localisation = await getCountryCityFromIP(ipAddress);
 
-      await supabase.from('Historiques').insert(
-          {
-            'action': 'Connexion', 'user': email,
-            "ip":ipAddress,"localisation":localisation
-          }
-      );
+      await supabase.from('Historiques').insert({
+        'action': 'Connexion',
+        'user': email,
+        "ip": ipAddress,
+        "localisation": localisation
+      });
     } catch (e) {
-      return ;
+      return;
     }
+  }
+  // firstConnexion
+  /**
+final data = await supabase
+  .from('countries')
+  .select()
+  .ilike('name', '%alba%'); */
+
+  Future countConnexion(String email) async {
+    final responseCountConnexion = await supabase
+        .from('Historiques')
+        .select('Action')
+        .ilike('Action', '%connexion%')
+        .eq('user', email);
+    print(responseCountConnexion);
   }
 
   void login(BuildContext context) async {
@@ -85,7 +107,8 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {
           isLoadedPage = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Echec", message, Colors.red));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(showSnackBar("Echec", message, Colors.red));
       }
     } on Exception {
       const message = "Vos identifiants sont incorrects";
@@ -93,15 +116,16 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isLoadedPage = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Echec", message, Colors.red));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(showSnackBar("Echec", message, Colors.red));
     }
   }
 
   @override
   void initState() {
+    super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-
 
     supabase.auth.onAuthStateChange.listen((data) {
       final AuthChangeEvent event = data.event;
@@ -110,10 +134,9 @@ class _LoginPageState extends State<LoginPage> {
       });
       print(event.name);
       if (session == "passwordRecovery") {
-        context.go("/account/change-password",extra:"passowrdRecovery");
+        context.go("/account/change-password", extra: "passowrdRecovery");
       }
     });
-    super.initState();
   }
 
   @override
@@ -127,7 +150,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height.roundToDouble();
     double width = MediaQuery.of(context).size.width.roundToDouble();
-    return Scaffold(body: Column(
+    return Scaffold(
+        body: Column(
       children: [
         Expanded(
           child: Container(
@@ -137,52 +161,51 @@ class _LoginPageState extends State<LoginPage> {
                     image: AssetImage(
                       "assets/images/fond_accueil.jpg",
                     ),
-                    fit: BoxFit.fill)
-            ),
+                    fit: BoxFit.fill)),
             child: Row(
               children: [
                 Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 150,
-                          width: 300,
-                          child: Image.asset(
-                            "assets/logos/perf_rse.png",
-                            height: 150,
-                          ),
-                        ),
-                         const SizedBox(
-                          height: 20,
-                        ),
-                        Image.network(
-                          "https://djlcnowdwysqbrggekme.supabase.co/storage/v1/object/public/Images/image_accueil.png",
-                          height: 350,
-                        ),
-                        const SizedBox(
-                          height:  20,
-                        ),
-                        RichText(
-                          text:  const TextSpan(
-                              text: "",
-                              style: TextStyle(
-                                  fontSize:  30,
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF6E4906)),
-                              children: <TextSpan>[
-                                TextSpan(
-                                    text: "Performance ",
-                                    style: TextStyle(color: Color(0xFF2A9836))),
-                                TextSpan(
-                                    text: "RSE",
-                                    style: TextStyle(color: Color(0xFF0F70B7))),
-                                TextSpan(
-                                    text: ", pilotez votre stratégie de développement durable en toute simplicité. "
-                                ),
-                              ]),
-                        )
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 150,
+                      width: 300,
+                      child: Image.asset(
+                        "assets/logos/perf_rse.png",
+                        height: 150,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Image.network(
+                      "https://djlcnowdwysqbrggekme.supabase.co/storage/v1/object/public/Images/image_accueil.png",
+                      height: 350,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    RichText(
+                      text: const TextSpan(
+                          text: "",
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF6E4906)),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: "Performance ",
+                                style: TextStyle(color: Color(0xFF2A9836))),
+                            TextSpan(
+                                text: "RSE",
+                                style: TextStyle(color: Color(0xFF0F70B7))),
+                            TextSpan(
+                                text:
+                                    ", pilotez votre stratégie de développement durable en toute simplicité. "),
+                          ]),
+                    )
                   ],
                 )),
                 Expanded(
@@ -198,11 +221,11 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(
-                          height:  20,
+                          height: 20,
                         ),
                         SizedBox(
                           width: 400,
-                          height:  450,
+                          height: 450,
                           child: Card(
                             elevation: 10,
                             shape: RoundedRectangleBorder(
@@ -236,11 +259,13 @@ class _LoginPageState extends State<LoginPage> {
                                           },
                                           decoration: InputDecoration(
                                               hintText: "Courriel",
-                                              prefixIcon: const Icon(Icons.person),
+                                              prefixIcon:
+                                                  const Icon(Icons.person),
                                               contentPadding:
                                                   const EdgeInsets.only(
                                                       left: 20.0, right: 20.0),
-                                              border: const OutlineInputBorder(),
+                                              border:
+                                                  const OutlineInputBorder(),
                                               focusedBorder: OutlineInputBorder(
                                                   borderSide: BorderSide(
                                                       color: Theme.of(context)
@@ -256,7 +281,8 @@ class _LoginPageState extends State<LoginPage> {
                                           controller: _passwordController,
                                           validator: (value) {
                                             if (value == null ||
-                                                value.isEmpty || value.length < 8) {
+                                                value.isEmpty ||
+                                                value.length < 8) {
                                               return 'Le mot de passe doit avoir au moins de 8 caractères.';
                                             }
                                             return null;
@@ -273,8 +299,8 @@ class _LoginPageState extends State<LoginPage> {
                                                     : Icons.visibility_off),
                                               ),
                                               hintText: "Mot de passe",
-                                              prefixIcon:
-                                                  const Icon(Icons.vpn_key_sharp),
+                                              prefixIcon: const Icon(
+                                                  Icons.vpn_key_sharp),
                                               contentPadding:
                                                   const EdgeInsets.only(
                                                       left: 20.0, right: 20.0),
@@ -302,7 +328,8 @@ class _LoginPageState extends State<LoginPage> {
                                           onPressed: isLoadedPage
                                               ? null
                                               : () async {
-                                                  if (_formKey.currentState!.validate()) {
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
                                                     login(context);
                                                   }
                                                 },

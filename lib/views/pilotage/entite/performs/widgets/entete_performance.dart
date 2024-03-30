@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:perf_rse/views/pilotage/controllers/drop_down_controller.dart';
 import 'package:perf_rse/views/pilotage/controllers/tableau_controller.dart';
 import 'package:perf_rse/widgets/menu_deroulant.dart';
-import 'package:perf_rse/views/pilotage/entite/performs/widgets/perform_global/performance_global.dart';
 
 import '../../../../../constants/constant_colors.dart';
 import '../../../../../widgets/custom_text.dart';
 import '../../../../../widgets/unimpleted_widget.dart';
+import '../../../controllers/performs_data_controller.dart';
 
 class EntetePerformance extends StatefulWidget {
   const EntetePerformance({Key? key}) : super(key: key);
@@ -17,12 +16,24 @@ class EntetePerformance extends StatefulWidget {
 }
 
 class _EntityWidgetWidgetState extends State<EntetePerformance> {
+  var listAnnee = <String>[];
+
+  final PerformsDataController performsDataController = Get.find();
+
+  void initialisation() {
+    final dateNow = DateTime.now();
+    setState(() {
+      listAnnee.add("${dateNow.year}");
+      listAnnee.add("${dateNow.year - 1}");
+      listAnnee.add("${dateNow.year - 2}");
+    });
+  }
   //final TableauBordController tableauBordController = Get.find();
   //final DropDownController dropDownController = Get.find();
 
-
   @override
   void initState() {
+    initialisation();
     super.initState();
   }
 
@@ -31,29 +42,51 @@ class _EntityWidgetWidgetState extends State<EntetePerformance> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        // const CustomText(text: "Filtre",size: 20,),
-        // const SizedBox(width: 5,),
-        // Container(height: 40,width: 1,color: Colors.grey,),
-        // const SizedBox(width: 20,),
-        // const CustomText(text: "Année",size: 20,),
-        // const SizedBox(width: 5,),
-        // MenuDeroulant(
-        //   indication: "",
-        //   initValue: "2023",
-        //   items: const ["2022","2023"],
-        //   width: 100,
-        //   onChanged: (value){
-        //   },
-        // ),
-        Expanded(
-            child: Container(
-          child: const YearFiltreWidget(),
-        )),
+        const CustomText(
+          text: "Filtre",
+          size: 20,
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Container(
+          height: 40,
+          width: 1,
+          color: Colors.grey,
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        const CustomText(
+          text: "Année",
+          size: 20,
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        MenuDeroulant(
+          indication: "",
+          initValue: listAnnee.first,
+          items: listAnnee,
+          width: 100,
+          onChanged: (value) {
+            if (value != null) {
+              performsDataController.loadDataPerforms(int.parse(value));
+            }
+          },
+        ),
+        // Expanded(
+        //     child: Container(
+        //   child: const YearFiltreWidget(),
+        // )),
         Expanded(child: Container()),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: IconButton(
-              onPressed: () async {},
+              onPressed: () async {
+                int an = performsDataController.annee.value;
+                performsDataController.loadDataPerforms(an);
+              },
               splashRadius: 20,
               icon: const Icon(
                 Icons.refresh_sharp,

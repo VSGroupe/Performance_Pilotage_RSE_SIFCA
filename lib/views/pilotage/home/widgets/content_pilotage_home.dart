@@ -381,7 +381,10 @@ class _EntityTextButtonState extends State<EntityTextButton> {
       _showMyDialog();
       return false;
     }
-    if (acces["est_admin"]) {
+    final List userRestrictionList = acces["restrictions"];
+    final checkEntite =
+        entityIsnotInRestriction(userRestrictionList, widget.entiteID);
+    if (acces["est_admin"] && checkEntite) {
       EasyLoading.dismiss();
       final path = "/pilotage/espace/$idEntite/accueil";
       await Future.delayed(const Duration(milliseconds: 100));
@@ -389,7 +392,7 @@ class _EntityTextButtonState extends State<EntityTextButton> {
       return true;
     }
     final bool verfication = (acces["est_spectateur"] || acces["est_editeur"] || acces["est_validateur"]);
-    final bool checkEntite = (acces["entite"] == widget.entiteID);
+    //final bool checkEntite = (acces["entite"] == widget.entiteID);
     if (verfication && checkEntite) {
       EasyLoading.dismiss();
       final path = "/pilotage/espace/$idEntite/accueil";
@@ -402,7 +405,9 @@ class _EntityTextButtonState extends State<EntityTextButton> {
     _showMyDialog();
     return false;
   }
-
+bool entityIsnotInRestriction(List userRestrictionList, String entity) {
+  return userRestrictionList.isEmpty || !userRestrictionList.contains(entity);
+}
 
   @override
   Widget build(BuildContext context) {

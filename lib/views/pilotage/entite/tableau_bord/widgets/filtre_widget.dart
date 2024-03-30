@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:perf_rse/models/pilotage/acces_pilotage_model.dart';
 import 'package:popover/popover.dart';
@@ -301,6 +302,7 @@ class _YearFiltreWidgetState extends State<YearFiltreWidget> {
                       tableauBordController
                           .changeYear(int.parse(_btn3SelectedYear));
                     });
+
                     tableauBordController.initialisation(context);
                   },
                   itemBuilder: (BuildContext context) => _popUpMenuYearItems(),
@@ -480,6 +482,7 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
 
   final TableauBordController tableauBordController = Get.find();
   final DropDownController dropDownController = Get.find();
+  final ProfilPilotageController profilPilotageController = Get.find();
 
   @override
   void initState() {
@@ -551,15 +554,18 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
   }
 
   Widget popoverWidget(BuildContext context) {
+    List<String>? processListUser =
+        profilPilotageController.accesPilotageModel.value.processus;
+    bool isAdmin = profilPilotageController.accesPilotageModel.value.estAdmin!;
     return Container(
       width: 200,
       height: 100,
       margin: const EdgeInsets.all(10),
       child: Column(
         children: [
-          Expanded(
-              child: Container(
-            child: const Row(
+          if (isAdmin)
+            const Expanded(
+                child: Row(
               children: [
                 Expanded(
                   child: Column(
@@ -583,12 +589,25 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
                       CheckBoxWidget(processus: 'Usine'),
                       CheckBoxWidget(processus: 'Médecin'),
                       CheckBoxWidget(processus: 'Infrastructures'),
+                      CheckBoxWidget(processus: 'RH / Juridique')
                     ],
                   ),
                 )
-              ],
+            ],
+          ))
+          else
+            Expanded(child:
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  for (String process in processListUser ?? [])
+                    CheckBoxWidget(processus: process),
+                ],
+              ),
+            )
             ),
-          )),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -638,10 +657,11 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
           children: [
             Checkbox(
                 checkColor: Colors.green,
-                value: filtreProcessus.contains(widget.processus),
+                value: filtreProcessus
+                    .contains(matchAbrProcess(abr: widget.processus)),
                 onChanged: (value) {
                   dropDownController.addRemoveProcessus(
-                      widget.processus, value!);
+                      matchAbrProcess(abr: widget.processus), value!);
                 }),
             const SizedBox(
               width: 10,
@@ -655,5 +675,18 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
         ),
       );
     });
+  }
+
+  String matchAbrProcess({required String abr}) {
+    switch (abr) {
+      case "RH":
+        return "Ressources Humaines";
+      case "RH / Juridique":
+        return "Ressources Humaines / Juridique";
+      case "DD":
+        return "Développement Durable";
+      default:
+        return abr;
+    }
   }
 }

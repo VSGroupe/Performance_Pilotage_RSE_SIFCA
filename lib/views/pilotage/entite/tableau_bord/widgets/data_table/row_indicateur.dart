@@ -42,6 +42,10 @@ class _RowIndicateurState extends State<RowIndicateur> {
   @override
   Widget build(BuildContext context) {
     final acess = checkAccesProfil();
+    final edition = checkAccesEdition();
+    final statusIndic = tableauBordController
+        .dataIndicateur.value.statusEntity[widget.indicateur.numero - 1];
+    final estContributeur = !acess && edition && !statusIndic;
     return InkWell(
       onTap: () {},
       onHover: (value) {
@@ -61,7 +65,11 @@ class _RowIndicateurState extends State<RowIndicateur> {
                 ? const Color(0xFFFDDDCC)
                 : widget.indicateur.type == "Test"
                     ? const Color(0xFFB3B9C0)
-                    : Colors.transparent,
+                    : tableauBordController.dataIndicateur.value
+                                .statusEntity[widget.indicateur.numero - 1] ==
+                            false
+                        ? Colors.orange
+                        : Colors.transparent,
           ),
           height: 40,
           child: Row(children: [
@@ -113,12 +121,20 @@ class _RowIndicateurState extends State<RowIndicateur> {
             // Processus
             Container(
               height: 40,
-              width: 172,
+              width: 130,
               color: Colors.transparent,
               alignment: Alignment.centerLeft,
               child: Text(widget.indicateur.processus ?? "",
                   style: const TextStyle(
                       fontStyle: FontStyle.italic, fontSize: 12)),
+            ),
+            //Realise Annee passee
+            Container(
+              height: 40,
+              width: 140,
+              color: Colors.transparent,
+              alignment: Alignment.centerLeft,
+              child: buildRealisePastYearColumn(),
             ),
             // Réalise Annuel
             Container(
@@ -134,16 +150,19 @@ class _RowIndicateurState extends State<RowIndicateur> {
               width: 170,
               color: Colors.transparent,
               alignment: Alignment.centerLeft,
-              child: buildRealiseMoisColumn(context),
+              child: estContributeur
+                  ? const Text("verrouille",
+                      style: TextStyle(color: Colors.black))
+                  : buildRealiseMoisColumn(context),
             ),
             //cible
-            Container(
-              height: 40,
-              width: 130,
-              color: Colors.transparent,
-              alignment: Alignment.centerLeft,
-              child: builCibleColumn(context),
-            ),
+            // Container(
+            //   height: 40,
+            //   width: 130,
+            //   color: Colors.transparent,
+            //   alignment: Alignment.centerLeft,
+            //   child: builCibleColumn(context),
+            // ),
             //ecart
             Container(
               height: 40,
@@ -169,9 +188,11 @@ class _RowIndicateurState extends State<RowIndicateur> {
   }
 
   void _buildToggleButtons() {
+    int numeroLigne = widget.indicateur.numero - 1;
+    var valIndex = getValeurStatusEntity(numeroLigne);
     _toggleButons = ToggleSwitch(
       cornerRadius: 90.0,
-      initialLabelIndex: 1,
+      initialLabelIndex: valIndex,
       inactiveBgColor: Colors.grey,
       activeFgColor: Colors.white,
       activeBgColors: [
@@ -207,8 +228,23 @@ class _RowIndicateurState extends State<RowIndicateur> {
                   "Oui",
                   style: TextStyle(color: Color.fromARGB(255, 232, 142, 31)),
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  var result = await changeStatusEntityIndic(
+                      index, widget.indicateur.numero - 1);
+                  if (result == true) {
+                    await tableauBordController.updateDataIndicateur();
+                    await Future.delayed(const Duration(seconds: 1));
+                    var message = "Action effectuée";
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        showSnackBar("Succès", message, Colors.green));
+                  } else {
+                    var message = "Traitement non effectué";
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        showSnackBar("Echec", message, Colors.red));
+                  }
+                  await Future.delayed(const Duration(milliseconds: 500));
                   Navigator.pop(dialogContext, false);
+                  //Navigator.of(context).pop();
                 },
               )
             ],
@@ -354,6 +390,71 @@ class _RowIndicateurState extends State<RowIndicateur> {
     });
   }
 
+  Widget buildRealisePastYearColumn() {
+    return Obx(() {
+      int numeroLigne = widget.indicateur.numero - 1;
+
+      var valeur = getValeurPastYear(numeroLigne, 0);
+
+      if (widget.indicateur.unite == "%" && valeur != null) {
+        valeur = valeur * 100;
+      }
+
+      return widget.indicateur.type == "Test"
+          ? Row(
+              children: [
+                Container(
+                  height: 40,
+                  width: 110,
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: [
+                      Text(
+                        "${formatNumber(valeur) ?? "---"} ",
+                        textAlign: TextAlign.left,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            )
+          : Row(children: [
+              Container(
+                height: 40,
+                width: 110,
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    Text(
+                      "${formatNumber(valeur) ?? "---"} ",
+                      textAlign: TextAlign.left,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "(${widget.indicateur.unite ?? ""})",
+                      style: const TextStyle(
+                          fontStyle: FontStyle.italic, fontSize: 12),
+                    )
+                  ],
+                ),
+              ),
+                const SizedBox(
+                  width: 3,
+                ),
+                Container(
+                  height: 35,
+                  color: Colors.grey,
+                  width: 2,
+                )
+            ]);
+    });
+  }
+
   Widget buildEcartsColumn() {
     return Obx(() {
       int numeroLigne = widget.indicateur.numero - 1;
@@ -369,12 +470,20 @@ class _RowIndicateurState extends State<RowIndicateur> {
             child: Row(
               children: [
                 Text(
-                  "${valeur != null ? valeur.toStringAsFixed(2) : "---"} %",
+                  "${valeur != null ? (valeur < 0 ? -valeur : valeur).toStringAsFixed(2) : "---"} %",
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.blue),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: valeur != null
+                        ? valeur <= 0
+                            ? Colors.green
+                            : valeur <= 50
+                                ? Colors.yellow
+                                : Colors.red
+                        : Colors.blue,
+                  ),
                 ),
                 const SizedBox(
                   width: 3,
@@ -612,8 +721,8 @@ class _RowIndicateurState extends State<RowIndicateur> {
                                               currentMonth,
                                               widget.indicateur.reference);
                                           tableauBordController.consolidation(
-                                        tableauBordController
-                                            .currentYear.value);
+                                              tableauBordController
+                                                  .currentYear.value);
                                           setState(() {
                                             isValidatingMonth = true;
                                           });
@@ -624,9 +733,9 @@ class _RowIndicateurState extends State<RowIndicateur> {
                                               widget.indicateur.numero - 1,
                                               currentMonth,
                                               widget.indicateur.reference);
-                                            tableauBordController.consolidation(
-                                        tableauBordController
-                                            .currentYear.value);
+                                          tableauBordController.consolidation(
+                                              tableauBordController
+                                                  .currentYear.value);
                                           await tableauBordController
                                               .updateDataIndicateur();
                                           setState(() {
@@ -641,7 +750,10 @@ class _RowIndicateurState extends State<RowIndicateur> {
                                       }
                                       tableauBordController.updateSuiviDate(
                                           tableauBordController
-                                              .currentYear.value);
+                                              .currentYear.value,
+                                          null,
+                                          null,
+                                          null);
                                       await Future.delayed(
                                           const Duration(seconds: 1));
                                       setState(() {
@@ -801,10 +913,26 @@ class _RowIndicateurState extends State<RowIndicateur> {
     return true;
   }
 
+  Future<bool> changeStatusEntityIndic(int? index, int ligne) async {
+    bool result = await tableauBordController.changeStatusEntityIndic(
+        statusIndex: index, numeroLigne: ligne);
+    return result;
+  }
+
   num? getValeur(int numeroLigne, int colonne) {
     try {
       final value = tableauBordController
           .dataIndicateur.value.valeurs[numeroLigne][colonne];
+      return value;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  num? getValeurPastYear(int numeroLigne, int colonne) {
+    try {
+      final value = tableauBordController
+          .dataIndicateurPastYear.value.valeurs[numeroLigne][colonne];
       return value;
     } catch (e) {
       return null;
@@ -821,14 +949,41 @@ class _RowIndicateurState extends State<RowIndicateur> {
     }
   }
 
+  int? getValeurStatusEntity(int numeroLigne) {
+    try {
+      final value =
+          tableauBordController.dataIndicateur.value.statusEntity[numeroLigne];
+      int result;
+      if (value == true) {
+        result = 1;
+      } else {
+        result = 0;
+      }
+      return result;
+    } catch (e) {
+      return 1;
+    }
+  }
+
   //recuperer valeur de la cible courante
   num? getValeurCible(int numeroLigne) {
     try {
-      final value = tableauBordController
-          .dataIndicateur.value.cibles[numeroLigne]; //dataCibleList
+      final value =
+          tableauBordController.dataIndicateur.value.cibles[numeroLigne];
       return value;
     } catch (e) {
       return null;
+    }
+  }
+
+  // statut de l'indicateur verouille ou deverouille
+  int getStatusIndic(int numeroLigne) {
+    final value =
+        tableauBordController.dataIndicateur.value.statusEntity[numeroLigne];
+    if (value == true) {
+      return 1;
+    } else {
+      return 0;
     }
   }
 

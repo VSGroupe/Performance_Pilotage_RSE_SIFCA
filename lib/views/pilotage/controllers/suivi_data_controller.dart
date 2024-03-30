@@ -13,7 +13,7 @@ class SuiviDataController extends GetxController {
 
   void updateDateSuivi() async {
     final entite = entitePilotageController.currentEntite.value;
-    await apiClient.updateSuiviDataEntite(entite,annee.value);
+    await apiClient.updateSuiviDataEntite(entite,annee.value, null, null, null);
   }
 
   void loadDataSuivi(int an) async {

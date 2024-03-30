@@ -33,14 +33,6 @@ class _PerformancePiliersState extends State<PerformancePiliers> {
         await supabase.from('Performance').select().eq('id', idPerformsA);
     final List performsDataListB =
         await supabase.from('Performance').select().eq('id', idPerformsB);
-    // final List<dynamic> entite = await supabase
-    //     .from('Entites')
-    //     .select('nom_entite')
-    //     .eq('id_entite', entiteID);
-    // var entiteVal = entite.first["nom_entite"];
-    // setState(() {
-    //   entiteName = entiteVal;
-    // });
 
     final datasPilierA = performsDataListA.first["performs_piliers"];
     final datasPilierB = performsDataListB.first["performs_piliers"];

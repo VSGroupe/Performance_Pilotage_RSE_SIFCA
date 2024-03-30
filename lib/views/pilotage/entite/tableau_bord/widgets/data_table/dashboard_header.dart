@@ -32,18 +32,23 @@ class _DashBoardHeaderState extends State<DashBoardHeader> {
                 children: [
                   const DashBoardHeaderTitle(
                     color: Colors.brown,
-                    size: 121,
+                    size: 110,
                     title: "Réf",
                   ),
                   const IndicateurTitle(
                     color: Colors.brown,
-                    size: 400,
+                    size: 100,
                     title: "Intitulé",
                   ),
                   const DashBoardHeaderTitle(
                     color: Colors.brown,
-                    size: 170,
+                    size: 120,
                     title: "Processus",
+                  ),
+                  DashBoardHeaderTitle(
+                    color: Colors.brown,
+                    size: 150,
+                    title: "Réalisé ${annee - 1}",
                   ),
                   DashBoardHeaderTitle(
                     color: Colors.brown,
@@ -55,23 +60,22 @@ class _DashBoardHeaderState extends State<DashBoardHeader> {
                     size: 170,
                     title: mois,
                   ),
+                  // const DashBoardHeaderTitle(
+                  //   color: Colors.brown,
+                  //   size: 100,
+                  //   title: "Cible",
+                  // ),
                   const DashBoardHeaderTitle(
                     color: Colors.brown,
-                    size: 100,
-                    title: "Cible",
-                  ),
-                  const DashBoardHeaderTitle(
-                    color: Colors.brown,
-                    size: 104,
+                    size: 80,
                     title: "Ecart",
                   ),
-                  
+
                   const DashBoardHeaderTitle(
                     color: Colors.brown,
                     size: 121,
                     title: "Actif/Inactif",
                   ),
-                  
                 ],
               );
             }),
@@ -109,7 +113,7 @@ class _MonthHeaderState extends State<MonthHeader> {
         padding: const EdgeInsets.only(left: 2.0),
         width: widget.size,
         color: isHovering ? const Color(0xFF8B735C) : widget.color,
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.center,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -190,7 +194,7 @@ class _IndicateurTitleState extends State<IndicateurTitle> {
           });
         },
         child: Container(
-          width: double.infinity,
+          width: widget.size, //double.infinity
           padding: const EdgeInsets.only(left: 2.0),
           color: isHovering ? const Color(0xFF8B735C) : widget.color,
           alignment: Alignment.centerLeft,

@@ -6,6 +6,7 @@ import 'package:perf_rse/models/pilotage/acces_pilotage_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import '../../../controllers/profil_pilotage_controller.dart';
 
 class ContributeurScreen extends StatefulWidget {
   const ContributeurScreen({super.key});
@@ -15,22 +16,66 @@ class ContributeurScreen extends StatefulWidget {
 }
 
 class _ContributeurScreenState extends State<ContributeurScreen> {
-  ContributeurDataGridSource contributeurDataGridSource = ContributeurDataGridSource(contributeurs: []);
+  ContributeurDataGridSource contributeurDataGridSource =
+      ContributeurDataGridSource(contributeurs: []);
+  final ProfilPilotageController profilcontroller = Get.find();
 
   final supabase = Supabase.instance.client;
   bool isLoading = false;
 
   List<String> entitesName = [];
+  List<String> userEntitesName =[];
   List<String> entitesId = [];
   List<String> filiales = [];
+  List<String> processList = [];
 
   void loadEntite() async {
+    final email = profilcontroller.userModel.value.email;
+    List accessibleEntityId = [];
     final List response = await supabase.from("Entites").select();
+    final List responseRestrictions = await supabase
+        .from("AccesPilotage")
+        .select("restrictions")
+        .eq("email", email);
+    final List restrictionList = responseRestrictions.first["restrictions"];
+    final List<Map<String, dynamic>> responseProcess =
+        await supabase.from("Indicateurs").select("processus");
+    processList = getProcessus(responseProcess);
     for (var data in response) {
       entitesName.add(data["nom_entite"]);
       entitesId.add(data["id_entite"]);
       filiales.add(data["filiale"]);
     }
+    if (restrictionList.isNotEmpty) {
+      accessibleEntityId = listFilter(restrictionList, entitesId);
+      for (var idEntite in accessibleEntityId) {
+        userEntitesName.add(entitesName[entitesId.indexOf(idEntite)]);
+      }
+    } else {
+      accessibleEntityId = entitesId;
+      userEntitesName = entitesName;
+    }
+  }
+
+  List listFilter(List listA, List<String> listB) {
+    Set convertListA = listA.toSet();
+    Set<String> convertListB = listB.toSet();
+
+    final diffBtoA = convertListB.difference(convertListA);
+
+    return diffBtoA.toList();
+  }
+
+  List<String> getProcessus(List<Map<String, dynamic>> liste) {
+    Set<String> result = {};
+
+    for (var element in liste) {
+      if (element.containsKey("processus") && element["processus"] != null) {
+        result.add(element["processus"]);
+      }
+    }
+
+    return result.toList();
   }
 
   Future<List<ContributeurModel>> getListContributeurs() async {
@@ -39,29 +84,32 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
     });
     List dataMap = [];
     final List userResponse = await supabase.from("Users").select();
-    final List accesPilotageResponse = await supabase.from("AccesPilotage").select();
+    final List accesPilotageResponse =
+        await supabase.from("AccesPilotage").select();
     for (Map acces in accesPilotageResponse) {
-       Map dataContributeur = {};
-       dataContributeur["acces_pilotage"] = acces;
-       var user;
-       try {
-         user = userResponse.firstWhere((element) => element["email"] == acces["email"],orElse: () => null);
-       } catch (e) {
-         user = null;
-       }
+      Map dataContributeur = {};
+      dataContributeur["acces_pilotage"] = acces;
+      var user;
+      try {
+        user = userResponse.firstWhere(
+            (element) => element["email"] == acces["email"],
+            orElse: () => null);
+      } catch (e) {
+        user = null;
+      }
 
-       if (user != null) {
-         dataContributeur["email"] = user["email"];
-         dataContributeur["nom"] = user["nom"];
-         dataContributeur["prenom"] = user["prenom"];
-         dataContributeur["fonction"] = user["fonction"];
-         dataMap.add(dataContributeur);
-       }
-
+      if (user != null) {
+        dataContributeur["email"] = user["email"];
+        dataContributeur["nom"] = user["nom"];
+        dataContributeur["prenom"] = user["prenom"];
+        dataContributeur["fonction"] = user["fonction"];
+        dataMap.add(dataContributeur);
+      }
     }
-    final listContribteurs = dataMap.map((json) => ContributeurModel.fromJson(json)).toList();
+    final listContribteurs =
+        dataMap.map((json) => ContributeurModel.fromJson(json)).toList();
     setState(() {
-       isLoading = false;
+      isLoading = false;
     });
     return listContribteurs;
   }
@@ -69,7 +117,8 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
   void refreshData() async {
     final response = await getListContributeurs();
     setState(() {
-      contributeurDataGridSource = ContributeurDataGridSource(contributeurs: response);
+      contributeurDataGridSource =
+          ContributeurDataGridSource(contributeurs: response);
     });
   }
 
@@ -249,8 +298,10 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
                           overflow: TextOverflow.ellipsis),
                       content: AjoutContributeur(
                         entitesName: entitesName,
+                        userEntitesName: userEntitesName,
                         entitesId: entitesId,
                         filiales: filiales,
+                        processus: processList,
                       ),
                     );
                   },
@@ -283,7 +334,10 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
           const SizedBox(
             height: 5,
           ),
-          Expanded(child: isLoading ? const Center(child: CircularProgressIndicator()) : _buildDataGridForWeb())
+          Expanded(
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _buildDataGridForWeb())
         ],
       ),
     );
@@ -303,24 +357,21 @@ class ContributeurDataGridSource extends DataGridSource {
   void buildDataGridRow() {
     dataGridRows =
         _contributeurs.map<DataGridRow>((ContributeurModel contributeur) {
+      var entites = concatenationListe(contributeur.accesPilotageModel!.entite);
+      var nomEntites =
+          concatenationListe(contributeur.accesPilotageModel?.nomEntite);
+      var processus =
+          concatenationListe(contributeur.accesPilotageModel?.processus);
       return DataGridRow(cells: <DataGridCell>[
         DataGridCell<String>(columnName: 'nom', value: contributeur.nom),
         DataGridCell<String>(columnName: 'prenom', value: contributeur.prenom),
         DataGridCell<String>(columnName: 'mail', value: contributeur.email),
-        DataGridCell<String>(
-            columnName: 'entite',
-            value: contributeur.accesPilotageModel?.nomEntite),
+        DataGridCell<String>(columnName: 'entite', value: nomEntites),
         DataGridCell<AccesPilotageModel>(
             columnName: 'acces', value: contributeur.accesPilotageModel),
-        DataGridCell<String>(
-            columnName: 'filiale',
-            value: contributeur.accesPilotageModel?.entite),
-        DataGridCell<String>(
-            columnName: 'filiere',
-            value: contributeur.accesPilotageModel?.entite),
-        DataGridCell<String>(
-            columnName: 'processus',
-            value: contributeur.accesPilotageModel?.processus),
+        DataGridCell<String>(columnName: 'filiale', value: entites),
+        DataGridCell<String>(columnName: 'filiere', value: entites),
+        DataGridCell<String>(columnName: 'processus', value: processus),
         DataGridCell<String>(
             columnName: 'fonction', value: contributeur.fonction),
       ]);
@@ -385,6 +436,11 @@ class ContributeurDataGridSource extends DataGridSource {
     }
     return Container();
   }
+
+  String concatenationListe(List? liste) {
+    List<String> strings = liste!.map((e) => e.toString()).toList();
+    return strings.join(", ");
+  }
 }
 
 class ContributeurModel {
@@ -427,12 +483,16 @@ class ContributeurModel {
 
 class AjoutContributeur extends StatefulWidget {
   final List<String> entitesName;
+  final List<String> userEntitesName;
   final List<String> entitesId;
   final List<String> filiales;
+  final List<String> processus;
   const AjoutContributeur(
       {super.key,
       required this.entitesName,
+      required this.userEntitesName,
       required this.entitesId,
+      required this.processus,
       required this.filiales});
 
   @override
@@ -443,8 +503,46 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
   final supabase = Supabase.instance.client;
 
   bool isSubmetted = false;
+  List<String> entiteName = [];
+  List<String> selectedProcess = [];
 
-  List<DropdownMenuItem<String>> _dropDownMenuItems = [];
+  void _showMultiSelect() async {
+    // a list of selectable items
+    // these items can be hard-coded or dynamically fetched from a database/API
+    List<String> dropDownMenuItems = widget.userEntitesName;
+    //print(dropDownMenuItems);
+
+    final List<String>? results = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelect(items: dropDownMenuItems, selectedItems: entiteName);
+      },
+    );
+
+    // Update UI
+    if (results != null) {
+      setState(() {
+        entiteName = results;
+      });
+    }
+  }
+
+  void _selectProcess() async {
+    List<String> dropDownMenuItems = widget.processus;
+
+    final List<String>? results = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return MultiSelect(
+              items: dropDownMenuItems, selectedItems: selectedProcess);
+        });
+
+    if (results != null) {
+      setState(() {
+        selectedProcess = results;
+      });
+    }
+  }
 
   static const listTitres = ["M.", "Mme", "Mlle"];
   static const listAcces = ["Spectateur", "Editeur", "Validateur", "Admin"];
@@ -456,23 +554,8 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
     "Admin": "est_admin"
   };
 
-  String? entiteName;
   String? titre;
   String? acces;
-
-  void initialisation() {
-    final dropDown = widget.entitesName
-        .map(
-          (String value) => DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          ),
-        )
-        .toList();
-    setState(() {
-      _dropDownMenuItems = dropDown;
-    });
-  }
 
   final _formKey = GlobalKey<FormState>();
 
@@ -500,7 +583,6 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
 
   @override
   void initState() {
-    initialisation();
     super.initState();
   }
 
@@ -596,17 +678,27 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                 ),
               ),
               ListTile(
-                title: const Text("Espace pilotage"),
-                trailing: DropdownButton(
-                  menuMaxHeight: 400,
-                  value: entiteName,
-                  hint: const Text('Espace'),
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      setState(() => entiteName = newValue);
-                    }
+                title: const Text(
+                    "Sélectionnez les entités à affecter à l'utilisateur"),
+                trailing: ElevatedButton(
+                  onPressed: () async {
+                    _showMultiSelect();
                   },
-                  items: _dropDownMenuItems,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Colors.blue,
+                    elevation: 0,
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Espace pilotage'),
+                      Icon(
+                        Icons.arrow_drop_down,
+                        size: 24.0,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               ListTile(
@@ -621,6 +713,30 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                     }
                   },
                   items: _dropDownMenuAcces,
+                ),
+              ),
+              ListTile(
+                title: const Text(
+                    "Sélectionnez les processus à affecter à l'utilisateur"),
+                trailing: ElevatedButton(
+                  onPressed: () async {
+                    _selectProcess();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        Colors.blue,
+                    elevation: 0,
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Processus'),
+                      Icon(
+                        Icons.arrow_drop_down,
+                        size: 24.0,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(
@@ -641,7 +757,8 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   Container(
-                    child: isSubmetted ? const CircularProgressIndicator() : null,
+                    child:
+                        isSubmetted ? const CircularProgressIndicator() : null,
                   ),
                   ElevatedButton(
                       onPressed: isSubmetted
@@ -649,16 +766,24 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                           : () async {
                               if (_formKey.currentState!.validate() &&
                                   titre != null &&
-                                  entiteName != null &&
-                                  acces != null) {
+                                  entiteName.isNotEmpty &&
+                                  acces != null &&
+                                  selectedProcess.isNotEmpty) {
                                 setState(() {
                                   isSubmetted = true;
                                 });
+                                List filiale = [];
+                                List<String> idEntite = [];
 
-                                final index =
-                                    widget.entitesName.indexOf(entiteName!);
-                                final filiale = widget.filiales[index];
-                                final idEntite = widget.entitesId[index];
+                                for (var entity in entiteName) {
+                                  var index =
+                                      widget.entitesName.indexOf(entity);
+                                  filiale.add(widget.filiales[index]);
+                                  idEntite.add(widget.entitesId[index]);
+                                }
+                                List listUserRestriction =
+                                    restrictElementFilter(
+                                        widget.entitesId, idEntite);
 
                                 final userMap = {
                                   "email": emailEditingController.text,
@@ -678,20 +803,21 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                                   "est_spectateur": false,
                                   "est_editeur": false,
                                   "est_validateur": false,
-                                  "restrictions": [],
+                                  "restrictions": listUserRestriction,
                                   "est_admin": false,
+                                  "processus": selectedProcess,
                                 };
 
                                 userAcces[accesToDoc[acces]] = true;
 
                                 try {
-                                  final res1 = await supabase
-                                      .from('Users')
-                                      .insert(userMap);
-
                                   final res2 = await supabase
                                       .from('AccesPilotage')
                                       .insert(userAcces);
+
+                                  final res1 = await supabase
+                                      .from('Users')
+                                      .insert(userMap);
 
                                   String pwd = generatePassword();
                                   final AuthResponse res3 = await supabase.auth
@@ -752,5 +878,141 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
     }
 
     return password;
+  }
+
+  List<String> restrictElementFilter(List<String> listA, List<String> listB) {
+    Set<String> convertListA = listA.toSet();
+    Set<String> convertListB = listB.toSet();
+
+    final diffA = convertListA.difference(convertListB);
+    final diffB = convertListB.difference(convertListA);
+
+    final differenceinAtoB = diffA.union(diffB);
+
+    return differenceinAtoB.toList();
+  }
+}
+
+// Multi Select widget
+// This widget is reusable
+class MultiSelect extends StatefulWidget {
+  final List<String> items;
+  final List<String> selectedItems;
+  const MultiSelect(
+      {Key? key, required this.items, required this.selectedItems})
+      : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _MultiSelectState();
+}
+
+class _MultiSelectState extends State<MultiSelect> {
+  // this variable holds the selected items
+  final List<String> _selectedItems = [];
+  bool _selectAll = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectAll = widget.selectedItems.length == widget.items.length;
+  }
+
+  void _toggleSelectAll(bool? newValue) {
+    if (newValue != null) {
+      setState(() {
+        _selectAll = newValue;
+        if (_selectAll) {
+          widget.selectedItems.clear();
+          widget.selectedItems.addAll(widget.items);
+        } else {
+          widget.selectedItems.clear();
+        }
+      });
+    }
+  }
+
+// This function is triggered when a checkbox is checked or unchecked
+  void _itemChange(String itemValue, bool isSelected) {
+    setState(() {
+      if (isSelected) {
+        widget.selectedItems.add(itemValue);
+      } else {
+        widget.selectedItems.remove(itemValue);
+      }
+      _selectAll = widget.selectedItems.length == widget.items.length;
+    });
+  }
+
+  // this function is called when the Cancel button is pressed
+  void _cancel() {
+    Navigator.pop(context);
+  }
+
+// this function is called when the Submit button is tapped
+  void _submit() {
+    Navigator.pop(context, widget.selectedItems);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController searchController = TextEditingController();
+    List<String> filteredItems = List.from(widget.items);
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return AlertDialog(
+        title: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: searchController,
+                decoration: const InputDecoration(
+                  hintText: 'Recherche...',
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    filteredItems = widget.items
+                        .where((item) =>
+                            item.toLowerCase().contains(value.toLowerCase()))
+                        .toList();
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: [
+              CheckboxListTile(
+                value: _selectAll,
+                title: const Text('Tout selectionner'),
+                controlAffinity: ListTileControlAffinity.leading,
+                onChanged: _toggleSelectAll,
+                activeColor: Colors.blue,
+              ),
+              ...filteredItems.map(
+                (item) => CheckboxListTile(
+                  value: widget.selectedItems.contains(item),
+                  title: Text(item),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  onChanged: (isChecked) => _itemChange(item, isChecked!),
+                  activeColor: Colors.blue,
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: _cancel,
+            child: const Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: _submit,
+            child: const Text('Valider'),
+          ),
+        ],
+      );
+    });
   }
 }

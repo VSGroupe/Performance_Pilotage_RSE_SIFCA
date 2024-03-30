@@ -30,14 +30,11 @@ class _CollecteGlobaleEntitesState extends State<CollecteGlobaleEntites> {
           await supabase.from('SuiviData').select().gte("annee", year - 1);
       final List entiteList =
           await supabase.from('Entites').select().eq("id_entite", entiteID);
-      //print(entiteList);
       final List affichageEnites = entiteList.first["filtre_entite_id"];
-      //print(affichageEnites);
       for (var kEniteId in affichageEnites) {
         Map<String, dynamic> doc = {"$year": 0, "${year - 1}": 0};
         final ligneAnneeN = suiviDocList.firstWhere((element) =>
             (element["annee"] == year && element["id_entite"] == kEniteId));
-        //print(ligneAnneeN);
         doc["nom"] = ligneAnneeN["nom_entite"];
         num percentage = (ligneAnneeN["indicateur_collectes"] /
             ligneAnneeN["indicateur_total"]);
@@ -53,12 +50,11 @@ class _CollecteGlobaleEntitesState extends State<CollecteGlobaleEntites> {
           }
         } catch (e) {
           doc["${year - 1}"] = 0;
-          apiClient.updateSuiviDataEntite(kEniteId, year - 1);
+          apiClient.updateSuiviDataEntite(kEniteId, year - 1, null, null, null);
         }
 
         kEntityInfos.add(doc);
       }
-      print(kEntityInfos);
     } catch (e) {
       setState(() {
         status = -1;

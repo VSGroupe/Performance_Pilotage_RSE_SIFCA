@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -7,6 +9,7 @@ import '../../../api/supabse_db.dart';
 import '../../../controller/time_system_controller.dart';
 import '../../../models/pilotage/data_indicateur_row_model.dart';
 import '../../../models/pilotage/indicateur_model.dart';
+import '../../../models/pilotage/acces_pilotage_model.dart';
 import 'drop_down_controller.dart';
 import 'entite_pilotage_controler.dart';
 import 'profil_pilotage_controller.dart';
@@ -17,10 +20,13 @@ class TableauBordController extends GetxController {
 
   final indicateursList = <IndicateurModel>[].obs;
 
+  //final accesPilotage = AccesPilotageModel;
+
   Map<String, dynamic>? dataMapExport;
   final indicateursListApparente = <IndicateurModel>[].obs;
 
   final dataIndicateur = DataIndicateurRowModel.init().obs;
+  final dataIndicateurPastYear = DataIndicateurRowModel.init().obs;
 
   final DataBaseController dataBaseController = DataBaseController();
 
@@ -89,6 +95,40 @@ class TableauBordController extends GetxController {
     }
   }
 
+  void filtreListApparenteOtherUser() {
+    if (dropDownController.filtreProcessus.isEmpty) {
+      final List<IndicateurModel> userIncateurList = [];
+      List<String>? processListUser =
+          profilPilotageController.accesPilotageModel.value.processus;
+      if (processListUser!.isNotEmpty) {
+        for (var process in processListUser) {
+          for (var instance in indicateursList) {
+            if (process == instance.processus) {
+              userIncateurList.add(instance);
+            }
+          }
+        }
+      }
+      indicateursListApparente.value = userIncateurList;
+    } else {
+      final List<IndicateurModel> Klist = [];
+      for (var indicateur in indicateursList) {
+        if (dropDownController.filtreProcessus.contains(indicateur.processus)) {
+          Klist.add(indicateur);
+        }
+      }
+      indicateursListApparente.value = Klist;
+    }
+  }
+
+  List<String>? getProcessUser(AccesPilotageModel userProcessus) {
+    return userProcessus.processus;
+  }
+
+  bool? estAdmin(AccesPilotageModel status) {
+    return status.estAdmin;
+  }
+
   void initDateTime() {
     var dateTime = TimeSystemController.date;
     currentYear.value = dateTime.year;
@@ -124,8 +164,12 @@ class TableauBordController extends GetxController {
     indicateursListApparente.value = indicateursList;
     final idDataIndicateur =
         '${entitePilotageController.currentEntite.value}_${currentYear.value}';
+    final idDataIndicateurPastYear =
+        '${entitePilotageController.currentEntite.value}_${currentYear.value - 1}';
     dataIndicateur.value =
         await dataBaseController.getAllDataRowIndicateur(idDataIndicateur);
+    dataIndicateurPastYear.value = await dataBaseController
+        .getAllDataRowIndicateur(idDataIndicateurPastYear);
     if (dataIndicateur.value.entite != "" && dataIndicateur.value.annee != 0) {
       dataBaseController.updateAPIDatabase(idDataIndicateur);
       statusIntialisation.value = true;
@@ -248,8 +292,12 @@ class TableauBordController extends GetxController {
     //indicateursList.value = await dataBaseController.getAllIndicateur();
     final idDataIndicateur =
         '${entitePilotageController.currentEntite.value}_${currentYear.value}';
+    final idDataIndicateurPastYear =
+        '${entitePilotageController.currentEntite.value}_${currentYear.value - 1}';
     dataIndicateur.value =
         await dataBaseController.getAllDataRowIndicateur(idDataIndicateur);
+    dataIndicateurPastYear.value = await dataBaseController
+        .getAllDataRowIndicateur(idDataIndicateurPastYear);
     if (dataIndicateur.value.entite != "" && dataIndicateur.value.annee != 0) {
       statusIntialisation.value = true;
       isLoading.value = false;
@@ -309,7 +357,9 @@ class TableauBordController extends GetxController {
   Future<bool> renseignerDataCible(
       {required num dataCible,
       required int numeroLigne,
-      required int colonne, required String type, required String formule}) async {
+      required int colonne,
+      required String type,
+      required String formule}) async {
     try {
       final currentEntite = entitePilotageController.currentEntite.value;
       final Map<String, dynamic> data = {
@@ -351,6 +401,37 @@ class TableauBordController extends GetxController {
       }
     } catch (e) {
       print("Erreur lors de la mise à jour de la cible : $e");
+      return false;
+    }
+  }
+
+  Future<bool> changeStatusEntityIndic(
+      {required int? statusIndex, required int numeroLigne}) async {
+    try {
+      final currentEntite = entitePilotageController.currentEntite.value;
+      final Map<String, dynamic> data = {
+        "annee": currentYear.value,
+        "entite": currentEntite,
+        "statusButton": statusIndex,
+        "ligne": numeroLigne
+      };
+      const String apiUrl =
+          "${DataBaseController.baseUrl}/data-entite-indicateur/change-entity-indic-status";
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(data),
+      );
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print("Une erreur s'est produite: $e");
       return false;
     }
   }
@@ -427,9 +508,18 @@ class TableauBordController extends GetxController {
     return result;
   }
 
-  Future<bool> updateSuiviDate(int annee) async {
+  // Future<bool> modifierStatusIndicEntity(int numeroLigne, List statuList) async {
+  //   try{
+  //   var idEntite = '${entitePilotageController.currentEntite.value}_${currentYear.value}';
+  //   await supabase.from('DataIndicateur').update({'status_entity': statuList}).eq('id', idEntite);
+  //   }
+  // }
+
+  Future<bool> updateSuiviDate(
+      int annee, String? processus, int? numeroLigne, int? colonne) async {
     final currentEntite = entitePilotageController.currentEntite.value;
-    await dataBaseController.updateSuiviDataEntite(currentEntite, annee);
+    await dataBaseController.updateSuiviDataEntite(
+        currentEntite, annee, processus, numeroLigne, colonne);
     return true;
   }
 
