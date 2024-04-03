@@ -253,7 +253,7 @@ class TableauBordController extends GetxController {
         .eq('id', idDataIndicateur);
     if (datasEntite.isEmpty) {
       final List<List<num?>> initData = List.generate(
-          280,
+          288,
           (index) => [
                 null,
                 null,
@@ -268,7 +268,7 @@ class TableauBordController extends GetxController {
                 null,
                 null,
                 null
-              ]).toList();
+              ]).toList(); //280
       await supabase.from('DataIndicateur').insert(
         {
           'id': idDataIndicateur,

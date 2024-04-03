@@ -18,7 +18,7 @@ class DataBaseController {
     final List<dynamic> docs = await supabase
         .from('Indicateurs')
         .select()
-        .order('numero', ascending: true);
+        .order('reference', ascending: true);
     final indicateurs =
         docs.map((json) => IndicateurModel.fromJson(json)).toList();
     return indicateurs;

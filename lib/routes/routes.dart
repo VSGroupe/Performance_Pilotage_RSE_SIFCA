@@ -204,19 +204,19 @@ class RouteClass {
         return null;
       }
       
-      bool sessionVerification = false;
-      final session = supabase.auth.currentSession;
+      // bool sessionVerification = false;
+      // final session = supabase.auth.currentSession;
       
-      if (session != null) {
-        sessionVerification = true;
-      } else {
-        sessionVerification = false;
+      // if (session != null) {
+      //   sessionVerification = true;
+      // } else {
+      //   sessionVerification = false;
+      // }
+      if (loggedPref == "true" && email!=null && isInitTime == "true" && GetUtils.isEmail(email)) {
+        return null; // && sessionVerification ==true
       }
-      if (loggedPref == "true" && email!=null && isInitTime == "true" && GetUtils.isEmail(email) && sessionVerification ==true) {
-        return null;
-      }
-      await supabase.auth.signOut();
-      return "/account/login";
+      // await supabase.auth.signOut();
+      // return "/account/login";
     },
   );
 }
