@@ -354,56 +354,56 @@ class TableauBordController extends GetxController {
     }
   }
 
-  Future<bool> renseignerDataCible(
-      {required num dataCible,
-      required int numeroLigne,
-      required int colonne,
-      required String type,
-      required String formule}) async {
-    try {
-      final currentEntite = entitePilotageController.currentEntite.value;
-      final Map<String, dynamic> data = {
-        "annee": currentYear.value,
-        "entite": currentEntite,
-        "datacible": dataCible,
-        "ligne": numeroLigne,
-        "colonne": colonne,
-        "type": type,
-        "formule": formule,
-      };
+  // Future<bool> renseignerDataCible(
+  //     {required num dataCible,
+  //     required int numeroLigne,
+  //     required int colonne,
+  //     required String type,
+  //     required String formule}) async {
+  //   try {
+  //     final currentEntite = entitePilotageController.currentEntite.value;
+  //     final Map<String, dynamic> data = {
+  //       "annee": currentYear.value,
+  //       "entite": currentEntite,
+  //       "datacible": dataCible,
+  //       "ligne": numeroLigne,
+  //       "colonne": colonne,
+  //       "type": type,
+  //       "formule": formule,
+  //     };
 
-      const String apiUrl =
-          "${DataBaseController.baseUrl}/data-entite-indicateur/compute-performs";
+  //     const String apiUrl =
+  //         "${DataBaseController.baseUrl}/data-entite-indicateur/compute-performs";
 
-      var idEntite =
-          '${entitePilotageController.currentEntite.value}_${currentYear.value}';
-      var listCibles =
-          await dataBaseController.getCibleListIndicateur(idEntite);
-      if (listCibles.isEmpty) {
-        listCibles = List.generate(280, (_) => null);
-      }
-      listCibles[numeroLigne] = dataCible;
-      await supabase
-          .from('DataIndicateur')
-          .update({'cibles': listCibles}).eq('id', idEntite);
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(data),
-      );
-      if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
-        return true;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      print("Erreur lors de la mise à jour de la cible : $e");
-      return false;
-    }
-  }
+  //     var idEntite =
+  //         '${entitePilotageController.currentEntite.value}_${currentYear.value}';
+  //     var listCibles =
+  //         await dataBaseController.getCibleListIndicateur(idEntite);
+  //     if (listCibles.isEmpty) {
+  //       listCibles = List.generate(280, (_) => null);
+  //     }
+  //     listCibles[numeroLigne] = dataCible;
+  //     await supabase
+  //         .from('DataIndicateur')
+  //         .update({'cibles': listCibles}).eq('id', idEntite);
+  //     final response = await http.post(
+  //       Uri.parse(apiUrl),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: jsonEncode(data),
+  //     );
+  //     if (response.statusCode == 200) {
+  //       final responseData = json.decode(response.body);
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } catch (e) {
+  //     print("Erreur lors de la mise à jour de la cible : $e");
+  //     return false;
+  //   }
+  // }
 
   Future<bool> changeStatusEntityIndic(
       {required int? statusIndex, required int numeroLigne}) async {

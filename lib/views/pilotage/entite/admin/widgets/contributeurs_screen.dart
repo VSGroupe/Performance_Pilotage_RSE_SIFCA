@@ -621,45 +621,45 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
               const SizedBox(
                 height: 10,
               ),
-              SizedBox(
-                height: 70,
-                child: TextFormField(
-                  controller: nomEditingController,
-                  maxLines: 1,
-                  validator: (value) {
-                    if (value == null || value.isEmpty || value.length < 3) {
-                      return '...';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    hintText: "Nom",
-                    labelText: "Nom",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                height: 70,
-                child: TextFormField(
-                  controller: prenomEditingController,
-                  maxLines: 1,
-                  validator: (value) {
-                    if (value == null || value.isEmpty || value.length < 3) {
-                      return '...';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    hintText: "Prénom(s)",
-                    labelText: "Prénom(s)",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
+              // SizedBox(
+              //   height: 70,
+              //   child: TextFormField(
+              //     controller: nomEditingController,
+              //     maxLines: 1,
+              //     validator: (value) {
+              //       if (value == null || value.isEmpty || value.length < 3) {
+              //         return '...';
+              //       }
+              //       return null;
+              //     },
+              //     decoration: const InputDecoration(
+              //       hintText: "Nom",
+              //       labelText: "Nom",
+              //       border: OutlineInputBorder(),
+              //     ),
+              //   ),
+              // ),
+              // const SizedBox(
+              //   height: 10,
+              // ),
+              // SizedBox(
+              //   height: 70,
+              //   child: TextFormField(
+              //     controller: prenomEditingController,
+              //     maxLines: 1,
+              //     validator: (value) {
+              //       if (value == null || value.isEmpty || value.length < 3) {
+              //         return '...';
+              //       }
+              //       return null;
+              //     },
+              //     decoration: const InputDecoration(
+              //       hintText: "Prénom(s)",
+              //       labelText: "Prénom(s)",
+              //       border: OutlineInputBorder(),
+              //     ),
+              //   ),
+              // ),
               const SizedBox(
                 height: 10,
               ),
@@ -740,7 +740,7 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 40,
               ),
               const Text(
                 "Renseigner bien tous les champs avant de soumettre ",

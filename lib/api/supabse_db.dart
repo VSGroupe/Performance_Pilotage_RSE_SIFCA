@@ -25,18 +25,18 @@ class DataBaseController {
   }
 
   //recuprer valeur de la cible de l'indicateur
-  Future<List<dynamic>> getCibleListIndicateur(String id) async {
-    try {
-      final List<dynamic> response =
-          await supabase.from('DataIndicateur').select('cibles').eq('id', id);
-      final data = response[0];
-      final result = data["cibles"];
-      return result;
-    } catch (e) {
-      print('Error fetching cible value:$e');
-      return [];
-    }
-  }
+  // Future<List<dynamic>> getCibleListIndicateur(String id) async {
+  //   try {
+  //     final List<dynamic> response =
+  //         await supabase.from('DataIndicateur').select('cibles').eq('id', id);
+  //     final data = response[0];
+  //     final result = data["cibles"];
+  //     return result;
+  //   } catch (e) {
+  //     print('Error fetching cible value:$e');
+  //     return [];
+  //   }
+  // }
 
   Future<DataIndicateurRowModel> getAllDataRowIndicateur(
       String idDataIndicateur) async {

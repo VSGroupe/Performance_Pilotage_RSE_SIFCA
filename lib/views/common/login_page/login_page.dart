@@ -21,9 +21,12 @@ class _LoginPageState extends State<LoginPage> {
   final storage = const FlutterSecureStorage();
 
   final _formKey = GlobalKey<FormState>();
+  final _formKeyFirstConnexion = GlobalKey<FormState>();
   bool _obsureText = true;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
+  late final nom;
+  late final prenoms;
 
   final RegExp regex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$');
 
@@ -32,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoadedPage = false;
 
   String? session = "B";
+  Session? sessionUser;
 
   bool isHovering = false;
 
@@ -60,20 +64,30 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
   }
-  // firstConnexion
-  /**
-final data = await supabase
-  .from('countries')
-  .select()
-  .ilike('name', '%alba%'); */
 
-  Future countConnexion(String email) async {
-    final responseCountConnexion = await supabase
-        .from('Historiques')
-        .select('Action')
-        .ilike('Action', '%connexion%')
-        .eq('user', email);
-    print(responseCountConnexion);
+  // Future<int> countConnexion(String email) async {
+  //   final List responseConnexion = await supabase
+  //       .from('Historiques')
+  //       .select('action')
+  //       .eq('action', "Connexion")
+  //       .eq('user', email);
+  //   final int result = responseConnexion.length;
+  //   if (responseConnexion.isEmpty) {
+  //     return 0;
+  //   } else {
+  //     return result;
+  //   }
+  // }
+
+  Future<bool> checkName(String email) async {
+    final List responseName =
+        await supabase.from('Users').select('nom').eq('email', email);
+    print(responseName.first["nom"]);
+    if (responseName.first["nom"] == "") {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   void login(BuildContext context) async {
@@ -94,13 +108,80 @@ final data = await supabase
         await storage.write(key: 'expiration', value: date.toString());
         await storage.write(key: 'logged', value: "true");
         await storage.write(key: 'email', value: email);
-        await Future.delayed(const Duration(milliseconds: 100));
         await trackUserLogin(email);
-        await Future.delayed(const Duration(milliseconds: 100));
-        context.go("/");
-        setState(() {
-          isLoadedPage = false;
-        });
+        bool userCheckName = await checkName(email);
+        if (userCheckName == false) {
+          // ignore: use_build_context_synchronously
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                    title: const Text("Nouvel Utilisateur"),
+                    content: Form(
+                      key: _formKeyFirstConnexion,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Veuillez votre nom svp.';
+                              }
+                              nom = value;
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              border: UnderlineInputBorder(),
+                              labelText: 'Entrez votre nom',
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Veuillez entrer vos premons svp.';
+                              }
+                              prenoms = value;
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              border: UnderlineInputBorder(),
+                              labelText: 'Entrez vos prenoms',
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if (_formKeyFirstConnexion.currentState!
+                                    .validate()) {
+                                  await supabase.from('Users').update({
+                                    'nom': nom,
+                                    'prenom': prenoms
+                                  }).eq('email', email);
+                                  await Future.delayed(
+                                      const Duration(milliseconds: 100));
+                                  context.go("/");
+                                }
+                              },
+                              child: const Text('Valider'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+              });
+        } else {
+          await Future.delayed(const Duration(milliseconds: 100));
+          context.go("/");
+          setState(() {
+            isLoadedPage = false;
+          });
+        }
       } else {
         const message = "Vos identifiants sont incorrectes";
         await Future.delayed(const Duration(milliseconds: 15));
