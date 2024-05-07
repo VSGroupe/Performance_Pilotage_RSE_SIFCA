@@ -593,11 +593,11 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
                     ],
                   ),
                 )
-            ],
-          ))
+              ],
+            ))
           else
-            Expanded(child:
-            SingleChildScrollView(
+            Expanded(
+                child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -606,8 +606,7 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
                     CheckBoxWidget(processus: process),
                 ],
               ),
-            )
-            ),
+            )),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -618,14 +617,14 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
                     dropDownController.effacerFiltreProcessus();
                     Navigator.of(context).pop();
                   },
-                  child: const Text("Effacer")),
-              OutlinedButton(
-                  style:
-                      OutlinedButton.styleFrom(foregroundColor: Colors.green),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Appliquer")),
+                  child: const Text("Tout de décocher")),
+              // OutlinedButton(
+              //     style:
+              //         OutlinedButton.styleFrom(foregroundColor: Colors.green),
+              //     onPressed: () {
+              //       Navigator.of(context).pop();
+              //     },
+              //     child: const Text("Appliquer")),
             ],
           )
         ],

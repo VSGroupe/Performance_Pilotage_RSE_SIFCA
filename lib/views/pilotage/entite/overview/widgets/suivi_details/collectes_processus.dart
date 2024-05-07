@@ -44,6 +44,7 @@ class _CollecteByProcessus extends State<CollecteByProcessus> {
           await supabase.from('SuiviData').select().gte("annee", year);
       final List entiteList =
           await supabase.from('Entites').select().eq("id_entite", entiteID);
+      final List totauxProcessus = await supabase.from('Processus').select().order('id', ascending: true);
       final List affichageEntites = entiteList.first["filtre_entite_id"];
 
       if (current_month != 1) {
@@ -61,9 +62,9 @@ class _CollecteByProcessus extends State<CollecteByProcessus> {
           for (var process in listProcessus) {
             num percentageN1 = (ligneAnneeN["suivi_processus"]["$process"]
                     ["$current_month"] /
-                5); // 5: Le nombre total des process pas encore defini dans la base de donnee
+                totauxProcessus[listProcessus.indexOf("$process")]["nombre_totale"]);
             num percentageN2 =
-                (ligneAnneeN["suivi_processus"]["$process"]["$last_month"] / 5);
+                (ligneAnneeN["suivi_processus"]["$process"]["$last_month"] / totauxProcessus[listProcessus.indexOf("$process")]["nombre_totale"]);
             Map<String, num> processMapN1 = {"$process": percentageN1};
             Map<String, num> processMapN2 = {"$process": percentageN2};
             listN1.add(processMapN1);
@@ -95,10 +96,10 @@ class _CollecteByProcessus extends State<CollecteByProcessus> {
           for (var process in listProcessus) {
             num percentageN1 = (ligneAnneeN["suivi_processus"]["$process"]
                     ["$current_month"] /
-                5);
+                totauxProcessus[listProcessus.indexOf("$process")]["nombre_totale"]);
             num percentageN2 = (ligneAnneeN1["suivi_processus"]["$process"]
                     ["$last_month"] /
-                5);
+                totauxProcessus[listProcessus.indexOf("$process")]["nombre_totale"]);
 
             Map<String, num> processMapN1 = {"$process": percentageN1};
             Map<String, num> processMapN2 = {"$process": percentageN2};

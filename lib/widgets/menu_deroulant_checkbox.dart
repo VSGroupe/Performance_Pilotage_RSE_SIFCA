@@ -24,7 +24,7 @@ class _MenuDeroulantCheckBoxState extends State<MenuDeroulantCheckBox> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton2(
           isExpanded: true,
-          dropdownElevation: 2,
+          //dropdownElevation: 2,
           hint: Align(
             alignment: AlignmentDirectional.centerStart,
             child: Text(
@@ -81,10 +81,10 @@ class _MenuDeroulantCheckBoxState extends State<MenuDeroulantCheckBox> {
           //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
           value: selectedItems.isEmpty ? null : selectedItems.last,
           onChanged: (value) {},
-          buttonHeight: 40,
-          buttonWidth: 200,
-          itemHeight: 40,
-          itemPadding: EdgeInsets.zero,
+          //buttonHeight: 40,
+          //buttonWidth: 200,
+          //itemHeight: 40,
+          //itemPadding: EdgeInsets.zero,
           selectedItemBuilder: (context) {
             return widget.items.map(
               (item) {

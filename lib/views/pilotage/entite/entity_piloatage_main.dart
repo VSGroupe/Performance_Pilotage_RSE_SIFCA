@@ -67,7 +67,7 @@ class _EntityPilotageMainState extends State<EntityPilotageMain> {
       return data;
     }
 
-    final entiteResponse = await supabase.from('Entites').select().eq('id_entite', widget.entiteId);
+    final entiteResponse = await supabase.from('Entites').select().eq('id_entite', widget.entiteId!);
     final entite  = entiteResponse[0];
 
     if (entite["id_entite"] == null || entite["id_entite"] == "") {
@@ -88,7 +88,7 @@ class _EntityPilotageMainState extends State<EntityPilotageMain> {
     }
 
     String? email = await storage.read(key: 'email');
-    final user = await supabase.from('Users').select().eq('email', email);
+    final user = await supabase.from('Users').select().eq('email', email!);
     final accesPilotage = await supabase.from('AccesPilotage').select().eq('email', email);
     final checkEntite = await entitePilotageController.initialisation();
     data["user"] = user[0] ;

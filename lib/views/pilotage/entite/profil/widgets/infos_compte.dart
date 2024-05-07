@@ -38,6 +38,11 @@ class _InfosCompteState extends State<InfosCompte> {
     EasyLoading.dismiss();
   }
 
+  String concatenationListe(List<String>? liste) {
+    List<String> strings = liste!.map((e) => e.toString()).toList();
+    return strings.join(", ");
+  }
+
   @override
   void initState() {
     dropDownLangue = profilController.userModel.value.langue ?? "";
@@ -90,6 +95,23 @@ class _InfosCompteState extends State<InfosCompte> {
                           height: 5,
                         ),
                         textNonModifiable(getAccesType(profilController.accesPilotageModel.value)),
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 10,
+                      height: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const CustomText(
+                          text: "Vos processus",
+                          size: 15,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        textNonModifiable(concatenationListe(profilController.accesPilotageModel.value.processus)),
                       ],
                     ),
                     const SizedBox(

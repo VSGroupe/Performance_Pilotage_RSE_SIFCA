@@ -4,7 +4,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:http/http.dart' as http;
 import '../models/pilotage/data_indicateur_row_model.dart';
 import '../models/pilotage/indicateur_model.dart';
-import '../models/pilotage/performs_model.dart';
 import '../models/common/user_model.dart';
 import '../models/pilotage/acces_pilotage_model.dart';
 
@@ -12,7 +11,7 @@ class DataBaseController {
   final supabase = Supabase.instance.client;
 
   static const baseUrl =
-      "http://127.0.0.1:4444"; //"https://test-api-rse.onrender.com" ;
+      "https://api-performance-rse-sifca.onrender.com"; //"http://127.0.0.1:4444"; //"https://api-performance-rse-sifca.onrender.com" ;
 
   Future<List<IndicateurModel>> getAllIndicateur() async {
     final List<dynamic> docs = await supabase
@@ -22,6 +21,18 @@ class DataBaseController {
     final indicateurs =
         docs.map((json) => IndicateurModel.fromJson(json)).toList();
     return indicateurs;
+  }
+
+  Future<List<IndicateurModel>> getProcessUserIndicators(
+      List<String> UserProcessList) async {
+    final List<dynamic> docs = await supabase
+        .from('Indicateurs')
+        .select()
+        .inFilter('processus', UserProcessList);
+
+    final UserIndicators =
+        docs.map((json) => IndicateurModel.fromJson(json)).toList();
+    return UserIndicators;
   }
 
   //recuprer valeur de la cible de l'indicateur

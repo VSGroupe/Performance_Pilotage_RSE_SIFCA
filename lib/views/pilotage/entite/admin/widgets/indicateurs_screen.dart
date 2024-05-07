@@ -55,7 +55,7 @@ class _IndicateursScreenState extends State<IndicateursScreen> {
   SfDataGridTheme  _buildDataGridForWeb() {
     return SfDataGridTheme(
       data: SfDataGridThemeData(
-          brightness: Brightness.light,
+          //brightness: Brightness.light,
           rowHoverColor: Colors.white,
           headerHoverColor: Colors.white.withOpacity(0.3),
           headerColor: Colors.blue),

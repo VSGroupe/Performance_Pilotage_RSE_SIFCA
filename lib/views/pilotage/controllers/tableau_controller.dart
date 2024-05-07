@@ -168,6 +168,7 @@ class TableauBordController extends GetxController {
         '${entitePilotageController.currentEntite.value}_${currentYear.value - 1}';
     dataIndicateur.value =
         await dataBaseController.getAllDataRowIndicateur(idDataIndicateur);
+        print(dataIndicateur.value);
     dataIndicateurPastYear.value = await dataBaseController
         .getAllDataRowIndicateur(idDataIndicateurPastYear);
     if (dataIndicateur.value.entite != "" && dataIndicateur.value.annee != 0) {

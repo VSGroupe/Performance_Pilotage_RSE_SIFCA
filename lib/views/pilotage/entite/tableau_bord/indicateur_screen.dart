@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/modules/styled_scrollview.dart';
 import 'package:perf_rse/views/pilotage/controllers/profil_pilotage_controller.dart';
+import 'package:perf_rse/views/pilotage/entite/tableau_bord/widgets/data_table/not_admin_dashboard_header.dart';
+import 'package:perf_rse/views/pilotage/entite/tableau_bord/widgets/data_table/row_indicateur.dart';
 import '../../../../widgets/privacy_widget.dart';
 import '../../controllers/drop_down_controller.dart';
 import '../../controllers/side_menu_controller.dart';
@@ -38,9 +41,7 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool acces = profilPilotageController.accesPilotageModel.value.estAdmin!;
-    List<String>? processUser =
-        profilPilotageController.accesPilotageModel.value.processus!;
+    bool userAdminStatus = checkAccesProfil();
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.only(top: 16, left: 10),
@@ -54,7 +55,8 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
                   IconButton(
                       splashRadius: 20,
                       onPressed: () {
-                        final location = GoRouter.of(context).location;
+                        final location = GoRouter.of(context)
+                            .location; //GoRouter.of(context).location
                         final path = location.split("/indicateurs").join("");
                         context.go(path);
                       },
@@ -72,8 +74,7 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
                         color: Color(0xFF3C3D3F),
                         fontWeight: FontWeight.bold),
                   ),
-                  const Expanded(
-                      child: FiltreTableauBord()),
+                  const Expanded(child: FiltreTableauBord()),
                   const SizedBox(
                     width: 10,
                   )
@@ -85,7 +86,9 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
                 child: Column(
               children: [
                 const CollecteStatus(),
-                const DashBoardHeader(),
+                userAdminStatus
+                ? const AdminDashBoardHeader()
+                : const NotAdminDashBoardHeader(),
                 Expanded(
                     child: Column(
                   children: [
@@ -100,15 +103,34 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
                         tableauBordController.filtreListApparenteOtherUser();
                       }
                       return Expanded(
-                          child: Container(
-                        child: isLoading
-                            ? loadingWidget()
+                        child: Container(
+                          child: isLoading
+                            ? loadingWidget() // Affichez un widget de chargement si isLoading est vrai
                             : status
-                                ? DashBoardListView(
-                                    indicateurs: tableauBordController
-                                        .indicateursListApparente)
-                                : const Center(child: Text("Acunnes données")),
-                      ));
+                                ? userAdminStatus
+                                    ? dropDownController.filtreProcessus.isNotEmpty
+                                      ? StyledScrollView(
+                                      child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: tableauBordController.indicateursListApparente.map((indicateur) {
+                                            return RowIndicateur(indicateur: indicateur);
+                                          }).toList()
+                                        ),
+                                    )                                    
+                                      : DashBoardListViewAdmin(
+                                          indicateurs: tableauBordController.indicateursListApparente
+                                        ) // Affichez un DashBoardListViewAdmin si l'utilisateur a accès
+                                    : StyledScrollView(
+                                      child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: tableauBordController.indicateursListApparente.map((indicateur) {
+                                            return RowIndicateur(indicateur: indicateur);
+                                          }).toList()
+                                        ),
+                                    ) // Affichez une colonne d'indicateurs si l'utilisateur n'a pas accès
+                                : const Center(child: Text("Aucunes données")) // Affichez un message "Aucunes données" si le statut est faux
+                        )
+                      );
                     }),
                     const SizedBox(height: 10),
                     const PrivacyWidget(),
@@ -122,7 +144,6 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
       ),
     );
   }
-
 
   Widget loadingWidget() {
     return const Center(
@@ -144,5 +165,13 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
         ],
       ),
     );
+  }
+
+  bool checkAccesProfil() {
+    final access = profilPilotageController.accesPilotageModel.value;
+    if (access.estAdmin == true) {
+      return true;
+    }
+    return false;
   }
 }

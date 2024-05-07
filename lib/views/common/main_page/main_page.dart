@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../utils/utils.dart';
 import '../../../widgets/export_widget.dart';
 import '../../../widgets/loading_widget.dart';
@@ -12,9 +13,7 @@ import 'widget/custom_cadre.dart';
 import 'widget/header_main_page.dart';
 import '../../../modules/styled_scrollview.dart';
 
-
 class MainPage extends StatefulWidget {
-
   const MainPage({Key? key}) : super(key: key);
 
   @override
@@ -22,7 +21,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
   final storage = const FlutterSecureStorage();
   final supabase = Supabase.instance.client;
   late Future<Map> mainData;
@@ -35,11 +33,11 @@ class _MainPageState extends State<MainPage> {
     mainData = loadDataMain();
   }
 
-  Future<Map> loadDataMain () async{
+  Future<Map> loadDataMain() async {
     var data = {};
     String? email = await storage.read(key: 'email');
-    final user = await supabase.from('Users').select().eq('email', email);
-    data["user"] = user[0] ;
+    final user = await supabase.from('Users').select().eq('email', email!);
+    data["user"] = user[0];
     return data;
   }
 
@@ -54,8 +52,14 @@ class _MainPageState extends State<MainPage> {
             child: ListBody(
               children: <Widget>[
                 const Text("Vous n'avez pas accès à cet espace."),
-                const SizedBox(height: 20,),
-                Image.asset("assets/images/forbidden.png",width: 50,height: 50,)
+                const SizedBox(
+                  height: 20,
+                ),
+                Image.asset(
+                  "assets/images/forbidden.png",
+                  width: 50,
+                  height: 50,
+                )
               ],
             ),
           ),
@@ -64,10 +68,9 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-
   Future<bool> checkAccesPilotage(String email) async {
-
-    final result = await supabase.from("AccesPilotage").select().eq("email", email);
+    final result =
+        await supabase.from("AccesPilotage").select().eq("email", email);
     final acces = result[0];
     if (acces["est_bloque"]) {
       _showMyDialog();
@@ -77,7 +80,10 @@ class _MainPageState extends State<MainPage> {
       context.go("/pilotage");
       return true;
     }
-    if (acces["est_spectateur"] || acces["est_editeur"] || acces["est_validateur"] || acces["est_admin"]) {
+    if (acces["est_spectateur"] ||
+        acces["est_editeur"] ||
+        acces["est_validateur"] ||
+        acces["est_admin"]) {
       context.go("/pilotage");
       return true;
     }
@@ -90,16 +96,15 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future trackUserLogin(String email) async {
-
     final ipAddress = await Ipify.ipv4();
     final localisation = await getCountryCityFromIP(ipAddress);
 
-    await supabase.from('Historiques').insert(
-        {
-          'action': 'Déconnexion', 'user': email,
-          "ip":ipAddress,"localisation":localisation
-        }
-    );
+    await supabase.from('Historiques').insert({
+      'action': 'Déconnexion',
+      'user': email,
+      "ip": ipAddress,
+      "localisation": localisation
+    });
   }
 
   @override
@@ -119,13 +124,18 @@ class _MainPageState extends State<MainPage> {
         return Scaffold(
           body: Column(
             children: [
-              HeaderMainPage(title: "Général",mainPageData: data,),
+              HeaderMainPage(
+                title: "Général",
+                mainPageData: data,
+              ),
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.all(5.0),
                   width: double.infinity,
                   decoration: const BoxDecoration(
-                      image: DecorationImage(image: AssetImage("assets/images/background_image.jpg"),
+                      image: DecorationImage(
+                          image:
+                              AssetImage("assets/images/background_image.jpg"),
                           fit: BoxFit.fitWidth)),
                   child: StyledScrollView(
                     child: Padding(
@@ -140,11 +150,16 @@ class _MainPageState extends State<MainPage> {
                                 children: [
                                   RichText(
                                     text: const TextSpan(
-                                        text: "Bienvenue dans ",
-                                        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold,color: Colors.black),
+                                      text: "Bienvenue dans ",
+                                      style: TextStyle(
+                                          fontSize: 35,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
                                     ),
                                   ),
-                                  const SizedBox(width: 20,),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
                                   Image.asset(
                                     "assets/logos/perf_rse.png",
                                     height: 50,
@@ -160,20 +175,33 @@ class _MainPageState extends State<MainPage> {
                               ),
                               //Text("${MediaQuery.of(context).size.height} x ${MediaQuery.of(context).size.width}"),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   CustomCadre(
                                     onTap: () async {
-                                      checkAccesEvaluation("${data["user"]["email"]}");
+                                      // checkAccesEvaluation(
+                                      //     "${data["user"]["email"]}");
+                                      context.go("/gestion/home");
+                                    },
+                                    imagePath: "assets/images/image_gouv.jpg",
+                                    titreCadre: "Gestion",
+                                  ),
+                                  CustomCadre(
+                                    onTap: () async {
+                                      // checkAccesEvaluation(
+                                      //     "${data["user"]["email"]}");
+                                      context.go("/audit/accueil");
                                     },
                                     imagePath: "assets/images/audit_rse.png",
                                     titreCadre: "Evaluation",
                                   ),
                                   CustomCadre(
-                                    onTap: (){
+                                    onTap: () {
                                       EasyLoading.show(status: 'Chargement...');
-                                      checkAccesPilotage("${data["user"]["email"]}");
+                                      checkAccesPilotage(
+                                          "${data["user"]["email"]}");
                                       EasyLoading.dismiss();
                                     },
                                     imagePath: "assets/images/pilotage_rse.jpg",
@@ -181,9 +209,10 @@ class _MainPageState extends State<MainPage> {
                                   ),
                                   CustomCadre(
                                     onTap: () {
-                                      _showMyDialog();
+                                      launch('http://localhost:56289/');
                                     },
-                                    imagePath: "assets/images/reporting_rse.jpg",
+                                    imagePath:
+                                        "assets/images/reporting_rse.jpg",
                                     titreCadre: "Reporting",
                                   ),
                                 ],
@@ -199,9 +228,7 @@ class _MainPageState extends State<MainPage> {
                                 tooltip: "Se déconnecter",
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.zero,
-                                style: IconButton.styleFrom(
-                                    iconSize: 50
-                                ),
+                                style: IconButton.styleFrom(iconSize: 50),
                                 icon: const Icon(
                                   Icons.exit_to_app_outlined,
                                   color: Colors.red,
@@ -212,9 +239,14 @@ class _MainPageState extends State<MainPage> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text("Voulez-vous quitter l'application ?"),
-                                        content: const SizedBox(width:200,child: Text('Cliquez sur Oui pour vous déconnecter.')),
-                                        actionsAlignment: MainAxisAlignment.spaceBetween,
+                                        title: const Text(
+                                            "Voulez-vous quitter l'application ?"),
+                                        content: const SizedBox(
+                                            width: 200,
+                                            child: Text(
+                                                'Cliquez sur Oui pour vous déconnecter.')),
+                                        actionsAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         actions: <Widget>[
                                           OutlinedButton(
                                             onPressed: () {
@@ -223,28 +255,40 @@ class _MainPageState extends State<MainPage> {
                                             child: const Text('Non'),
                                           ),
                                           OutlinedButton(
-                                            onPressed: isDisconnecting ? null : () async {
-                                              setState(() {
-                                                isDisconnecting = true;
-                                              });
-                                              String? emailCurrent = supabase.auth.currentUser!.email;
-                                              await storage.write(key: 'logged', value: "");
-                                              await storage.write(key: 'email', value: "");
-                                              await storage.deleteAll();
-                                              await supabase.auth.signOut();
-                                              context.go('/account/login');
-                                              if (emailCurrent != null ) {
-                                                trackUserLogin(emailCurrent);
-                                              }
-                                              setState(() {
-                                                isDisconnecting =false ;
-                                              });
-                                            },
+                                            onPressed: isDisconnecting
+                                                ? null
+                                                : () async {
+                                                    setState(() {
+                                                      isDisconnecting = true;
+                                                    });
+                                                    String? emailCurrent =
+                                                        supabase.auth
+                                                            .currentUser!.email;
+                                                    await storage.write(
+                                                        key: 'logged',
+                                                        value: "");
+                                                    await storage.write(
+                                                        key: 'email',
+                                                        value: "");
+                                                    await storage.deleteAll();
+                                                    await supabase.auth
+                                                        .signOut();
+                                                    context
+                                                        .go('/account/login');
+                                                    if (emailCurrent != null) {
+                                                      trackUserLogin(
+                                                          emailCurrent);
+                                                    }
+                                                    setState(() {
+                                                      isDisconnecting = false;
+                                                    });
+                                                  },
                                             child: const Text('Oui'),
                                           ),
                                         ],
                                       );
-                                    },);
+                                    },
+                                  );
                                 },
                               ),
                             ),

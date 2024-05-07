@@ -36,7 +36,7 @@ class _PerformanceIndicateurState extends State<PerformanceIndicateur> {
   SfCartesianChart _buildPerformanceIndicateur() {
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
-      title: ChartTitle(text: "Taux de Consommation d'energie -- SANIA"),
+      title: ChartTitle(text: "Taux de Consommation d'energie -- SUCRIVOIRE"),
       legend: Legend(
           isVisible:false,
           overflowMode: LegendItemOverflowMode.wrap),

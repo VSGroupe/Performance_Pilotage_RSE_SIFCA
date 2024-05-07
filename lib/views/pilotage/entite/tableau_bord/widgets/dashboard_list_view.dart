@@ -5,16 +5,16 @@ import '../../../../../models/pilotage/indicateur_model.dart';
 import '/views/pilotage/controllers/tableau_controller.dart';
 import 'data_table/row_axe.dart';
 
-class DashBoardListView extends StatefulWidget {
+class DashBoardListViewAdmin extends StatefulWidget {
   final List<IndicateurModel> indicateurs;
-  const DashBoardListView({Key? key, required this.indicateurs})
+  const DashBoardListViewAdmin({Key? key, required this.indicateurs})
       : super(key: key);
 
   @override
-  State<DashBoardListView> createState() => _DashBoardListViewState();
+  State<DashBoardListViewAdmin> createState() => _DashBoardListViewAdminState();
 }
 
-class _DashBoardListViewState extends State<DashBoardListView> {
+class _DashBoardListViewAdminState extends State<DashBoardListViewAdmin> {
   late ScrollController _scrollController;
   final TableauBordController tableauBordController = Get.find();
   DataIndicateurModel? dataRowIndicateur;

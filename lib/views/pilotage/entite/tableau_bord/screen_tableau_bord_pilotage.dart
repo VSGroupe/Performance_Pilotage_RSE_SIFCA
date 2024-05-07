@@ -28,7 +28,7 @@ class _ScreenTableauBordPilotageState extends State<ScreenTableauBordPilotage> {
   Future chekUserAccesPilotage() async{
     var data = {};
     String? email = await storage.read(key: 'email');
-    final user = await supabase.from('Users').select().eq('email', email);
+    final user = await supabase.from('Users').select().eq('email', email!);
     final accesPilotage = await supabase.from('AccesPilotage').select().eq('email', email);
     data["user"] = user[0] ;
     data["accesPilotage"] = accesPilotage[0] ;

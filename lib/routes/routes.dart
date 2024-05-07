@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/views/audit/gestion_audits/screen_gestions_audits.dart';
+import 'package:perf_rse/views/audit/overview/all_list_evaluation/all_list_evaluation.dart';
+import 'package:perf_rse/views/audit/overview/overview_evaluation_page.dart';
+import 'package:perf_rse/views/audit/panneau_admin/screen_admin.dart';
+import 'package:perf_rse/views/audit/screen_evaluation.dart';
+import 'package:perf_rse/views/audit/transiteAudit.dart';
+import 'package:perf_rse/views/gestion/home/gestion_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../views/common/forgot_password/change_password.dart';
 import '../views/common/reload_page/reload_screen.dart';
@@ -149,6 +156,64 @@ class RouteClass {
                 ]
             ),
           ]),
+            ShellRoute(
+              navigatorKey: _shellNavigatorKey,
+              builder: (BuildContext context, GoRouterState state, Widget child) {
+                return ScreenEvaluation(child: child);
+              },
+              routes: <RouteBase>[
+                GoRoute(
+                  path: '/audit/transite',
+                  pageBuilder: (context, state) => NoTransitionPage<void>(
+                      key: state.pageKey,
+                      child: const TransiteAudit()
+                  ),
+                ),
+                GoRoute(
+                  path: '/audit/accueil',
+                  pageBuilder: (context, state) => NoTransitionPage<void>(
+                      key: state.pageKey,
+                      child: const OverviewEvaluationPage()
+                  ),
+                ),
+                GoRoute(
+                  path: '/audit/list-audits',
+                  pageBuilder: (context, state) => NoTransitionPage<void>(
+                      key: state.pageKey,
+                      child: const AllListView()
+                  ),
+                ),
+                GoRoute(
+                  path: '/audit/gestion-audits',
+                  pageBuilder: (context, state) => NoTransitionPage<void>(
+                      key: state.pageKey,
+                      child: const ScreenGestionAudit()
+                  ),
+                ),
+                GoRoute(
+                  path: '/audit/profil',
+                  pageBuilder: (context, state) => NoTransitionPage<void>(
+                      key: state.pageKey,
+                      child: const ScreenPilotageProfil()
+                  ),
+                ),
+                GoRoute(
+                  path: '/audit/admin',
+                  pageBuilder: (context, state) => NoTransitionPage<void>(
+                      key: state.pageKey,
+                      child: const ScreenAdmin()
+                  ),
+                ),
+              ],
+            ),
+      GoRoute(
+          path: '/gestion/home',
+          pageBuilder: (context, state) => NoTransitionPage<void>(
+            key: state.pageKey,
+            restorationId: state.pageKey.value,
+            child: const GestionScreen(),
+          )
+      ),
       GoRoute(
           path: '/account/login',
           pageBuilder: (context, state) => NoTransitionPage<void>(

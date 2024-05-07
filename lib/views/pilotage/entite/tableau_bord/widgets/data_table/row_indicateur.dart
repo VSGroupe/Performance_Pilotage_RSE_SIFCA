@@ -41,11 +41,11 @@ class _RowIndicateurState extends State<RowIndicateur> {
 
   @override
   Widget build(BuildContext context) {
-    final acess = checkAccesProfil();
+    final accesAdmin = checkAccesAdmin();
     final edition = checkAccesEdition();
     final statusIndic = tableauBordController
         .dataIndicateur.value.statusEntity[widget.indicateur.numero - 1];
-    final estContributeur = !acess && edition && !statusIndic;
+    final estContributeur = !accesAdmin && edition && !statusIndic;
     return InkWell(
       onTap: () {},
       onHover: (value) {
@@ -163,24 +163,27 @@ class _RowIndicateurState extends State<RowIndicateur> {
             //   alignment: Alignment.centerLeft,
             //   child: builCibleColumn(context),
             // ),
-            //ecart
-            Container(
-              height: 40,
-              width: 100,
-              color: Colors.transparent,
-              alignment: Alignment.center,
-              child: buildEcartsColumn(),
-            ),
-            //actif/inactif
-            Container(
-              height: 40,
-              width: 100,
-              color: Colors.transparent,
-              alignment: Alignment.centerLeft,
-              child: acess
-                  ? _toggleButons
-                  : const Text("---", style: TextStyle(color: Colors.black)),
-            )
+//ecart
+accesAdmin
+  ? Container(
+      height: 40,
+      width: 100,
+      color: Colors.transparent,
+      alignment: Alignment.center,
+      child: buildEcartsColumn(),
+    )
+  : SizedBox(), // Affichez un conteneur vide si accessAdmin est faux
+
+//actif/inactif
+accesAdmin
+  ? Container(
+      height: 40,
+      width: 100,
+      color: Colors.transparent,
+      alignment: Alignment.centerLeft,
+      child: _toggleButons, // Affichez _toggleButtons si accessAdmin est vrai
+    )
+  : SizedBox(), // Affichez un conteneur vide si accessAdmin est faux
           ]),
         ),
       ),
@@ -540,7 +543,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
     return false;
   }
 
-  bool checkAccesProfil() {
+  bool checkAccesAdmin() {
     final access = profilPilotageController.accesPilotageModel.value;
     if (access.estAdmin == true) {
       return true;
@@ -806,7 +809,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
               splashRadius: 15,
               splashColor: Colors.amber,
               onPressed: () async {
-                final acces = checkAccesProfil();
+                final acces = checkAccesAdmin();
                 if (acces) {
                   renseignerDonneeCible(context, widget.indicateur, dataCible,
                       numeroLigne, currentMonth);

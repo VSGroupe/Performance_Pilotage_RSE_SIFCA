@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -194,29 +195,29 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
   }
 
   void _pickFile() async {
-    // FilePickerResult? result = await FilePicker.platform.pickFiles(
-    //   type: FileType.custom,
-    //   allowedExtensions: ['jpg', 'png', 'jpeg'],
-    // );
-    //
-    // if (result != null) {
-    //   String filePath = result.files.single.path!;
-    //   final file = File(filePath);
-    //   if (file.lengthSync() <= 512000) {
-    //     final name = filePath.split(Platform.pathSeparator).last;
-    //     file.rename(name);
-    //     setState(() {
-    //       fileState = true;
-    //       messageFormFile = "${filePath}";
-    //       ticketFile = file;
-    //     });
-    //   } else {
-    //     setState(() {
-    //       fileState = false;
-    //       messageFormFile = "La taille du fichier dépasse la limite de 500 Ko.";
-    //     });
-    //   }
-    // }
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png', 'jpeg'],
+    );
+    
+    if (result != null) {
+      String filePath = result.files.single.path!;
+      final file = File(filePath);
+      if (file.lengthSync() <= 512000) {
+        final name = filePath.split(Platform.pathSeparator).last;
+        file.rename(name);
+        setState(() {
+          fileState = true;
+          messageFormFile = "${filePath}";
+          ticketFile = file;
+        });
+      } else {
+        setState(() {
+          fileState = false;
+          messageFormFile = "La taille du fichier dépasse la limite de 500 Ko.";
+        });
+      }
+    }
   }
 
   Widget requestWidget() {

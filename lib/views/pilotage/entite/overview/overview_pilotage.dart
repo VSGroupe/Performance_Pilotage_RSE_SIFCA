@@ -36,8 +36,8 @@ class OverviewPilotage extends StatelessWidget {
                 weight: FontWeight.bold,
               ),
               SizedBox(height: defaultPadding),
-              CollecteMensuelleEntites(),
               CollecteByProcessus(),
+              CollecteMensuelleEntites(),
               //SizedBox(height: defaultPadding),
               CollecteGlobaleEntites()
             ],

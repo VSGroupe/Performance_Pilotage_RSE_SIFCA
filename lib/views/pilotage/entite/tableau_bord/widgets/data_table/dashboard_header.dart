@@ -3,14 +3,14 @@ import 'package:get/get.dart';
 
 import '../../../../controllers/tableau_controller.dart';
 
-class DashBoardHeader extends StatefulWidget {
-  const DashBoardHeader({Key? key}) : super(key: key);
+class AdminDashBoardHeader extends StatefulWidget {
+  const AdminDashBoardHeader({Key? key}) : super(key: key);
 
   @override
-  State<DashBoardHeader> createState() => _DashBoardHeaderState();
+  State<AdminDashBoardHeader> createState() => _AdminDashBoardHeaderState();
 }
 
-class _DashBoardHeaderState extends State<DashBoardHeader> {
+class _AdminDashBoardHeaderState extends State<AdminDashBoardHeader> {
   final TableauBordController tableauBordController = Get.find();
 
   @override
@@ -30,7 +30,7 @@ class _DashBoardHeaderState extends State<DashBoardHeader> {
                   .listMonth[tableauBordController.currentMonth.value - 1];
               return Row(
                 children: [
-                  const DashBoardHeaderTitle(
+                  const AdminDashBoardHeaderTitle(
                     color: Colors.brown,
                     size: 110,
                     title: "Réf",
@@ -40,17 +40,17 @@ class _DashBoardHeaderState extends State<DashBoardHeader> {
                     size: 100,
                     title: "Intitulé",
                   ),
-                  const DashBoardHeaderTitle(
+                  const AdminDashBoardHeaderTitle(
                     color: Colors.brown,
                     size: 120,
                     title: "Processus",
                   ),
-                  DashBoardHeaderTitle(
+                  AdminDashBoardHeaderTitle(
                     color: Colors.brown,
                     size: 150,
                     title: "Réalisé ${annee - 1}",
                   ),
-                  DashBoardHeaderTitle(
+                  AdminDashBoardHeaderTitle(
                     color: Colors.brown,
                     size: 150,
                     title: "Réalisé $annee",
@@ -60,18 +60,18 @@ class _DashBoardHeaderState extends State<DashBoardHeader> {
                     size: 170,
                     title: mois,
                   ),
-                  // const DashBoardHeaderTitle(
+                  // const AdminDashBoardHeaderTitle(
                   //   color: Colors.brown,
                   //   size: 100,
                   //   title: "Cible",
                   // ),
-                  const DashBoardHeaderTitle(
+                  const AdminDashBoardHeaderTitle(
                     color: Colors.brown,
                     size: 80,
                     title: "Ecart",
                   ),
 
-                  const DashBoardHeaderTitle(
+                  const AdminDashBoardHeaderTitle(
                     color: Colors.brown,
                     size: 121,
                     title: "Actif/Inactif",
@@ -131,19 +131,19 @@ class _MonthHeaderState extends State<MonthHeader> {
   }
 }
 
-class DashBoardHeaderTitle extends StatefulWidget {
+class AdminDashBoardHeaderTitle extends StatefulWidget {
   final double size;
   final Color color;
   final String title;
-  const DashBoardHeaderTitle(
+  const AdminDashBoardHeaderTitle(
       {Key? key, required this.size, required this.color, required this.title})
       : super(key: key);
 
   @override
-  State<DashBoardHeaderTitle> createState() => _DashBoardHeaderTitleState();
+  State<AdminDashBoardHeaderTitle> createState() => _AdminDashBoardHeaderTitleState();
 }
 
-class _DashBoardHeaderTitleState extends State<DashBoardHeaderTitle> {
+class _AdminDashBoardHeaderTitleState extends State<AdminDashBoardHeaderTitle> {
   bool isHovering = false;
   @override
   Widget build(BuildContext context) {

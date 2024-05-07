@@ -88,7 +88,7 @@ class _ListeContributeurState extends State<ListeContributeur> {
                       width: double.infinity,
                       height: 400,
                       child: DataTable(
-                          columnSpacing: 12,
+                          columnSpacing: 10,
                           horizontalMargin: 12,
                           columns: const [
                             DataColumn(

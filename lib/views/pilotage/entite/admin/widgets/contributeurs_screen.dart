@@ -24,7 +24,7 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
   bool isLoading = false;
 
   List<String> entitesName = [];
-  List<String> userEntitesName =[];
+  List<String> userEntitesName = [];
   List<String> entitesId = [];
   List<String> filiales = [];
   List<String> processList = [];
@@ -95,6 +95,7 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
             (element) => element["email"] == acces["email"],
             orElse: () => null);
       } catch (e) {
+        print(e);
         user = null;
       }
 
@@ -134,7 +135,7 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
   SfDataGridTheme _buildDataGridForWeb() {
     return SfDataGridTheme(
       data: SfDataGridThemeData(
-          brightness: Brightness.light,
+          //brightness: Brightness.light,
           rowHoverColor: Colors.amber.withOpacity(0.5),
           headerHoverColor: Colors.white.withOpacity(0.3),
           headerColor: Colors.blue),
@@ -685,8 +686,7 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                     _showMultiSelect();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Colors.blue,
+                    backgroundColor: Colors.blue,
                     elevation: 0,
                   ),
                   child: const Row(
@@ -723,8 +723,7 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                     _selectProcess();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Colors.blue,
+                    backgroundColor: Colors.blue,
                     elevation: 0,
                   ),
                   child: const Row(
