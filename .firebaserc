@@ -4,7 +4,8 @@
     "performance-rse-sifca": "performance-rse-sifca",
     "default": "sifca-perf-rse",
     "sifcaPerf": "sifca-performance-rse",
-    "perfRSE": "sifca-perf-rse"
+    "perfRSE": "sifca-perf-rse",
+    "sifcaPerfRse": "sifca-performance-rse"
   },
   "targets": {},
   "etags": {}
