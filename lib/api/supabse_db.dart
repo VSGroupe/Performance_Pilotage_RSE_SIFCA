@@ -10,8 +10,7 @@ import '../models/pilotage/acces_pilotage_model.dart';
 class DataBaseController {
   final supabase = Supabase.instance.client;
 
-  static const baseUrl =
-      "https://api-performance-rse-sifca.onrender.com"; //"http://127.0.0.1:4444"; //"https://api-performance-rse-sifca.onrender.com" ;
+  static const baseUrl = "https://api-performance-rse-sifca.onrender.com";
 
   Future<List<IndicateurModel>> getAllIndicateur() async {
     final List<dynamic> docs = await supabase

@@ -93,7 +93,7 @@ bool verifyCode(String code){
     if (code.length != 6) {
       return false;
     }
-    int numberCode = int.parse(code);
+    int.parse(code);
     return true;
   } catch (e) {
     return true;
