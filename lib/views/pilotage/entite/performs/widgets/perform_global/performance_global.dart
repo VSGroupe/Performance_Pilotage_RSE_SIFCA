@@ -33,10 +33,10 @@ class _PerformanceGlobaleState extends State<PerformanceGlobale> {
         .select('nom_entite')
         .eq('id_entite', entiteID);
     var entiteval = entite.first["nom_entite"];
-      entiteName = entiteval;
- 
+    entiteName = entiteval;
 
     dataPerformGlobal = responsePerforms.first["performs_global"];
+    print(dataPerformGlobal);
 
     await Future.delayed(const Duration(milliseconds: 2000));
     setState(() {
@@ -115,8 +115,8 @@ class _PerformanceGlobaleState extends State<PerformanceGlobale> {
                   ),
                   Text(entiteName,
                       textAlign: TextAlign.center,
-                      style:
-                          const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold)),
                 ],
               ),
               _buildPerformanceGlobale(data),

@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../constants/constant_double.dart';
@@ -19,6 +22,21 @@ class ListeContributeur extends StatefulWidget {
 class _ListeContributeurState extends State<ListeContributeur> {
   final OverviewPilotageController overviewPilotageController = Get.find();
 
+
+  String returnOneName(String chaine) {
+  String resultat = '';
+  
+  for (int i = 0; i < chaine.length; i++) {
+    if (chaine[i] == ' ') {
+      break;
+    }
+    resultat += chaine[i];
+  }
+  
+  return resultat;
+}
+
+
   void loading() async {
     await overviewPilotageController.getAllUserEntite();
   }
@@ -31,6 +49,7 @@ class _ListeContributeurState extends State<ListeContributeur> {
 
   @override
   Widget build(BuildContext context) {
+    Random random = Random();
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(
@@ -79,37 +98,40 @@ class _ListeContributeurState extends State<ListeContributeur> {
                       height: 270,
                       child: Center(
                           child: SizedBox(
-                        width: 50,
+                        width: 300,
                         height: 50,
-                        child: CircularProgressIndicator(),
+                        child: Text("Aucun Contributeur associé à cette entité"),
                       )),
                     )
                   : SizedBox(
                       width: double.infinity,
                       height: 400,
-                      child: DataTable(
-                          columnSpacing: 10,
-                          horizontalMargin: 12,
-                          columns: const [
-                            DataColumn(
-                              label: Text("Nom"),
-                            ),
-                            // DataColumn(
-                            //   label: Text("Filiale"),
-                            // ),
-                            DataColumn(
-                              label: Text("Entité"),
-                            ),
-                            // DataColumn(
-                            //   label: Text("Accès"),
-                            // ),
-                            DataColumn(label: Text("Processus"),),
-                          ],
-                          rows: List.generate(
-                            contributeurs.length,
-                            (index) => contributeursDataRow(
-                                contributeurs[index], colors[index % 8]),
-                          )),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: DataTable(
+                            columnSpacing: 40,
+                            horizontalMargin: 12,
+                            columns: const [
+                              DataColumn(
+                                label: Text("Nom"),
+                              ),
+                              // DataColumn(
+                              //   label: Text("Filiale"),
+                              // ),
+                              DataColumn(
+                                label: Text("Entité"),
+                              ),
+                              // DataColumn(
+                              //   label: Text("Accès"),
+                              // ),
+                              DataColumn(label: Text("Processus"),),
+                            ],
+                            rows: List.generate(
+                              contributeurs.length,
+                              (index) => contributeursDataRow(
+                                  contributeurs[index], colors[random.nextInt(8)]),
+                            )),
+                      ),
                     )
             ],
           ),
@@ -149,17 +171,28 @@ class _ListeContributeurState extends State<ListeContributeur> {
                       color: Colors.white, fontWeight: FontWeight.bold),
                 )),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Text("${fileInfo.prenom} ${fileInfo.nom}"),
+              const SizedBox(
+                width: 10,
               ),
+Expanded(
+  child: Text(
+                    "${fileInfo.nom} ${returnOneName(fileInfo.prenom)}"
+                    ),
+),
+              
             ],
           ),
         ),
         //DataCell(Text(fileInfo.filiale)),
-        DataCell(Text(fileInfo.entite)),
+        DataCell(Text(
+          fileInfo.entite,
+          maxLines: 2,
+          )),
         //DataCell(Text(fileInfo.access)),
-        DataCell(Text(fileInfo.processus)),
+        DataCell(Text(
+          fileInfo.processus,
+          maxLines: 2,
+          )),
       ],
     );
   }

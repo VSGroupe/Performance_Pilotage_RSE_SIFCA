@@ -2,10 +2,13 @@
   "projects": {
     "n": "performance-rse-sifca",
     "performance-rse-sifca": "performance-rse-sifca",
-    "default": "sifca-perf-rse",
+    "default": "performace-rse-sifca",
     "sifcaPerf": "sifca-performance-rse",
     "perfRSE": "sifca-perf-rse",
-    "sifcaPerfRse": "sifca-performance-rse"
+    "sifcaPerfRse": "sifca-performance-rse",
+    "perf-rse": "performance-rse-sifca-d3f20",
+    "perfsifca": "perf-rse-sifca-497d4",
+    "perfrsesifca": "performace-rse-sifca"
   },
   "targets": {},
   "etags": {}

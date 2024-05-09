@@ -60,7 +60,7 @@ class OverviewPilotageController extends GetxController {
         final resultProcessus =
             concatenationListe(accesPilotageJson["processus"]);
         final resultFiliale = concatenationListe(user["entreprise"]);
-        //print(processus);
+        //print(user["nom"]);
 
         //print(accesPilotageJson["processus"]);
 
@@ -75,6 +75,7 @@ class OverviewPilotageController extends GetxController {
         listUserEntite.add(kUser);
       }
       contributeurs.value = listUserEntite;
+      //print(listUserEntite.length);
 
       if (contributeurs.isEmpty) {
         return false;

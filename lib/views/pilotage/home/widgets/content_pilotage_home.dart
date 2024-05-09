@@ -332,119 +332,119 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: 210,
-                width: 650,
-                child: OverviewCard(
-                  title: "Outils de Gestions",
-                  titleColor: Colors.orange,
-                  children: [
-                    Row(
-                      children: [
-                        // Outils des Dirigeants
-                        SizedBox(
-                          height: mheight,
-                          width: 300,
-                          child: OverviewCard(
-                            title: "Outils des Dirigeants",
-                            titleColor: Colors.black,
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    _showMyDialog(
-                                        "assets/images/gouvernance-strategie-dd-2021-2025.png",
-                                        "Feuille de Route");
-                                  },
-                                  child: const CustomText(
-                                    text: "Feuille de Route",
-                                    color: Colors.black,
-                                    weight: FontWeight.bold,
-                                  )),
-                            ],
-                          ),
-                        ),
-                        // Ressources
-                        SizedBox(
-                          height: mheight,
-                          width: 300,
-                          child: Container(
-                            width: 200,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                border:
-                                    Border.all(color: headerApp, width: 2.0)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 25,
-                                  width: double.maxFinite,
-                                  decoration: BoxDecoration(
-                                      color: headerApp,
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: const Center(
-                                    child: CustomText(
-                                      text: "Ressources",
-                                      color: Colors.black,
-                                      weight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                TextButton.icon(
-                                    onPressed: () {
-                                      _showMyDialog(
-                                          "assets/images/organigramme.png",
-                                          "Arborescence des pages de Performance RSE");
-                                    },
-                                    icon: const Icon(
-                                      Icons.account_tree,
-                                      color: Colors.amber,
-                                    ),
-                                    label: const Text("Organigramme",
-                                        style: TextStyle(color: activeBlue))),
-                                TextButton.icon(
-                                    onPressed: () {
-                                      _showMyDialog(
-                                          "assets/images/strategie.jpg",
-                                          "Stratégie RSE");
-                                    },
-                                    icon: const Icon(
-                                      Icons.telegram,
-                                      color: Colors.green,
-                                    ),
-                                    label: const Text("Stratégie RSE",
-                                        style: TextStyle(color: activeBlue))),
-                                TextButton.icon(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                      Icons.person,
-                                      color: Colors.orange,
-                                    ),
-                                    label: const Text("Contributeurs",
-                                        style: TextStyle(color: activeBlue))),
-                                TextButton.icon(
-                                    onPressed: () {
-                                      _showMyDialog(
-                                          "assets/images/politique-durabilite.jpg",
-                                          "Politique Durabilité");
-                                    },
-                                    icon: const Icon(
-                                      Icons.batch_prediction,
-                                      color: Colors.brown,
-                                    ),
-                                    label: const Text(
-                                      "Politique Durabilité",
-                                      style: TextStyle(color: activeBlue),
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              // SizedBox(
+              //   height: 210,
+              //   width: 650,
+              //   child: OverviewCard(
+              //     title: "Outils de Gestions",
+              //     titleColor: Colors.orange,
+              //     children: [
+              //       Row(
+              //         children: [
+              //           // Outils des Dirigeants
+              //           SizedBox(
+              //             height: mheight,
+              //             width: 300,
+              //             child: OverviewCard(
+              //               title: "Outils des Dirigeants",
+              //               titleColor: Colors.black,
+              //               children: [
+              //                 TextButton(
+              //                     onPressed: () {
+              //                       _showMyDialog(
+              //                           "assets/images/gouvernance-strategie-dd-2021-2025.png",
+              //                           "Feuille de Route");
+              //                     },
+              //                     child: const CustomText(
+              //                       text: "Feuille de Route",
+              //                       color: Colors.black,
+              //                       weight: FontWeight.bold,
+              //                     )),
+              //               ],
+              //             ),
+              //           ),
+              //           // Ressources
+              //           SizedBox(
+              //             height: mheight,
+              //             width: 300,
+              //             child: Container(
+              //               width: 200,
+              //               decoration: BoxDecoration(
+              //                   borderRadius: BorderRadius.circular(20),
+              //                   border:
+              //                       Border.all(color: headerApp, width: 2.0)),
+              //               child: Column(
+              //                 crossAxisAlignment: CrossAxisAlignment.start,
+              //                 children: [
+              //                   Container(
+              //                     height: 25,
+              //                     width: double.maxFinite,
+              //                     decoration: BoxDecoration(
+              //                         color: headerApp,
+              //                         borderRadius: BorderRadius.circular(20)),
+              //                     child: const Center(
+              //                       child: CustomText(
+              //                         text: "Ressources",
+              //                         color: Colors.black,
+              //                         weight: FontWeight.bold,
+              //                       ),
+              //                     ),
+              //                   ),
+              //                   TextButton.icon(
+              //                       onPressed: () {
+              //                         _showMyDialog(
+              //                             "assets/images/organigramme.png",
+              //                             "Arborescence des pages de Performance RSE");
+              //                       },
+              //                       icon: const Icon(
+              //                         Icons.account_tree,
+              //                         color: Colors.amber,
+              //                       ),
+              //                       label: const Text("Organigramme",
+              //                           style: TextStyle(color: activeBlue))),
+              //                   TextButton.icon(
+              //                       onPressed: () {
+              //                         _showMyDialog(
+              //                             "assets/images/strategie.jpg",
+              //                             "Stratégie RSE");
+              //                       },
+              //                       icon: const Icon(
+              //                         Icons.telegram,
+              //                         color: Colors.green,
+              //                       ),
+              //                       label: const Text("Stratégie RSE",
+              //                           style: TextStyle(color: activeBlue))),
+              //                   TextButton.icon(
+              //                       onPressed: () {},
+              //                       icon: const Icon(
+              //                         Icons.person,
+              //                         color: Colors.orange,
+              //                       ),
+              //                       label: const Text("Contributeurs",
+              //                           style: TextStyle(color: activeBlue))),
+              //                   TextButton.icon(
+              //                       onPressed: () {
+              //                         _showMyDialog(
+              //                             "assets/images/politique-durabilite.jpg",
+              //                             "Politique Durabilité");
+              //                       },
+              //                       icon: const Icon(
+              //                         Icons.batch_prediction,
+              //                         color: Colors.brown,
+              //                       ),
+              //                       label: const Text(
+              //                         "Politique Durabilité",
+              //                         style: TextStyle(color: activeBlue),
+              //                       ))
+              //                 ],
+              //               ),
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),

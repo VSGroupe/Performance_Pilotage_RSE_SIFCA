@@ -82,8 +82,8 @@ class _LoginPageState extends State<LoginPage> {
   Future<bool> checkName(String email) async {
     final List responseName =
         await supabase.from('Users').select('nom').eq('email', email);
-    print(responseName.first["nom"]);
-    if (responseName.first["nom"] == "") {
+    //print(responseName.first["nom"]);
+    if (responseName.first["nom"] == "Nouvel") {
       return false;
     } else {
       return true;

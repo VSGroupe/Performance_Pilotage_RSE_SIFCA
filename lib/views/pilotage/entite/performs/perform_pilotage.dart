@@ -84,36 +84,36 @@ class _PerformPilotageState extends State<PerformPilotage>
             ),
           ),
         )),
-    ContentView(
-        tab: const CustomTab(title: 'Vue detaillée'),
-        content: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          children: const <Widget>[
-            Wrap(
-              spacing: 22,
-              runSpacing: 22,
-              children: <Widget>[
-                // SizedBox(
-                //   height: 310,
-                //   width: 550,
-                //   child: Column(
-                //     children: [
-                //       Expanded(child: KeywordsGrid()),
-                //     ],
-                //   )),
-                SizedBox(
-                  height: 300,
-                  width: 600,
-                  child: ProcessGrid()),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  NonEditableTable(),
-              ],
-            )
-          ],
-        )
-        ),
+    // ContentView(
+    //     tab: const CustomTab(title: 'Vue detaillée'),
+    //     content: ListView(
+    //       padding: const EdgeInsets.symmetric(horizontal: 40),
+    //       children: const <Widget>[
+    //         Wrap(
+    //           spacing: 22,
+    //           runSpacing: 22,
+    //           children: <Widget>[
+    //             // SizedBox(
+    //             //   height: 310,
+    //             //   width: 550,
+    //             //   child: Column(
+    //             //     children: [
+    //             //       Expanded(child: KeywordsGrid()),
+    //             //     ],
+    //             //   )),
+    //             SizedBox(
+    //               height: 300,
+    //               width: 600,
+    //               child: ProcessGrid()),
+    //               SizedBox(
+    //                 height: 10,
+    //               ),
+    //               NonEditableTable(),
+    //           ],
+    //         )
+    //       ],
+    //     )
+    //     ),
   ];
   @override
   void initState() {

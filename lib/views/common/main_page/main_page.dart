@@ -109,6 +109,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool notAcces = true;
     return FutureBuilder<Map>(
       future: mainData,
       builder: (context, snapshot) {
@@ -190,9 +191,11 @@ class _MainPageState extends State<MainPage> {
                                   ),
                                   CustomCadre(
                                     onTap: () async {
-                                      // checkAccesEvaluation(
-                                      //     "${data["user"]["email"]}");
-                                      context.go("/audit/accueil");
+                                      if (notAcces) {
+                                        _showMyDialog();
+                                        return false;
+                                      }
+                                      //context.go("/audit/accueil");
                                     },
                                     imagePath: "assets/images/audit_rse.png",
                                     titreCadre: "Evaluation",
@@ -209,7 +212,11 @@ class _MainPageState extends State<MainPage> {
                                   ),
                                   CustomCadre(
                                     onTap: () {
-                                      launch('http://localhost:56289/');
+                                      if (notAcces) {
+                                        _showMyDialog();
+                                        return false;
+                                      }
+                                      //launch('http://localhost:56289/');
                                     },
                                     imagePath:
                                         "assets/images/reporting_rse.jpg",
