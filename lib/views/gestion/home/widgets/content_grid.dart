@@ -20,7 +20,7 @@ class _ContentGridState extends State<ContentGrid> {
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        childAspectRatio: 16 / 7,
+        childAspectRatio: 25 / 8,
         crossAxisCount: 4,
         mainAxisSpacing: 20,
         crossAxisSpacing: 30,
@@ -61,14 +61,16 @@ child: Padding(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        //crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(
-            contentData[index].text,
-            style: GoogleFonts.playfairDisplay(
-              fontSize: 30,
-              color: Colors.white,
+          Center(
+            child: Text(
+              contentData[index].text,
+              style: GoogleFonts.playfairDisplay(
+                fontSize: 20,
+                color: Colors.white,
+              ),
             ),
           ),
         ],

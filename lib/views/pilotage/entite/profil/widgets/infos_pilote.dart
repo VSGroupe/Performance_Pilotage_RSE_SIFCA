@@ -30,53 +30,48 @@ class _InfosPiloteState extends State<InfosPilote> {
   late String entite;
   late String filiale;
 
-String concatenationListe(List liste) {
-  List<String> strings = liste.map((e) => e.toString()).toList();
-  return strings.join(", ");
-}
-
+  String concatenationListe(List liste) {
+    List<String> strings = liste.map((e) => e.toString()).toList();
+    return strings.join(", ");
+  }
 
   void initialisation() {
-
     nomTextEditingController.text = profilController.userModel.value.nom;
     prenomTextEditingController.text = profilController.userModel.value.prenom!;
     titreTextEditingController.text = profilController.userModel.value.titre ?? "";
-
-    villeTextEditingController.text = profilController.userModel.value.ville?? "" ;
-    adresseTextEditingController.text = profilController.userModel.value.addresse?? "";
-    numeroTextEditingController.text = profilController.userModel.value.numero?? "";
+    villeTextEditingController.text = profilController.userModel.value.ville ?? "";
+    adresseTextEditingController.text = profilController.userModel.value.addresse ?? "";
+    numeroTextEditingController.text = profilController.userModel.value.numero ?? "";
     fonctionTextEditingController.text = profilController.userModel.value.fonction ?? "";
     paysTextEditingController.text = profilController.userModel.value.pays ?? "";
-
     entite = concatenationListe(profilController.accesPilotageModel.value.nomEntite!);
     filiale = concatenationListe(profilController.userModel.value.entreprise!);
   }
-
 
   void updateInfoPilote() async {
     setState(() {
       isUpdating = true;
     });
-    EasyLoading.show(status: 'Mise à jour du profil ...');
+    EasyLoading.show(status: "Mise à jour du profil en cours");
     await Future.delayed(const Duration(seconds: 1));
     String email = profilController.userModel.value.email;
     final reponse = await dataBaseController.updateUser(
-        email: email,
-        nom: nomTextEditingController.text,
-        prenom: prenomTextEditingController.text,
-        titre: titreTextEditingController.text,
-        ville: villeTextEditingController.text,
-        pays: paysTextEditingController.text,
-        adresse: adresseTextEditingController.text,
-        numero: numeroTextEditingController.text,
-        fonction: fonctionTextEditingController.text,
+      email: email,
+      nom: nomTextEditingController.text,
+      prenom: prenomTextEditingController.text,
+      titre: titreTextEditingController.text,
+      ville: villeTextEditingController.text,
+      pays: paysTextEditingController.text,
+      adresse: adresseTextEditingController.text,
+      numero: numeroTextEditingController.text,
+      fonction: fonctionTextEditingController.text,
     );
 
     if (reponse) {
       await profilController.updateProfil();
-      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Succès", "La mise à jour a été éffectué avec succès." , Colors.green));
+      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Succès", "La mise à jour a été effectuée avec succès", Colors.green));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Echec", "Un problème est survenu.", Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Échec", "La mise à jour a échoué", Colors.red));
     }
     EasyLoading.dismiss();
     setState(() {
@@ -88,7 +83,6 @@ String concatenationListe(List liste) {
 
   @override
   void initState() {
-
     nomTextEditingController = TextEditingController();
     prenomTextEditingController = TextEditingController();
     villeTextEditingController = TextEditingController();
@@ -97,9 +91,7 @@ String concatenationListe(List liste) {
     fonctionTextEditingController = TextEditingController();
     paysTextEditingController = TextEditingController();
     titreTextEditingController = TextEditingController();
-
     initialisation();
-
     super.initState();
   }
 
@@ -146,7 +138,7 @@ String concatenationListe(List liste) {
                   border: Border.all(
                     color: Colors.amber,
                   ),
-                  borderRadius: const BorderRadius.all(Radius.circular(40))),//
+                  borderRadius: const BorderRadius.all(Radius.circular(40))),
               child: const Center(
                   child: CustomText(
                 text: "Enregistrer",
@@ -163,73 +155,74 @@ String concatenationListe(List liste) {
 
   Widget piloteInfoPilote() {
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const CustomText(
-            text: "Contributeur",
-            size: 20,
-            weight: FontWeight.bold,
-          ),
-          Card(
-            elevation: 3,
-            child: Container(
-              height: 300,
-              width: double.infinity,
-              padding: const EdgeInsets.all(20.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const CustomText(
-                            text: "Titre",
-                            size: 15,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          textNonModifiable(titreTextEditingController.text,250),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const CustomText(
-                            text: "Nom",
-                            size: 15,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          CustomTextFormField(
-                            controller: nomTextEditingController,
-                            width: 250,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const CustomText(
-                            text: "Prénom",
-                            size: 15,
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          CustomTextFormField(
-                            controller: prenomTextEditingController,
-                            width: 250,
-                          ),
-                        ],
-                      )
-                ],
-              ),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const CustomText(
+          text: "Utilisateur",
+          size: 20,
+          weight: FontWeight.bold,
+        ),
+        Card(
+          elevation: 3,
+          child: Container(
+            height: 300,
+            width: double.infinity,
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const CustomText(
+                      text: "Titre de l'utilisateur",
+                      size: 15,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    textNonModifiable(titreTextEditingController.text, 250),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const CustomText(
+                      text: "Nom",
+                      size: 15,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    CustomTextFormField(
+                      controller: nomTextEditingController,
+                      width: 250,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const CustomText(
+                      text: "Prénom",
+                      size: 15,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    CustomTextFormField(
+                      controller: prenomTextEditingController,
+                      width: 250,
+                    ),
+                  ],
+                )
+              ],
             ),
           ),
-        ],
-      );
+        ),
+      ],
+    );
   }
 
   Widget contactPilote() {
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start, children: [
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         const CustomText(
           text: "Contacts",
           size: 20,
@@ -243,7 +236,8 @@ String concatenationListe(List liste) {
             padding: const EdgeInsets.all(20.0),
             child: Row(
               children: [
-                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                Expanded(child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const CustomText(
                       text: "Numéro de téléphone",
@@ -289,32 +283,33 @@ String concatenationListe(List liste) {
                 const SizedBox(
                   width: 10,
                 ),
-                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                Expanded(child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const CustomText(
-                      text: "Filiale",
+                      text: "Filiales",
                       size: 15,
                     ),
                     const SizedBox(
                       height: 5,
                     ),
-                    textNonModifiable(filiale,250),
+                    textNonModifiable(filiale, 250),
                     const SizedBox(
                       height: 10,
                     ),
                     const CustomText(
-                      text: "Entité",
+                      text: "Entités",
                       size: 15,
                     ),
                     const SizedBox(
                       height: 5,
                     ),
-                    textNonModifiable(entite,250),
+                    textNonModifiable(entite, 250),
                     const SizedBox(
                       height: 10,
                     ),
                     const CustomText(
-                      text: "Fonction",
+                      text: "Rôle",
                       size: 15,
                     ),
                     const SizedBox(
@@ -329,7 +324,8 @@ String concatenationListe(List liste) {
                 const SizedBox(
                   width: 10,
                 ),
-                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                Expanded(child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const CustomText(
                       text: "Adresse",

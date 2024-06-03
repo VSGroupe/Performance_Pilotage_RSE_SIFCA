@@ -4,7 +4,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../utils/utils.dart';
 import '../../../widgets/export_widget.dart';
 import '../../../widgets/loading_widget.dart';
@@ -47,7 +46,7 @@ class _MainPageState extends State<MainPage> {
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Accès refusé'),
+          title: const Text("Accès refusé"),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -202,7 +201,7 @@ class _MainPageState extends State<MainPage> {
                                   ),
                                   CustomCadre(
                                     onTap: () {
-                                      EasyLoading.show(status: 'Chargement...');
+                                      EasyLoading.show(status: "Chargement ...");
                                       checkAccesPilotage(
                                           "${data["user"]["email"]}");
                                       EasyLoading.dismiss();
@@ -216,7 +215,6 @@ class _MainPageState extends State<MainPage> {
                                         _showMyDialog();
                                         return false;
                                       }
-                                      //launch('http://localhost:56289/');
                                     },
                                     imagePath:
                                         "assets/images/reporting_rse.jpg",
@@ -246,12 +244,10 @@ class _MainPageState extends State<MainPage> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text(
-                                            "Voulez-vous quitter l'application ?"),
+                                        title: const Text("Voulez-vous quitter l'application ?"),
                                         content: const SizedBox(
                                             width: 200,
-                                            child: Text(
-                                                'Cliquez sur Oui pour vous déconnecter.')),
+                                            child: Text("Cliquez sur Oui pour vous déconnecter.")),
                                         actionsAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         actions: <Widget>[
@@ -259,7 +255,7 @@ class _MainPageState extends State<MainPage> {
                                             onPressed: () {
                                               Navigator.pop(context);
                                             },
-                                            child: const Text('Non'),
+                                            child: const Text("Non"),
                                           ),
                                           OutlinedButton(
                                             onPressed: isDisconnecting
@@ -290,7 +286,7 @@ class _MainPageState extends State<MainPage> {
                                                       isDisconnecting = false;
                                                     });
                                                   },
-                                            child: const Text('Oui'),
+                                            child: const Text("Oui"),
                                           ),
                                         ],
                                       );
@@ -314,3 +310,4 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
+

@@ -376,7 +376,7 @@ class _MonthFiltreWidgetState extends State<MonthFiltreWidget> {
       child: Row(
         children: [
           const Text(
-            "Mois:  ",
+            "Mois  ",
             style: TextStyle(fontSize: 18),
           ),
           Container(
@@ -584,7 +584,7 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      CheckBoxWidget(processus: 'Gestion Stock / Logistique'),
+                      CheckBoxWidget(processus: 'GS / Logistique'),
                       CheckBoxWidget(processus: 'Emissions'),
                       CheckBoxWidget(processus: 'Usine'),
                       CheckBoxWidget(processus: 'Médecin'),
@@ -618,13 +618,6 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
                     Navigator.of(context).pop();
                   },
                   child: const Text("Tout de décocher")),
-              // OutlinedButton(
-              //     style:
-              //         OutlinedButton.styleFrom(foregroundColor: Colors.green),
-              //     onPressed: () {
-              //       Navigator.of(context).pop();
-              //     },
-              //     child: const Text("Appliquer")),
             ],
           )
         ],
@@ -684,8 +677,69 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
         return "Ressources Humaines / Juridique";
       case "DD":
         return "Développement Durable";
+      case "GS / Logistique":
+        return "Gestion des Stocks / Logistique";
       default:
         return abr;
     }
   }
 }
+
+// class CheckBoxWidgetEn extends StatefulWidget {
+//   final String processus;
+//   const CheckBoxWidgetEn({super.key, required this.processus});
+
+//   @override
+//   State<CheckBoxWidgetEn> createState() => _CheckBoxWidgetEnState();
+// }
+
+// class _CheckBoxWidgetEnState extends State<CheckBoxWidgetEn> {
+//   final DropDownController dropDownController = Get.find();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Obx(() {
+//       final filtreProcessus = dropDownController.filtreProcessus;
+//       return Container(
+//         height: 40,
+//         width: double.infinity,
+//         margin: const EdgeInsets.all(2),
+//         child: Row(
+//           children: [
+//             Checkbox(
+//                 checkColor: Colors.green,
+//                 value: filtreProcessus
+//                     .contains(matchAbrProcess(abr: widget.processus)),
+//                 onChanged: (value) {
+//                   dropDownController.addRemoveProcessus(
+//                       matchAbrProcess(abr: widget.processus), value!);
+//                 }),
+//             const SizedBox(
+//               width: 10,
+//             ),
+//             Flexible(
+//                 child: CustomText(
+//               text: widget.processus,
+//               fontStyle: FontStyle.italic,
+//             ))
+//           ],
+//         ),
+//       );
+//     });
+//   }
+
+//   String matchAbrProcess({required String abr}) {
+//     switch (abr) {
+//       case "HR":
+//         return "Human resources";
+//       case "HR / Legal":
+//         return "Human Resources/Legal";
+//       case "SD":
+//         return "Sustainable development";
+//       case "SM / Logistics":
+//         return "Stock Management/Logistics";
+//       default:
+//         return abr;
+//     }
+//   }
+// }

@@ -89,29 +89,29 @@ class _SuiviMensuelChartState extends State<SuiviMensuelChart> {
     _tooltipBehavior = TooltipBehavior(enable: true);
     chartData = <ChartSampleData>[
       ChartSampleData(
-          x: 'Jan.', y: number.toDouble() - suiviDoc["1"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["1"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["1"]["indicateur_valides"]),
+          x: "Jan", y: number.toDouble() - suiviDoc["1"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["1"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["1"]["indicateur_valides"]),
       ChartSampleData(
-          x: 'Fév.', y: number.toDouble() - suiviDoc["2"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["2"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["2"]["indicateur_valides"]),
+          x: "Feb", y: number.toDouble() - suiviDoc["2"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["2"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["2"]["indicateur_valides"]),
       ChartSampleData(
-          x: 'Mars', y: number.toDouble() - suiviDoc["3"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["3"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["3"]["indicateur_valides"]),
+          x: "Mar", y: number.toDouble() - suiviDoc["3"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["3"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["3"]["indicateur_valides"]),
       ChartSampleData(
-          x: 'Avril', y: number.toDouble() - suiviDoc["4"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["4"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["4"]["indicateur_valides"]),
+          x: "Apr", y: number.toDouble() - suiviDoc["4"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["4"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["4"]["indicateur_valides"]),
       ChartSampleData(
-          x: 'Mai', y: number.toDouble() - suiviDoc["5"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["5"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["5"]["indicateur_valides"]),
+          x: "May", y: number.toDouble() - suiviDoc["5"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["5"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["5"]["indicateur_valides"]),
       ChartSampleData(
-          x: 'Juin', y: number.toDouble() - suiviDoc["6"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["6"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["6"]["indicateur_valides"]),
+          x: "Jun", y: number.toDouble() - suiviDoc["6"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["6"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["6"]["indicateur_valides"]),
       ChartSampleData(
-          x: 'Jui.', y: number.toDouble() - suiviDoc["7"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["7"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["7"]["indicateur_valides"]),
+          x: "Jul", y: number.toDouble() - suiviDoc["7"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["7"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["7"]["indicateur_valides"]),
       ChartSampleData(
-          x: 'Août', y: number.toDouble() - suiviDoc["8"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["8"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["8"]["indicateur_valides"]),
+          x: "Aug", y: number.toDouble() - suiviDoc["8"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["8"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["8"]["indicateur_valides"]),
       ChartSampleData(
-          x: 'Sept.', y: number.toDouble() - suiviDoc["9"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["9"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["9"]["indicateur_valides"]),
+          x: "Sep", y: number.toDouble() - suiviDoc["9"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["9"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["9"]["indicateur_valides"]),
       ChartSampleData(
-          x: 'Oct.', y: number.toDouble() - suiviDoc["10"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["10"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["10"]["indicateur_valides"]),
+          x: "Oct", y: number.toDouble() - suiviDoc["10"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["10"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["10"]["indicateur_valides"]),
       ChartSampleData(
-          x: 'Nov.', y: number.toDouble() - suiviDoc["11"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["11"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["11"]["indicateur_valides"]),
+          x: "Nov", y: number.toDouble() - suiviDoc["11"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["11"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["11"]["indicateur_valides"]),
       ChartSampleData(
-          x: 'Déc.', y: number.toDouble() - suiviDoc["12"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["12"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["12"]["indicateur_valides"])
+          x: "Dec", y: number.toDouble() - suiviDoc["12"]["indicateur_collectes"], secondSeriesYValue: suiviDoc["12"]["indicateur_collectes"], thirdSeriesYValue: suiviDoc["12"]["indicateur_valides"])
     ];
     await Future.delayed(const Duration(milliseconds: 2000));
     setState(() {
@@ -159,15 +159,15 @@ class _SuiviMensuelChartState extends State<SuiviMensuelChart> {
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
       title: ChartTitle(
-          text: 'Suivi des données mensuelles ${suiviDataController.annee.value} : $eniteName',
+          text: 'Suivi mensuel des données pour ${suiviDataController.annee.value} : $eniteName',
           textStyle: const TextStyle(fontSize: 16,decoration: TextDecoration.underline)
       ),
-      primaryXAxis: CategoryAxis(
-        title: AxisTitle(text: "",textStyle: const TextStyle(fontSize: 14)),
-        majorGridLines: const MajorGridLines(width: 0),
+      primaryXAxis: const CategoryAxis(
+        title: AxisTitle(text: "",textStyle: TextStyle(fontSize: 14)),
+        majorGridLines: MajorGridLines(width: 0),
       ),
       primaryYAxis: NumericAxis(
-          title: AxisTitle(text: "Nombre d'occurrence"),
+          title: AxisTitle(text: "Indicateurs"),
           maximum: numberTotal.toDouble(),
           minimum: 0,
           interval: 40,
@@ -209,7 +209,7 @@ class _SuiviMensuelChartState extends State<SuiviMensuelChart> {
           color: Colors.red,
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.y,
-          name: 'Champ vide'),
+          name: "Champs vides"),
       ColumnSeries<ChartSampleData, String>(
           dataSource: chartData!,
           width: isCardView ? 0.5 : _columnWidth,
@@ -217,7 +217,7 @@ class _SuiviMensuelChartState extends State<SuiviMensuelChart> {
           color: Colors.amber,
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
-          name: 'Saisie'),
+          name: "Collectés"),
       ColumnSeries<ChartSampleData, String>(
           dataSource: chartData!,
           width: isCardView ? 0.5 : _columnWidth,

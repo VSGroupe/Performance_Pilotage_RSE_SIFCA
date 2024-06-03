@@ -6,10 +6,13 @@ import 'package:http/http.dart' as http;
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class EntitePilotageController extends GetxController{
-
+class EntitePilotageController extends GetxController {
   Uint8List? bytesLogo;
   final currentEntite = "".obs;
+  final filialeCurrentEntity = "".obs;
+  final filiereCurrentEntity = "".obs;
+  final entityAppartenance = "".obs;
+  final sousEntite = [].obs;
   final supabase = Supabase.instance.client;
   final entites = [].obs;
 
@@ -36,12 +39,10 @@ class EntitePilotageController extends GetxController{
         return false;
       }
       return true;
-    }catch (e) {
+    } catch (e) {
       return false;
     }
   }
-
-
 
   Map getCurrentEntiteRes() {
     for (var entite in entites) {
@@ -51,13 +52,9 @@ class EntitePilotageController extends GetxController{
     }
     return {};
   }
-
-
-
 }
 
 class EntiteModel {
-
   String idEntite;
   String nomEntite;
   String entiteAbr;
@@ -72,6 +69,7 @@ class EntiteModel {
   String filiale;
   String filiere;
   bool blockCreatingData;
+  String groupe;
 
   EntiteModel({
     required this.idEntite,
@@ -88,44 +86,45 @@ class EntiteModel {
     required this.filiale,
     required this.filiere,
     required this.blockCreatingData,
+    required this.groupe,
   });
 
-  factory EntiteModel.fromRawJson(String str) => EntiteModel.fromJson(json.decode(str));
+  factory EntiteModel.fromRawJson(String str) =>
+      EntiteModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory EntiteModel.fromJson(Map<String, dynamic> json) => EntiteModel(
-    idEntite: json["id_entite"],
-    nomEntite: json["nom_entite"],
-    entiteAbr: json["entite_abr"],
-    estConsolide: json["est_consolide"],
-    sousEntites: List<String>.from(json["sous_entites"].map((x) => x)),
-    logo: json["logo"],
-    couleur: json["couleur"],
-    addresse: json["addresse"],
-    pays: json["pays"],
-    ville: json["ville"],
-    langue: json["langue"],
-    filiale: json["filiale"],
-    filiere: json["filiere"],
-    blockCreatingData: json["block_creating_data"],
-  );
+      idEntite: json["id_entite"],
+      nomEntite: json["nom_entite"],
+      entiteAbr: json["entite_abr"],
+      estConsolide: json["est_consolide"],
+      sousEntites: List<String>.from(json["sous_entites"].map((x) => x)),
+      logo: json["logo"],
+      couleur: json["couleur"],
+      addresse: json["addresse"],
+      pays: json["pays"],
+      ville: json["ville"],
+      langue: json["langue"],
+      filiale: json["filiale"],
+      filiere: json["filiere"],
+      blockCreatingData: json["block_creating_data"],
+      groupe: json["groupe"]);
 
   Map<String, dynamic> toJson() => {
-    "id_entite": idEntite,
-    "nom_entite": nomEntite,
-    "entite_abr": entiteAbr,
-    "est_consolide": estConsolide,
-    "sous_entites": List<dynamic>.from(sousEntites.map((x) => x)),
-    "logo": logo,
-    "couleur": couleur,
-    "addresse": addresse,
-    "pays": pays,
-    "ville": ville,
-    "langue": langue,
-    "filiale": filiale,
-    "filiere": filiere,
-  };
+        "id_entite": idEntite,
+        "nom_entite": nomEntite,
+        "entite_abr": entiteAbr,
+        "est_consolide": estConsolide,
+        "sous_entites": List<dynamic>.from(sousEntites.map((x) => x)),
+        "logo": logo,
+        "couleur": couleur,
+        "addresse": addresse,
+        "pays": pays,
+        "ville": ville,
+        "langue": langue,
+        "filiale": filiale,
+        "filiere": filiere,
+        "groupe": groupe,
+      };
 }
-
-

@@ -39,7 +39,7 @@ class _EnteteSuiviState extends State<EnteteSuivi> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const CustomText(text: "Filtre",size: 20,),
+        const CustomText(text: "Fiktre", size: 20,),
         const SizedBox(width: 5,),
         Container(height: 30,width: 1,color: Colors.grey,),
         const SizedBox(width: 20,),

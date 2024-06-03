@@ -120,7 +120,7 @@ class _CollecteMensuelleEntites extends State<CollecteMensuelleEntites> {
                     width: 50,
                     height: 50,
                     child: status == -1
-                        ? const Text("Aucune donnée")
+                        ? const Text("Aucune donnée disponible.")
                         : const CircularProgressIndicator(),
                   ),
                 ),
@@ -133,7 +133,7 @@ class _CollecteMensuelleEntites extends State<CollecteMensuelleEntites> {
                       horizontalMargin: 12,
                       columns: [
                         const DataColumn(
-                          label: Text("Filiale/Entités"),
+                          label: Text("Entités des filiales"),
                         ),
                         DataColumn(
                           label: Text("${obtenirNomMois(last_month)}"),
@@ -189,17 +189,17 @@ class _CollecteMensuelleEntites extends State<CollecteMensuelleEntites> {
   String? obtenirNomMois(num chiffreMois) {
     Map<int, String> moisMap = {
       1: "Janvier",
-      2: "Fevrier",
+      2: "Février",
       3: "Mars",
       4: "Avril",
       5: "Mai",
       6: "Juin",
       7: "Juillet",
-      8: "Aout",
+      8: "Août",
       9: "Septembre",
       10: "Octobre",
       11: "Novembre",
-      12: "Decembre",
+      12: "Décembre"
     };
 
     String? nomMois = moisMap[chiffreMois];
@@ -208,3 +208,4 @@ class _CollecteMensuelleEntites extends State<CollecteMensuelleEntites> {
         : nomMois?.substring(0, 3);
   }
 }
+

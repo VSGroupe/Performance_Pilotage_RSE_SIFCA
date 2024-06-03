@@ -91,14 +91,14 @@ class _SuiviDetailsState extends State<SuiviDetails> {
               ChartOverview(nombreTotal: numberTotal, numberVide: numberTotal-numberCollecte, numberCollecte: numberCollecte,),
               DataSuiviCard(
                 svgSrc: "assets/icons/data_validated.png",
-                title: "Données Validées",
+                title: "Données validées",
                 nombre: "$numberTotal",
                 total: numberValide,
                 color: Colors.green,
               ),
               DataSuiviCard(
                 svgSrc: "assets/icons/data_collect.png",
-                title: "Données Collectées",
+                title: "Données collectées",
                 nombre: "$numberTotal",
                 total: numberCollecte,
                 color: Colors.amber,
@@ -117,3 +117,4 @@ class _SuiviDetailsState extends State<SuiviDetails> {
     );
   }
 }
+

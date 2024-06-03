@@ -41,3 +41,30 @@ List demoPiliers = [
     color: Colors.green,
   ),
 ];
+
+List enDemoPiliers = [
+  PilierInfoModel(
+    axeId : "axe_1",
+    title: "GOVERNANCE AND ETHICS",
+    svgSrc: "assets/icons/gouvernance.png",
+    color: Colors.purple,
+  ),
+  PilierInfoModel(
+    axeId : "axe_2",
+    title: "EMPLOYMENT AND WORKING CONDITIONS",
+    svgSrc: "assets/icons/economie.png",
+    color: const Color(0xFF007EE5),
+  ),
+  PilierInfoModel(
+    axeId : "axe_3",
+    title: "COMMUNITIES AND SOCIAL INNOVATION",
+    svgSrc: "assets/icons/social.png",
+    color: Colors.amber,
+  ),
+  PilierInfoModel(
+    axeId : "axe_4",
+    title: "ENVIRONMENT",
+    svgSrc: "assets/icons/environnement.png",
+    color: Colors.green,
+  ),
+];

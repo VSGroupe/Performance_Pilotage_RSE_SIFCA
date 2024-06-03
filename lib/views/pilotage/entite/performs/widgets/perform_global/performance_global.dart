@@ -36,7 +36,6 @@ class _PerformanceGlobaleState extends State<PerformanceGlobale> {
     entiteName = entiteval;
 
     dataPerformGlobal = responsePerforms.first["performs_global"];
-    print(dataPerformGlobal);
 
     await Future.delayed(const Duration(milliseconds: 2000));
     setState(() {
@@ -108,7 +107,7 @@ class _PerformanceGlobaleState extends State<PerformanceGlobale> {
                     height: 5,
                   ),
                   Text(
-                    "Performance Gloable ${performsDataController.annee.value}",
+                    "Performance Globale ${performsDataController.annee.value}",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold),

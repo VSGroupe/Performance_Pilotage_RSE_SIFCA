@@ -65,24 +65,9 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // Future<int> countConnexion(String email) async {
-  //   final List responseConnexion = await supabase
-  //       .from('Historiques')
-  //       .select('action')
-  //       .eq('action', "Connexion")
-  //       .eq('user', email);
-  //   final int result = responseConnexion.length;
-  //   if (responseConnexion.isEmpty) {
-  //     return 0;
-  //   } else {
-  //     return result;
-  //   }
-  // }
-
   Future<bool> checkName(String email) async {
     final List responseName =
         await supabase.from('Users').select('nom').eq('email', email);
-    //print(responseName.first["nom"]);
     if (responseName.first["nom"] == "Nouvel") {
       return false;
     } else {
@@ -117,63 +102,62 @@ class _LoginPageState extends State<LoginPage> {
               barrierDismissible: false,
               builder: (BuildContext context) {
                 return AlertDialog(
-                    title: const Text("Nouvel Utilisateur"),
-                    content: Form(
-                      key: _formKeyFirstConnexion,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Veuillez votre nom svp.';
-                              }
-                              nom = value;
-                              return null;
-                            },
-                            decoration: const InputDecoration(
+                  title: const Text("Nouvel Utilisateur"),
+                  content: Form(
+                    key: _formKeyFirstConnexion,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Veuillez votre nom svp.";
+                            }
+                            nom = value;
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                            border: UnderlineInputBorder(),
+                            labelText: "Entrez votre nom",
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Veuillez entrer vos premons svp.";
+                            }
+                            prenoms = value;
+                            return null;
+                          },
+                          decoration: const InputDecoration(
                               border: UnderlineInputBorder(),
-                              labelText: 'Entrez votre nom',
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Veuillez entrer vos premons svp.';
+                              labelText: "Entrez vos prenoms"),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              if (_formKeyFirstConnexion.currentState!
+                                  .validate()) {
+                                await supabase
+                                    .from('Users')
+                                    .update({'nom': nom, 'prenom': prenoms}).eq(
+                                        'email', email);
+                                await Future.delayed(
+                                    const Duration(milliseconds: 100));
+                                context.go("/");
                               }
-                              prenoms = value;
-                              return null;
                             },
-                            decoration: const InputDecoration(
-                              border: UnderlineInputBorder(),
-                              labelText: 'Entrez vos prenoms',
-                            ),
+                            child: const Text("Valider"),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                if (_formKeyFirstConnexion.currentState!
-                                    .validate()) {
-                                  await supabase.from('Users').update({
-                                    'nom': nom,
-                                    'prenom': prenoms
-                                  }).eq('email', email);
-                                  await Future.delayed(
-                                      const Duration(milliseconds: 100));
-                                  context.go("/");
-                                }
-                              },
-                              child: const Text('Valider'),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  );
+                  ),
+                );
               });
         } else {
           await Future.delayed(const Duration(milliseconds: 100));
@@ -183,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
           });
         }
       } else {
-        const message = "Vos identifiants sont incorrectes";
+        var message = "Vos identifiants sont incorrectes";
         await Future.delayed(const Duration(milliseconds: 15));
         setState(() {
           isLoadedPage = false;
@@ -192,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
             .showSnackBar(showSnackBar("Echec", message, Colors.red));
       }
     } on Exception {
-      const message = "Vos identifiants sont incorrects";
+      var message = "Vos identifiants sont incorrectes";
       await Future.delayed(const Duration(milliseconds: 15));
       setState(() {
         isLoadedPage = false;
@@ -282,9 +266,7 @@ class _LoginPageState extends State<LoginPage> {
                             TextSpan(
                                 text: "RSE",
                                 style: TextStyle(color: Color(0xFF0F70B7))),
-                            TextSpan(
-                                text:
-                                    ", pilotez votre stratégie de développement durable en toute simplicité. "),
+                            TextSpan(text: "pilotez votre stratégie de développement durable en toute simplicité."),
                           ]),
                     )
                   ],
@@ -334,7 +316,7 @@ class _LoginPageState extends State<LoginPage> {
                                             if (value == null ||
                                                 value.isEmpty ||
                                                 !GetUtils.isEmail(value)) {
-                                              return 'Svp veuillez entrer un e-mail correct.';
+                                              return "Svp veuillez entrer un e-mail correct.";
                                             }
                                             return null;
                                           },
@@ -362,9 +344,8 @@ class _LoginPageState extends State<LoginPage> {
                                           controller: _passwordController,
                                           validator: (value) {
                                             if (value == null ||
-                                                value.isEmpty ||
-                                                value.length < 8) {
-                                              return 'Le mot de passe doit avoir au moins de 8 caractères.';
+                                                value.isEmpty) {
+                                              return "Entrez un mot de passe valide";
                                             }
                                             return null;
                                           },

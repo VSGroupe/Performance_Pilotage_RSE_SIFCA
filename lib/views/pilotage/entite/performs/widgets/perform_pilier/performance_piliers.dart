@@ -45,21 +45,21 @@ class _PerformancePiliersState extends State<PerformancePiliers> {
     _tooltipBehavior = TooltipBehavior(enable: true);
     chartData = <ChartSampleData>[
       ChartSampleData(
-          x: 'Gouvernance',
+          x: "Gouvernance",
           y: datasPilierListB[0] ?? 0,
           secondSeriesYValue:
               datasPilierListA[0] ?? 0,
           thirdSeriesYValue: 13),
       ChartSampleData(
-          x: 'Emploi',
+          x: "Emploi",
           y: datasPilierListB[1] ?? 0,
           secondSeriesYValue:
               datasPilierListA[1] ?? 0,
           thirdSeriesYValue: 7),
       ChartSampleData(
-          x: 'Société', y: datasPilierListB[2] ?? 0, secondSeriesYValue: datasPilierListA[2] ?? 0, thirdSeriesYValue: 5),
+          x: "Société", y: datasPilierListB[2] ?? 0, secondSeriesYValue: datasPilierListA[2] ?? 0, thirdSeriesYValue: 5),
       ChartSampleData(
-          x: 'Environnement',
+          x: "Environnement",
           y: datasPilierListB[3] ?? 0,
           secondSeriesYValue: datasPilierListA[3] ?? 0,
           thirdSeriesYValue: 14)
@@ -102,25 +102,25 @@ class _PerformancePiliersState extends State<PerformancePiliers> {
   SfCartesianChart _buildSpacingColumnChart() {
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
-      title: ChartTitle(
-          text: 'PERFORMANCE PAR AXE STRATEGIQUE',
-          textStyle: const TextStyle(
+      title: const ChartTitle(
+          text: "PERFORMANCE PAR AXE STRATEGIQUE",
+          textStyle: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,
               decoration: TextDecoration.underline)),
-      primaryXAxis: CategoryAxis(
-        title: AxisTitle(text: "Les axes stratégiques"),
-        majorGridLines: const MajorGridLines(width: 0),
+      primaryXAxis: const CategoryAxis(
+        title: AxisTitle(text: "Les Axes Stratégiques"),
+        majorGridLines: MajorGridLines(width: 0),
       ),
-      primaryYAxis: NumericAxis(
+      primaryYAxis: const NumericAxis(
           title: AxisTitle(text: "Performance en %"),
           maximum: 100,
           minimum: 0,
           interval: 1,
-          axisLine: const AxisLine(width: 0),
-          majorTickLines: const MajorTickLines(size: 0)),
+          axisLine: AxisLine(width: 0),
+          majorTickLines: MajorTickLines(size: 0)),
       series: _getDefaultColumn(),
-      legend: Legend(isVisible: true),
+      legend: const Legend(isVisible: true),
       tooltipBehavior: _tooltipBehavior,
     );
   }

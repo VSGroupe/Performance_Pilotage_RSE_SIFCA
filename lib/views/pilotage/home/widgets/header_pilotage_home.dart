@@ -22,7 +22,7 @@ class _HeaderPilotageHomeState extends State<HeaderPilotageHome> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const CustomText(
+              CustomText(
                 text: "PILOTAGE DE DEVELOPEMENT DURABLE",
                 weight: FontWeight.bold,
                 size: 30,

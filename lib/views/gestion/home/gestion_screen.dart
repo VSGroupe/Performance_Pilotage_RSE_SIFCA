@@ -48,7 +48,9 @@ class GestionScreen extends StatelessWidget {
                               const SizedBox(
                                 height: 10,
                               ),
-                        const ContentGrid(),
+                        const SizedBox(
+                          width: 1200,
+                          child: ContentGrid()),
                         ],
                         //ContentGrid(),
                       ),

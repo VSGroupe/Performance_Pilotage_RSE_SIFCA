@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -6,9 +5,6 @@ import 'package:perf_rse/views/pilotage/controllers/performs_data_controller.dar
 import 'package:perf_rse/views/pilotage/entite/performs/content_view.dart';
 import 'package:perf_rse/views/pilotage/entite/performs/custom_tab.dart';
 import 'package:perf_rse/views/pilotage/entite/performs/custom_tab_bar.dart';
-import 'package:perf_rse/views/pilotage/entite/performs/widgets/perform_processus/indicateurs_table.dart';
-import 'package:perf_rse/views/pilotage/entite/performs/widgets/perform_processus/keywords.dart';
-import 'package:perf_rse/views/pilotage/entite/performs/widgets/perform_processus/user_processus.dart';
 import '/modules/styled_scrollview.dart';
 import '../../../../constants/constant_double.dart';
 import 'widgets/perform_enjeu/perform_enjeu.dart';
@@ -33,7 +29,7 @@ class _PerformPilotageState extends State<PerformPilotage>
 
   List<ContentView> contentViews = [
     ContentView(
-        tab: const CustomTab(title: 'Vue globale'),
+        tab: const CustomTab(title: "Vue Globale"),
         content: Container(
           padding: const EdgeInsets.only(
               right: defaultPadding, bottom: defaultPadding, top: 5),

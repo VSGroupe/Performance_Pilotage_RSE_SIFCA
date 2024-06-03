@@ -15,28 +15,23 @@ class OverviewPilotageController extends GetxController {
 
   Future<bool> getAllUserEntite() async {
     try {
-      //print(entitePilotageController.currentEntite.value);
       List<ContributeurModel> listUserEntite = [];
       const storage = FlutterSecureStorage();
       String? email = await storage.read(key: 'email');
       if (email == null) {
         return false;
       }
-      // final List userDocList =
-      //     await supabase.from('Users').select().eq("email", email);
+
       List resultEntreprise = await supabase
           .from('Entites')
           .select('filiale')
           .eq("id_entite", entitePilotageController.currentEntite.value);
       final entreprise = resultEntreprise.first["filiale"];
-      //print(userDocList);
-      // final userDoc = userDocList.first;
-      //print(userDoc);
+
       final usersList = await supabase
           .from('Users')
           .select()
-          .contains("entreprise", ["$entreprise"]); //userDoc["entreprise"]
-      //print(usersList);
+          .contains("entreprise", ["$entreprise"]);
       final List<Map<String, dynamic>> accesPilotagesList =
           await supabase.from('AccesPilotage').select();
 
@@ -44,15 +39,18 @@ class OverviewPilotageController extends GetxController {
         final accesPilotageJson = accesPilotagesList.firstWhere(
             (element) => element["email"] == user["email"],
             orElse: () => {});
-        // print(user);
-        // print(accesPilotageJson);
+        List userEntities = accesPilotageJson["entite"];
+
+        if (accesPilotageJson["est_editeur"] != true ||
+            !userEntities.contains(entitePilotageController.currentEntite.value)) {
+          continue;
+        }
+
         final resultEntites = accesPilotageJson == null
             ? "----"
             : accesPilotageJson["nom_entite"];
-        // print(resultEntites);
-        // print(concatenationListe(resultEntites));
+
         final entite = concatenationListe(resultEntites);
-        //print(entite);
 
         final acces = accesPilotageJson != null
             ? getAccesTypeUtils(AccesPilotageModel.fromJson(accesPilotageJson))
@@ -60,16 +58,13 @@ class OverviewPilotageController extends GetxController {
         final resultProcessus =
             concatenationListe(accesPilotageJson["processus"]);
         final resultFiliale = concatenationListe(user["entreprise"]);
-        //print(user["nom"]);
-
-        //print(accesPilotageJson["processus"]);
 
         final kUser = ContributeurModel(
           entite: "$entite",
           nom: user["nom"],
           prenom: user["prenom"],
           access: acces,
-          filiale: "$resultFiliale", //{user["entreprise"]}
+          filiale: "$resultFiliale",
           processus: "$resultProcessus",
         );
         listUserEntite.add(kUser);

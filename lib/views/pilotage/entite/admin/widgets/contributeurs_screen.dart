@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:perf_rse/models/pilotage/acces_pilotage_model.dart';
+import 'package:perf_rse/views/pilotage/controllers/entite_pilotage_controler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -19,6 +20,7 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
   ContributeurDataGridSource contributeurDataGridSource =
       ContributeurDataGridSource(contributeurs: []);
   final ProfilPilotageController profilcontroller = Get.find();
+  final EntitePilotageController entitePilotageController = Get.find();
 
   final supabase = Supabase.instance.client;
   bool isLoading = false;
@@ -83,23 +85,38 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
       isLoading = true;
     });
     List dataMap = [];
-    final List userResponse = await supabase.from("Users").select();
-    final List accesPilotageResponse =
+    List resultEntreprise = await supabase
+        .from('Entites')
+        .select('filiale')
+        .eq("id_entite", entitePilotageController.currentEntite.value);
+    final entreprise = resultEntreprise.first["filiale"];
+    final List userResponse = await supabase
+        .from("Users")
+        .select()
+        .contains("entreprise", ["$entreprise"]);
+    final List<Map<String, dynamic>> accesPilotageResponse =
         await supabase.from("AccesPilotage").select();
     for (Map acces in accesPilotageResponse) {
       Map dataContributeur = {};
       dataContributeur["acces_pilotage"] = acces;
-      var user;
+      Map<String, dynamic>? user;
       try {
         user = userResponse.firstWhere(
             (element) => element["email"] == acces["email"],
-            orElse: () => null);
+            orElse: () => <String, dynamic>{});
       } catch (e) {
         print(e);
         user = null;
       }
+      List userEntities = acces["entite"];
 
-      if (user != null) {
+      if (!userEntities
+              .contains(entitePilotageController.currentEntite.value) ||
+          acces["est_admin"] == true) {
+        continue;
+      }
+
+      if (user != null && user.isNotEmpty) {
         dataContributeur["email"] = user["email"];
         dataContributeur["nom"] = user["nom"];
         dataContributeur["prenom"] = user["prenom"];
@@ -351,6 +368,7 @@ class ContributeurDataGridSource extends DataGridSource {
     buildDataGridRow();
   }
 
+  final EntitePilotageController entitePilotageController = Get.find();
   List<ContributeurModel> _contributeurs = <ContributeurModel>[];
 
   List<DataGridRow> dataGridRows = <DataGridRow>[];
@@ -358,7 +376,8 @@ class ContributeurDataGridSource extends DataGridSource {
   void buildDataGridRow() {
     dataGridRows =
         _contributeurs.map<DataGridRow>((ContributeurModel contributeur) {
-      var entites = concatenationListe(contributeur.accesPilotageModel!.entite);
+      final filiale = entitePilotageController.filialeCurrentEntity.value;
+      final filiere = entitePilotageController.filiereCurrentEntity.value;
       var nomEntites =
           concatenationListe(contributeur.accesPilotageModel?.nomEntite);
       var processus =
@@ -370,8 +389,8 @@ class ContributeurDataGridSource extends DataGridSource {
         DataGridCell<String>(columnName: 'entite', value: nomEntites),
         DataGridCell<AccesPilotageModel>(
             columnName: 'acces', value: contributeur.accesPilotageModel),
-        DataGridCell<String>(columnName: 'filiale', value: entites),
-        DataGridCell<String>(columnName: 'filiere', value: entites),
+        DataGridCell<String>(columnName: 'filiale', value: filiale),
+        DataGridCell<String>(columnName: 'filiere', value: filiere),
         DataGridCell<String>(columnName: 'processus', value: processus),
         DataGridCell<String>(
             columnName: 'fonction', value: contributeur.fonction),
@@ -622,45 +641,6 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
               const SizedBox(
                 height: 10,
               ),
-              // SizedBox(
-              //   height: 70,
-              //   child: TextFormField(
-              //     controller: nomEditingController,
-              //     maxLines: 1,
-              //     validator: (value) {
-              //       if (value == null || value.isEmpty || value.length < 3) {
-              //         return '...';
-              //       }
-              //       return null;
-              //     },
-              //     decoration: const InputDecoration(
-              //       hintText: "Nom",
-              //       labelText: "Nom",
-              //       border: OutlineInputBorder(),
-              //     ),
-              //   ),
-              // ),
-              // const SizedBox(
-              //   height: 10,
-              // ),
-              // SizedBox(
-              //   height: 70,
-              //   child: TextFormField(
-              //     controller: prenomEditingController,
-              //     maxLines: 1,
-              //     validator: (value) {
-              //       if (value == null || value.isEmpty || value.length < 3) {
-              //         return '...';
-              //       }
-              //       return null;
-              //     },
-              //     decoration: const InputDecoration(
-              //       hintText: "Prénom(s)",
-              //       labelText: "Prénom(s)",
-              //       border: OutlineInputBorder(),
-              //     ),
-              //   ),
-              // ),
               const SizedBox(
                 height: 10,
               ),
@@ -686,7 +666,8 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                     _showMultiSelect();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor:
+                        entiteName.isNotEmpty ? Colors.green : Colors.blue,
                     elevation: 0,
                   ),
                   child: const Row(
@@ -723,7 +704,8 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                     _selectProcess();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor:
+                        selectedProcess.isNotEmpty ? Colors.green : Colors.blue,
                     elevation: 0,
                   ),
                   child: const Row(
@@ -785,17 +767,20 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                                         widget.entitesId, idEntite);
 
                                 final userMap = {
-                                  "email": emailEditingController.text,
-                                  "nom": nomEditingController.text,
-                                  "prenom": prenomEditingController.text,
-                                  "acces_pilotage": emailEditingController.text,
+                                  "email": emailEditingController.text
+                                      .toLowerCase(), // .toLowerCase()
+                                  "nom": "Nouvel",
+                                  "prenom": "Utilisateur",
+                                  "acces_pilotage":
+                                      emailEditingController.text.toLowerCase(),
                                   "entreprise": filiale,
                                   "est_bloque": false,
                                   "titre": titre,
                                 };
 
                                 final userAcces = {
-                                  "email": emailEditingController.text,
+                                  "email":
+                                      emailEditingController.text.toLowerCase(),
                                   "entite": idEntite,
                                   "nom_entite": entiteName,
                                   "est_bloque": false,

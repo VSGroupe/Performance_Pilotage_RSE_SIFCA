@@ -53,57 +53,57 @@ class _PerformanceEnjeuxState extends State<PerformanceEnjeux> {
     _tooltipBehavior = TooltipBehavior(enable: true);
     chartData = <ChartSampleData>[
       ChartSampleData(
-          x: '1.a Gouvernance DD et stratégie',
+          x: "Gouvernance DD et stratégie",
           y: datasEnjeuListB[0] ?? 0,
           secondSeriesYValue: datasEnjeuListA[0] ?? 0,
           thirdSeriesYValue: 13),
       ChartSampleData(
-          x: '1.b Pilotage DD',
+          x: "Pilotage DD",
           y: datasEnjeuListB[1] ?? 0,
           secondSeriesYValue: datasEnjeuListA[1] ?? 0,
           thirdSeriesYValue: 5),
       ChartSampleData(
-          x: '2. Éthique des affaires et achats responsables',
+          x: "Éthique des affaires et achats responsables",
           y: datasEnjeuListB[2] ?? 0,
           secondSeriesYValue: datasEnjeuListA[2] ?? 0,
           thirdSeriesYValue: 14),
       ChartSampleData(
-          x: '3. Intégration des attentes DD des clients et consommateurs',
+          x: "Intégration des attentes DD des clients et consommateurs",
           y: datasEnjeuListB[3] ?? 0,
           secondSeriesYValue: datasEnjeuListA[3] ?? 0,
           thirdSeriesYValue: 13),
       ChartSampleData(
-          x: '4. Égalité de traitement',
+          x: "Égalité de traitement",
           y: datasEnjeuListB[4] ?? 0,
           secondSeriesYValue: datasEnjeuListA[4] ?? 0,
           thirdSeriesYValue: 7),
       ChartSampleData(
-          x: '5. Conditions de travail',
+          x: "Conditions de travail",
           y: datasEnjeuListB[5] ?? 0,
           secondSeriesYValue: datasEnjeuListA[5]  ?? 0,
           thirdSeriesYValue: 5),
       ChartSampleData(
-          x: '6. Amélioration du cadre de vie',
+          x: "Amélioration du cadre de vie",
           y: datasEnjeuListB[6] ?? 0,
           secondSeriesYValue: datasEnjeuListA[6] ?? 0,
           thirdSeriesYValue: 14),
       ChartSampleData(
-          x: '7. Inclusion sociale et développement des communautés',
+          x: "Inclusion sociale ét dévéloppement des communautés",
           y: datasEnjeuListB[7] ?? 0,
           secondSeriesYValue: datasEnjeuListA[7] ?? 0,
           thirdSeriesYValue: 13),
       ChartSampleData(
-          x: '8. Changement climatique et déforestation',
+          x: "Changement climatique et déforestation",
           y: datasEnjeuListB[8] ?? 0,
           secondSeriesYValue: datasEnjeuListA[8] ?? 0,
           thirdSeriesYValue: 7),
       ChartSampleData(
-          x: '9. Gestion et traitement de l’eau',
+          x: "Gestion et traitement de l’eau",
           y: datasEnjeuListB[9] ?? 0,
           secondSeriesYValue: datasEnjeuListA[9] ?? 0,
           thirdSeriesYValue: 5),
       ChartSampleData(
-          x: '10. Gestion des ressources et déchets',
+          x: "Gestion des ressources et déchets",
           y: datasEnjeuListB[10]  ?? 0,
           secondSeriesYValue: datasEnjeuListA[10] ?? 0,
           thirdSeriesYValue: 14)
@@ -146,31 +146,31 @@ class _PerformanceEnjeuxState extends State<PerformanceEnjeux> {
   SfCartesianChart _buildSpacingColumnChart() {
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
-      title: ChartTitle(
-          text: 'PERFORMANCE PAR ENJEU PRIORITAIRE',
-          textStyle: const TextStyle(
+      title: const ChartTitle(
+          text: "PERFORMANCE PAR ENJEU PRIORITAIRE",
+          textStyle: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,
               decoration: TextDecoration.underline)),
-      primaryXAxis: CategoryAxis(
-        labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+      primaryXAxis: const CategoryAxis(
+        labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
         title: AxisTitle(
             text: "Les enjeux prioritaires",
-            textStyle: const TextStyle(fontSize: 18)),
-        majorGridLines: const MajorGridLines(width: 0),
+            textStyle: TextStyle(fontSize: 18)),
+        majorGridLines: MajorGridLines(width: 0),
       ),
-      primaryYAxis: NumericAxis(
+      primaryYAxis: const NumericAxis(
           labelAlignment: LabelAlignment.center,
           title: AxisTitle(
               text: "Performance en %",
-              textStyle: const TextStyle(fontSize: 18)),
+              textStyle: TextStyle(fontSize: 18)),
           maximum: 100,
           minimum: 0,
           interval: 5,
-          axisLine: const AxisLine(width: 0),
-          majorTickLines: const MajorTickLines(size: 0)),
+          axisLine: AxisLine(width: 0),
+          majorTickLines: MajorTickLines(size: 0)),
       series: _getDefaultColumn(),
-      legend: Legend(isVisible: true),
+      legend: const Legend(isVisible: true),
       tooltipBehavior: _tooltipBehavior,
     );
   }

@@ -26,7 +26,7 @@ class _SendTokenToEmailFormState extends State<SendTokenToEmailForm> {
       isLoadedPage = true;
     });
     try {
-      await supabase.auth.resetPasswordForEmail(_emailController.text.trim(),redirectTo: 'https://performance-rse-ee576.web.app');
+      await supabase.auth.resetPasswordForEmail(_emailController.text.trim(),redirectTo: 'https://performace-rse-sifca.web.app/');
       setState(() {
         isLoadedPage = false;
       });

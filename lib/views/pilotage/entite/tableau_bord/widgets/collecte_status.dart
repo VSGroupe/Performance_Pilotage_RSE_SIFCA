@@ -47,7 +47,7 @@ class _CollecteStatusState extends State<CollecteStatus> {
           Row(
             children: [
               const CustomText(
-                text: "Le progrès de collecte est égale à ",
+                text: "Le progrès de collecte est égale à",
                 size: 15,
               ),
               CustomText(
@@ -57,12 +57,12 @@ class _CollecteStatusState extends State<CollecteStatus> {
                 weight: FontWeight.bold,
               ),
               CustomText(
-                text: " (${json["collecte"]} indicateur${json["collecte"]>1?"s":""} renseigné${json["collecte"]>1?"s":""}/ ${json["total"]})",
+                text: " (${json["collecte"]} indicateurs${json["collecte"]>1?"s":""} renseigné${json["collecte"]>1?"s":""}/ ${json["total"]})",
                 size: 15,
                 weight: FontWeight.bold,
               ),
               const CustomText(
-                text: " ce mois-ci. ",
+                text: "ce mois-ci. ",
                 size: 15,
               ),
             ],

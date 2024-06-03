@@ -39,7 +39,7 @@ class _StrategieContainerState extends State<StrategieContainer> {
                       {
                         "key": "7",
                         "enjeu":
-                            "Inclusion sociale ét dévéloppementdes communautés"
+                            "Inclusion sociale et dévéloppement des communautés"
                       },
                     ],
                   ),

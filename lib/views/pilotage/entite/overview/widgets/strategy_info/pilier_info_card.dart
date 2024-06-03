@@ -134,7 +134,7 @@ class _PilierInfoCardState extends State<PilierInfoCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "${entiteSuivi["indicateur_collectes"]} indicateur${ entiteSuivi["indicateur_collectes"] > 1 ? "s" : "" } sur",
+                    "${entiteSuivi["indicateur_collectes"]} indicateurs${ entiteSuivi["indicateur_collectes"] > 1 ? "s" : "" } sur",
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall!

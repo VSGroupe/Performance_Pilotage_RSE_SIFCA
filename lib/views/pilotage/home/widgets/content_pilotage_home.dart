@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
-import 'package:perf_rse/constants/constant_colors.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../helper/helper_methods.dart';
 import '/modules/styled_scrollview.dart';
@@ -102,6 +101,16 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
                   title: "Oléagineux",
                   titleColor: Colors.red,
                   children: [
+                    EntityTextButton(
+                      title: "GOLDEN SIFCA",
+                      color: Colors.red,
+                      entiteID: "golden-sifca",
+                    ),
+                    EntityTextButton(
+                      title: "THSP",
+                      color: Colors.red,
+                      entiteID: "thsp",
+                    ),
                     EntityTextButton(
                       title: "SANIA",
                       color: Colors.red,
@@ -299,17 +308,17 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
                   titleColor: Color(0xffb66600),
                   children: [
                     EntityTextButton(
-                      title: 'Oléagineux',
+                      title: "Oléagineux",
                       entiteID: 'oleagineux',
                       color: Colors.red,
                     ),
                     EntityTextButton(
-                      title: 'Sucre',
+                      title: "Sucre",
                       entiteID: 'sucre',
                       color: Colors.blue,
                     ),
                     EntityTextButton(
-                      title: 'Caoutchouc Naturel',
+                      title: "Catouchou Naturel",
                       entiteID: 'caoutchouc-naturel',
                       color: Colors.green,
                     ),
@@ -492,11 +501,11 @@ class _EntityTextButtonState extends State<EntityTextButton> {
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Accès refusé'),
+          title: Text("Accès refusé"),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                const Text("Vous n'avez pas accès à cet espace."),
+                Text("acces_refused_to_space"),
                 const SizedBox(
                   height: 20,
                 ),
@@ -514,8 +523,7 @@ class _EntityTextButtonState extends State<EntityTextButton> {
   }
 
   Future<bool> goToEspaceEntitePilotage(String idEntite) async {
-    print(idEntite);
-    EasyLoading.show(status: 'Chargement...');
+    EasyLoading.show(status: "Chargement ...");
     await Future.delayed(const Duration(seconds: 2));
     String? email = await storage.read(key: 'email');
     if (email == null) {

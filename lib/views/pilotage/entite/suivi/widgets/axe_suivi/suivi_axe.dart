@@ -18,7 +18,6 @@ class SuiviAxe extends StatefulWidget {
 }
 
 class _SuiviAxeState extends State<SuiviAxe> {
-
   final SuiviDataController suiviDataController = Get.find();
 
   @override
@@ -30,9 +29,10 @@ class _SuiviAxeState extends State<SuiviAxe> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Obx(() => CustomText(
-              text: "Les Axes Stratégiques , Année ${suiviDataController.annee.value}",
-              weight: FontWeight.bold,
-            ))
+                  text:
+                      "Les Axes Stratégiques ,Année ${suiviDataController.annee.value}",
+                  weight: FontWeight.bold,
+                ))
           ],
         ),
         const SizedBox(height: defaultPadding),
@@ -66,11 +66,11 @@ class PilierInfoCardGridView extends StatefulWidget {
 }
 
 class _PilierInfoCardGridViewState extends State<PilierInfoCardGridView> {
-
   final SuiviDataController suiviDataController = Get.find();
 
   @override
   Widget build(BuildContext context) {
+
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -81,7 +81,12 @@ class _PilierInfoCardGridViewState extends State<PilierInfoCardGridView> {
         mainAxisSpacing: defaultPadding,
         childAspectRatio: widget.childAspectRatio,
       ),
-      itemBuilder: (context, index) => Obx(() => PilierInfoCard(info: demoPiliers[index], annee: suiviDataController.annee.value,)),
+      itemBuilder: (context, index) => Obx(() =>
+      PilierInfoCard(
+                info: demoPiliers[index],
+                annee: suiviDataController.annee.value,
+              )
+      ),
     );
   }
 }

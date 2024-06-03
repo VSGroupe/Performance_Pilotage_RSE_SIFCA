@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:perf_rse/modules/styled_scrollview.dart';
 import 'package:perf_rse/views/pilotage/controllers/profil_pilotage_controller.dart';
+import 'package:perf_rse/views/pilotage/entite/tableau_bord/widgets/consolidation_entity_view.dart';
 import 'package:perf_rse/views/pilotage/entite/tableau_bord/widgets/data_table/not_admin_dashboard_header.dart';
 import 'package:perf_rse/views/pilotage/entite/tableau_bord/widgets/data_table/row_indicateur.dart';
 import '../../../../widgets/privacy_widget.dart';
@@ -26,8 +27,11 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
   final tableauBordController = Get.put(TableauBordController());
   final DropDownController dropDownController = Get.find();
   final ProfilPilotageController profilPilotageController = Get.find();
+  final PageController _controller = PageController(initialPage: 0);
 
   final SideMenuController sideMenuController = Get.find();
+
+  bool showAdminHeader = true;
 
   void initIndicateurScreen() async {
     tableauBordController.initialisation(context);
@@ -37,6 +41,17 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
   void initState() {
     super.initState();
     initIndicateurScreen();
+    _controller.addListener(() {
+      setState(() {
+        showAdminHeader = _controller.page?.round() == 0;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -68,7 +83,7 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
                     width: 10,
                   ),
                   const Text(
-                    "Tableau de bord ",
+                    "Tableau de bord",
                     style: TextStyle(
                         fontSize: 24,
                         color: Color(0xFF3C3D3F),
@@ -87,8 +102,13 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
               children: [
                 const CollecteStatus(),
                 userAdminStatus
-                ? const AdminDashBoardHeader()
-                : const NotAdminDashBoardHeader(),
+                ? IndicateurTabs(pageController: _controller)
+                : const SizedBox(),
+                if (showAdminHeader && userAdminStatus)
+                  const AdminDashBoardHeader()
+                else if (!showAdminHeader && userAdminStatus)
+                  const SizedBox(), // Ajout de SizedBox pour l'espacement
+                if (!userAdminStatus) const NotAdminDashBoardHeader(),
                 Expanded(
                     child: Column(
                   children: [
@@ -103,34 +123,64 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
                         tableauBordController.filtreListApparenteOtherUser();
                       }
                       return Expanded(
-                        child: Container(
-                          child: isLoading
-                            ? loadingWidget() // Affichez un widget de chargement si isLoading est vrai
-                            : status
-                                ? userAdminStatus
-                                    ? dropDownController.filtreProcessus.isNotEmpty
-                                      ? StyledScrollView(
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: tableauBordController.indicateursListApparente.map((indicateur) {
-                                            return RowIndicateur(indicateur: indicateur);
-                                          }).toList()
-                                        ),
-                                    )                                    
-                                      : DashBoardListViewAdmin(
-                                          indicateurs: tableauBordController.indicateursListApparente
-                                        ) // Affichez un DashBoardListViewAdmin si l'utilisateur a accès
-                                    : StyledScrollView(
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: tableauBordController.indicateursListApparente.map((indicateur) {
-                                            return RowIndicateur(indicateur: indicateur);
-                                          }).toList()
-                                        ),
-                                    ) // Affichez une colonne d'indicateurs si l'utilisateur n'a pas accès
-                                : const Center(child: Text("Aucunes données")) // Affichez un message "Aucunes données" si le statut est faux
-                        )
-                      );
+                          child: Container(
+                              child: isLoading
+                                  ? loadingWidget() // Affichez un widget de chargement si isLoading est vrai
+                                  : status
+                                      ? userAdminStatus
+                                          ? dropDownController
+                                                  .filtreProcessus.isNotEmpty
+                                              ? 
+                                              Expanded(
+                                                child: PageView(
+                                                  controller: _controller, // Ajoutez le contrôleur de page
+                                                  children: <Widget> [
+                                                    StyledScrollView(
+                                                      child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children:
+                                                              tableauBordController
+                                                                  .indicateursListApparente
+                                                                  .map(
+                                                                      (indicateur) {
+                                                            return RowIndicateur(
+                                                                indicateur:
+                                                                    indicateur);
+                                                          }).toList()),
+                                                    ),
+                                                     const Expanded(child: ConsolidationEntityTable()), // AllMonthsTable()
+                                                  ]
+                                                ),
+                                              )
+                                              : Expanded(
+                                                child: PageView(
+                                                  physics: const NeverScrollableScrollPhysics(),
+                                                  controller: _controller,
+                                                  children: <Widget> [
+                                                    DashBoardListViewAdmin(
+                                                      indicateurs: tableauBordController
+                                                          .indicateursListApparente),
+                                                    const Expanded(child: ConsolidationEntityTable()),
+                                                
+                                                                  ],),
+                                              ) // Affichez un DashBoardListViewAdmin si l'utilisateur a accès
+                                          : StyledScrollView(
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: tableauBordController
+                                                      .indicateursListApparente
+                                                      .map((indicateur) {
+                                                    return RowIndicateur(
+                                                        indicateur: indicateur);
+                                                  }).toList()),
+                                            ) // Affichez une colonne d'indicateurs si l'utilisateur n'a pas accès
+                                      : const Center(
+                                          child: Text(
+                                              "Aucune Donnée")) // Affichez un message "Aucunes données" si le statut est faux
+                              ));
                     }),
                     const SizedBox(height: 10),
                     const PrivacyWidget(),
@@ -175,3 +225,93 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
     return false;
   }
 }
+
+class IndicateurTabs extends StatefulWidget {
+  const IndicateurTabs({required this.pageController, super.key});
+
+  final PageController pageController;
+
+  @override
+  State<IndicateurTabs> createState() => _IndicateurTabsState();
+}
+
+class _IndicateurTabsState extends State<IndicateurTabs>
+    with TickerProviderStateMixin {
+  late final TabController _controller;
+
+  int selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TabController(
+      length: 2,
+      vsync: this,
+      initialIndex: selectedIndex,
+    );
+    _controller.addListener(() {
+      widget.pageController.jumpToPage(_controller.index);
+      setState(() {
+        selectedIndex = _controller.index;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TabBar(
+      padding: const EdgeInsets.only(left: 20),
+      tabAlignment: TabAlignment.start,
+      isScrollable: true,
+      controller: _controller,
+      indicatorSize: TabBarIndicatorSize.label,
+      indicatorColor: Colors.blue,
+      tabs: [
+        IndicateurTab(
+          text: "Edition", 
+          isSelected: selectedIndex == 0),
+        IndicateurTab(
+          text: "Vue d'ensemble",
+          isSelected: selectedIndex == 1),
+      ],
+      );
+  }
+}
+
+class IndicateurTab extends StatelessWidget {
+  const IndicateurTab(
+      {required this.text, required this.isSelected, super.key});
+  final bool isSelected;
+  final String text;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 30,
+      child: Text(
+        text,
+        style: isSelected
+            ? const TextStyle(
+                fontFamily: 'MyriadPro',
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                color: Colors.lightBlue,
+              )
+            : TextStyle(
+                fontFamily: 'MyriadPro',
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                color: Colors.blue.withOpacity(0.4),
+              ),
+      ),
+    );
+  }
+}
+

@@ -52,6 +52,7 @@ class PilierInfoCardGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -62,7 +63,7 @@ class PilierInfoCardGridView extends StatelessWidget {
         mainAxisSpacing: defaultPadding,
         childAspectRatio: childAspectRatio,
       ),
-      itemBuilder: (context, index) => PilierInfoCard(info: demoPiliers[index], annee: DateTime.now().year,),
+itemBuilder: (context, index) => PilierInfoCard(info: demoPiliers[index], annee: DateTime.now().year,),
     );
   }
 }

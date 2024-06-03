@@ -10,7 +10,8 @@ import '../models/pilotage/acces_pilotage_model.dart';
 class DataBaseController {
   final supabase = Supabase.instance.client;
 
-  static const baseUrl = "https://api-performance-rse-sifca.onrender.com";
+  static const baseUrl =
+      "https://api-performance-rse-sifca.onrender.com"; //http://127.0.0.1:5000 // https://api-performance-rse-sifca.onrender.com
 
   Future<List<IndicateurModel>> getAllIndicateur() async {
     final List<dynamic> docs = await supabase
@@ -106,6 +107,8 @@ class DataBaseController {
       "colonne": colonne,
     };
 
+    print("$entite updating");
+
     const String apiUrl = "$baseUrl/data-entite-suivi";
 
     final response = await http.post(
@@ -115,6 +118,7 @@ class DataBaseController {
       },
       body: jsonEncode(data),
     );
+    //print(response.statusCode);
 
     if (response.statusCode == 200) {
       return true;

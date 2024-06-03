@@ -27,6 +27,7 @@ class TableauBordController extends GetxController {
 
   final dataIndicateur = DataIndicateurRowModel.init().obs;
   final dataIndicateurPastYear = DataIndicateurRowModel.init().obs;
+  final dataIndicateurSousEntite = <String, DataIndicateurRowModel>{}.obs;
 
   final DataBaseController dataBaseController = DataBaseController();
 
@@ -44,6 +45,7 @@ class TableauBordController extends GetxController {
   final editing = false.obs;
   var currentYear = 0.obs;
   var currentMonth = 0.obs;
+  var monthsToCurrentMonth = [];
   var allYearsList = [].obs;
 
   var colonnesTableauBord = [
@@ -129,10 +131,19 @@ class TableauBordController extends GetxController {
     return status.estAdmin;
   }
 
+  List getMonthstoCurrentMonth(int currentMonth) {
+    List resultList = [];
+    for (var i = 1; i <= currentMonth; i++) {
+      resultList.add(i);
+    }
+    return resultList;
+  }
+
   void initDateTime() {
     var dateTime = TimeSystemController.date;
     currentYear.value = dateTime.year;
     currentMonth.value = dateTime.month;
+    monthsToCurrentMonth = getMonthstoCurrentMonth(currentMonth.value);
   }
 
   void changeMonth(int month) {
@@ -168,9 +179,10 @@ class TableauBordController extends GetxController {
         '${entitePilotageController.currentEntite.value}_${currentYear.value - 1}';
     dataIndicateur.value =
         await dataBaseController.getAllDataRowIndicateur(idDataIndicateur);
-        print(dataIndicateur.value);
     dataIndicateurPastYear.value = await dataBaseController
         .getAllDataRowIndicateur(idDataIndicateurPastYear);
+    dataIndicateurSousEntite.value = await
+        getAllDataRowsIndicateur(entitePilotageController.sousEntite);
     if (dataIndicateur.value.entite != "" && dataIndicateur.value.annee != 0) {
       dataBaseController.updateAPIDatabase(idDataIndicateur);
       statusIntialisation.value = true;
@@ -179,6 +191,22 @@ class TableauBordController extends GetxController {
       statusIntialisation.value = false;
       isLoading.value = false;
     }
+  }
+
+  Future<Map<String, DataIndicateurRowModel>> getAllDataRowsIndicateur(
+      List sousEntites) async {
+    final Map<String, DataIndicateurRowModel> resultMap = {};
+
+    for (String? sousEntite in sousEntites) {
+      if (sousEntite != null) {
+        final idDataIndicateur =
+            '${sousEntite}_${currentYear.value}';
+        resultMap[sousEntite] =
+            await dataBaseController.getAllDataRowIndicateur(idDataIndicateur);
+      }
+    }
+
+    return resultMap;
   }
 
   Future resetTotal() async {
@@ -355,6 +383,46 @@ class TableauBordController extends GetxController {
     }
   }
 
+Future<bool> supprimerIndicateurMois(
+      {
+      required int numeroLigne,
+      required int colonne,
+      required String type,
+      required String formule}) async {
+    try {
+      final currentEntite = entitePilotageController.currentEntite.value;
+      final Map<String, dynamic> data = {
+        "annee": currentYear.value,
+        "entite": currentEntite,
+        "ligne": numeroLigne,
+        "colonne": colonne,
+        "type": type,
+        "formule": formule,
+      };
+
+      const String apiUrl =
+          "${DataBaseController.baseUrl}/data-entite-indicateur/delete-data";
+
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(data),
+      );
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print("Erreur lors de la suppression de l'indicateur : $e");
+      return false;
+    }
+  }
+
+
   // Future<bool> renseignerDataCible(
   //     {required num dataCible,
   //     required int numeroLigne,
@@ -519,8 +587,18 @@ class TableauBordController extends GetxController {
   Future<bool> updateSuiviDate(
       int annee, String? processus, int? numeroLigne, int? colonne) async {
     final currentEntite = entitePilotageController.currentEntite.value;
+    //print("update suivi $currentEntite");
     await dataBaseController.updateSuiviDataEntite(
         currentEntite, annee, processus, numeroLigne, colonne);
+    return true;
+  }
+
+  Future<bool> updateSuiviDataEntityAppartenance(
+      int annee, String? processus, int? numeroLigne, int? colonne) async {
+    final entity = entitePilotageController.entityAppartenance.value;
+    //print("update suivi $entity");
+    await dataBaseController.updateSuiviDataEntite(
+        entity, annee, processus, numeroLigne, colonne);
     return true;
   }
 

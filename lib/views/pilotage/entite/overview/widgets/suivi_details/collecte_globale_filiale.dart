@@ -91,7 +91,7 @@ class _CollecteGlobaleEntitesState extends State<CollecteGlobaleEntites> {
                     width: 50,
                     height: 50,
                     child: status == -1
-                        ? const Text("Aucune donnée")
+                        ? const Text("Aucune Donnée")
                         : const CircularProgressIndicator(),
                   ),
                 ),

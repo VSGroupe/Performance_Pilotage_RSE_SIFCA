@@ -17,7 +17,6 @@ class InfosCompte extends StatefulWidget {
 }
 
 class _InfosCompteState extends State<InfosCompte> {
-
   final supabase = Supabase.instance.client;
   final DataBaseController dbController = DataBaseController();
   final ProfilPilotageController profilController = Get.find();
@@ -25,15 +24,18 @@ class _InfosCompteState extends State<InfosCompte> {
   double widthTextForm = 350;
 
   void updateLanguage(String langue) async {
-    EasyLoading.show(status: 'Mise à jour ...');
+    EasyLoading.show(status: "Mise à jour en cours");
     final email = profilController.userModel.value.email;
-    final result = await dbController.updateUserLanguage(email: email, langue: langue);
+    final result =
+        await dbController.updateUserLanguage(email: email, langue: langue);
     if (result) {
-      profilController.userModel.value. langue = langue;
+      profilController.userModel.value.langue = langue;
       profilController.updateProfil();
-      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Succès", "Modification éffectuée avec succès", Colors.green));
+      ScaffoldMessenger.of(context).showSnackBar(showSnackBar(
+          "Succès", "La mise à jour a été effectuée avec succès", Colors.green));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Echec", "Un problème est survenu.", Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(
+          showSnackBar("Échec", "La mise à jour a échoué", Colors.red));
     }
     EasyLoading.dismiss();
   }
@@ -52,134 +54,143 @@ class _InfosCompteState extends State<InfosCompte> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        Card(
-          elevation: 3,
-          child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
-              child: SizedBox(
-                width: double.infinity,
-                child: Wrap(
-                  direction: Axis.horizontal,
-                  spacing: 10,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Card(
+              elevation: 3,
+              child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 10,
                       children: [
-                        const CustomText(
-                          text: "Email utilisateur",
-                          size: 15,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        textNonModifiable(profilController.userModel.value.email),
-                      ],
-                    ),
-                    const SizedBox(
-                      width: 10,
-                      height: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const CustomText(
-                          text: "Type d'accès",
-                          size: 15,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        textNonModifiable(getAccesType(profilController.accesPilotageModel.value)),
-                      ],
-                    ),
-                    const SizedBox(
-                      width: 10,
-                      height: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const CustomText(
-                          text: "Vos processus",
-                          size: 15,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        textNonModifiable(concatenationListe(profilController.accesPilotageModel.value.processus)),
-                      ],
-                    ),
-                    const SizedBox(
-                      width: 10,
-                      height: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const CustomText(
-                          text: "Langue",
-                          size: 15,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const CustomText(
+                              text: "Email de l'utilisateur",
+                              size: 15,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            textNonModifiable(
+                                profilController.userModel.value.email),
+                          ],
                         ),
                         const SizedBox(
                           width: 10,
                           height: 10,
                         ),
-                        MenuDeroulant(
-                          indication: "",
-                          initValue: profilController.userModel.value.langue == "fr" ? "Français" : "English",
-                          width: 350,
-                          dropdownWidth: 350,
-                          height: 50,
-                          items: const ["Français", "English"],
-                          onChanged: (value) {
-                            if (value == "Français") {
-                              dropDownLangue = "fr";
-                            } else if ( value == "English" ) {
-                              dropDownLangue = "en";
-                            }
-                          },
-                        )
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const CustomText(
+                              text: "Type d'accès",
+                              size: 15,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            textNonModifiable(getAccesType(
+                                profilController.accesPilotageModel.value)),
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 10,
+                          height: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const CustomText(
+                              text: "Vos processus",
+                              size: 15,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            textNonModifiable(concatenationListe(
+                                profilController
+                                    .accesPilotageModel.value.processus)),
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 10,
+                          height: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const CustomText(
+                              text: "Langue",
+                              size: 15,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                              height: 10,
+                            ),
+                            MenuDeroulant(
+                              indication: "",
+                              initValue:
+                                  profilController.userModel.value.langue ==
+                                          "fr"
+                                      ? "Français"
+                                      : "English",
+                              width: 350,
+                              dropdownWidth: 350,
+                              height: 50,
+                              items: const ["Français", "English"],
+                              onChanged: (value) {
+                                if (value == "Français") {
+                                  dropDownLangue = "fr";
+                                } else if (value == "English") {
+                                  dropDownLangue = "en";
+                                }
+                              },
+                            )
+                          ],
+                        ),
                       ],
                     ),
-                  ],
-                ),
-              )
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Center(
-          child: InkWell(
-            onTap: () {
-              updateLanguage(dropDownLangue);
-            },
-            child: Container(
-              height: 50,
-              width: 200,
-              decoration: BoxDecoration(
-                  color: Colors.amber,
-                  border: Border.all(
-                    color: Colors.amber,
-                  ),
-                  borderRadius: const BorderRadius.all(Radius.circular(40))),
-              child: const Center(
-                  child: CustomText(
+                  )),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: InkWell(
+                onTap: () {
+                  updateLanguage(dropDownLangue);
+                },
+                child: Container(
+                  height: 50,
+                  width: 200,
+                  decoration: BoxDecoration(
+                      color: Colors.amber,
+                      border: Border.all(
+                        color: Colors.amber,
+                      ),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(40))),
+                  child: const Center(
+                      child: CustomText(
                     text: "Enregistrer",
                     size: 20,
                     weight: FontWeight.bold,
                     color: Colors.white,
                   )),
-            ),
-          ),
-        )
-      ],
-    ));
+                ),
+              ),
+            )
+          ],
+        ));
   }
 
   String getAccesType(AccesPilotageModel accesPilotageModel) {

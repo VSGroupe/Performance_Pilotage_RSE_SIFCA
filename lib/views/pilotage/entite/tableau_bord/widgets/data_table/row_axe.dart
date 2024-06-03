@@ -125,7 +125,7 @@ class _RowAxeState extends State<RowAxe> {
           const SizedBox(
             height: 1,
           ),
-          RowEnjeu(
+ RowEnjeu(
               numero: "1a",
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_1a",
@@ -212,7 +212,7 @@ class _RowAxeState extends State<RowAxe> {
               numero: "7",
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_7",
-              enjeuTitle: "Inclusion sociale et développement des communautés",
+              enjeuTitle: "Inclusion sociale ét dévéloppement des communautés",
               color: widget.color,
               indicateurs: indicateursList),
           const SizedBox(
@@ -249,6 +249,7 @@ class _RowAxeState extends State<RowAxe> {
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_10",
               enjeuTitle: "Gestion des ressources et déchets",
+
               color: widget.color,
               indicateurs: indicateursList),
           const SizedBox(

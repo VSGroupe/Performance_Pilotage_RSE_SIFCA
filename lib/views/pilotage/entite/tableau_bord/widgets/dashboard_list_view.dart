@@ -82,14 +82,14 @@ class _DashBoardListViewAdminState extends State<DashBoardListViewAdmin> {
           indicateurs: listIndicateurs,
         ),
         RowAxe(
-          title: "Communauté et innovation sociétale",
+          title: "Intégration des attentes DD des clients et consommateurs",
           color: const Color(0xFFFAAF7B),
           idAxe: "axe_3",
           imagePath: "assets/icons/social.png",
           indicateurs: listIndicateurs,
         ),
         RowAxe(
-          title: "Environnement",
+          title: "Égalité de traitement",
           color: const Color(0xFF97C3A8),
           idAxe: "axe_4",
           imagePath: "assets/icons/environnement.png",

@@ -91,7 +91,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                       width: 2,
                     ),
                   Text(
-                    "#${widget.indicateur.reference}", //${widget.indicateur.numero} 
+                    "#${widget.indicateur.numero} ${widget.indicateur.reference}", //${widget.indicateur.numero}
                     style: const TextStyle(fontSize: 12),
                   ),
                 ],
@@ -151,7 +151,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
               color: Colors.transparent,
               alignment: Alignment.centerLeft,
               child: estContributeur
-                  ? const Text("verrouille",
+                  ? const Text("verrouillé",
                       style: TextStyle(color: Colors.black))
                   : buildRealiseMoisColumn(context),
             ),
@@ -163,27 +163,28 @@ class _RowIndicateurState extends State<RowIndicateur> {
             //   alignment: Alignment.centerLeft,
             //   child: builCibleColumn(context),
             // ),
-//ecart
-accesAdmin
-  ? Container(
-      height: 40,
-      width: 100,
-      color: Colors.transparent,
-      alignment: Alignment.center,
-      child: buildEcartsColumn(),
-    )
-  : SizedBox(), // Affichez un conteneur vide si accessAdmin est faux
+            //ecart
+            accesAdmin
+                ? Container(
+                    height: 40,
+                    width: 100,
+                    color: Colors.transparent,
+                    alignment: Alignment.center,
+                    child: buildEcartsColumn(),
+                  )
+                : SizedBox(), // Affichez un conteneur vide si accessAdmin est faux
 
 //actif/inactif
-accesAdmin
-  ? Container(
-      height: 40,
-      width: 100,
-      color: Colors.transparent,
-      alignment: Alignment.centerLeft,
-      child: _toggleButons, // Affichez _toggleButtons si accessAdmin est vrai
-    )
-  : SizedBox(), // Affichez un conteneur vide si accessAdmin est faux
+            accesAdmin
+                ? Container(
+                    height: 40,
+                    width: 100,
+                    color: Colors.transparent,
+                    alignment: Alignment.centerLeft,
+                    child:
+                        _toggleButons, // Affichez _toggleButtons si accessAdmin est vrai
+                  )
+                : SizedBox(), // Affichez un conteneur vide si accessAdmin est faux
           ]),
         ),
       ),
@@ -211,14 +212,15 @@ accesAdmin
         print('switched to: $index');
       },
       cancelToggle: (index) async {
-        String selection = index == 0 ? 'desactiver' : 'activer';
+        String selection =
+            index == 0 ? "Desactiver" : "Activer";
         return await showDialog(
           context: context,
           builder: (dialogContext) => AlertDialog(
-            content: Text("Voulez vous $selection l'indicateur ?"),
+            content: Text("$selection l'indicateur ?"),
             actions: [
               TextButton(
-                child: const Text(
+                child: Text(
                   "Non",
                   style: TextStyle(color: Color.fromARGB(255, 114, 244, 54)),
                 ),
@@ -227,7 +229,7 @@ accesAdmin
                 },
               ),
               TextButton(
-                child: const Text(
+                child: Text(
                   "Oui",
                   style: TextStyle(color: Color.fromARGB(255, 232, 142, 31)),
                 ),
@@ -238,8 +240,8 @@ accesAdmin
                     await tableauBordController.updateDataIndicateur();
                     await Future.delayed(const Duration(seconds: 1));
                     var message = "Action effectuée";
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        showSnackBar("Succès", message, Colors.green));
+                    ScaffoldMessenger.of(context).showSnackBar(showSnackBar(
+                        "Succès", message, Colors.green));
                   } else {
                     var message = "Traitement non effectué";
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -278,11 +280,12 @@ accesAdmin
                   child: Row(
                     children: [
                       Text(
-                        "${formatNumber(valeur) ?? "---"} ",
+                        "${valeur == 0 ? "Faux": valeur == 1 ? "Vrai": "---"} ",
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.green),
                       ),
                     ],
                   ),
@@ -338,6 +341,7 @@ accesAdmin
                             : (value) async {
                                 final acces = await checkAccesValidation();
                                 if (acces) {
+                                  //print("update suivi");
                                   var validation = value;
                                   if (validation == true) {
                                     await validerIndicateur(
@@ -413,11 +417,12 @@ accesAdmin
                   child: Row(
                     children: [
                       Text(
-                        "${formatNumber(valeur) ?? "---"} ",
+                        "${valeur == 0 ? "Faux": valeur == 1 ? "Vrai": "---"} ",
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.green),
                       ),
                     ],
                   ),
@@ -446,14 +451,14 @@ accesAdmin
                   ],
                 ),
               ),
-                const SizedBox(
-                  width: 3,
-                ),
-                Container(
-                  height: 35,
-                  color: Colors.grey,
-                  width: 2,
-                )
+              const SizedBox(
+                width: 3,
+              ),
+              Container(
+                height: 35,
+                color: Colors.grey,
+                width: 2,
+              )
             ]);
     });
   }
@@ -628,11 +633,12 @@ accesAdmin
                   child: Row(
                     children: [
                       Text(
-                        "${formatNumber(valeur) ?? "---"} ",
+                        "${valeur == 0 ? "Faux": valeur == 1 ? "Vrai": "---"} ",
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.green),
                       ),
                     ],
                   ),
@@ -669,7 +675,7 @@ accesAdmin
                                         numeroLigne);
                                   } else {
                                     _showMyDialog(
-                                        "Vous n'avez pas l'accès à éditeur.");
+                                        "Vous n'avez pas droit à cette action");
                                   }
                                 },
                                 icon: const Icon(
@@ -749,14 +755,25 @@ accesAdmin
                                         }
                                       } else {
                                         _showMyDialog(
-                                            "Vous n'avez pas l'accès à validateur.");
+                                            "Vous n'avez pas droit à cette action");
+                                      }
+                                      if (entitePilotageController
+                                              .entityAppartenance.value !=
+                                          "vide") {
+                                        tableauBordController
+                                            .updateSuiviDataEntityAppartenance(
+                                                tableauBordController
+                                                    .currentYear.value,
+                                                widget.indicateur.processus,
+                                                numeroLigne,
+                                                currentMonth);
                                       }
                                       tableauBordController.updateSuiviDate(
                                           tableauBordController
                                               .currentYear.value,
-                                          null,
-                                          null,
-                                          null);
+                                          widget.indicateur.processus,
+                                          numeroLigne,
+                                          currentMonth);
                                       await Future.delayed(
                                           const Duration(seconds: 1));
                                       setState(() {
@@ -785,6 +802,210 @@ accesAdmin
               ],
             );
     });
+  }
+
+  Widget buildRealiseMoisColumnAdmin(BuildContext context, int index) {
+    final estConsolide =
+        entitePilotageController.getCurrentEntiteRes()["est_consolide"];
+    List<Icon> icons = [
+      const Icon(
+        Icons.verified,
+        color: Colors.green,
+      ),
+      const Icon(
+        Icons.circle,
+        color: Colors.yellow,
+      ),
+      const Icon(
+        Icons.circle,
+        color: Colors.red,
+      ),
+    ];
+    int numeroLigne = widget.indicateur.numero - 1;
+    int currentMonth = index; // a l'index dans liste des mois
+
+    var valideRealise = getValidation(numeroLigne, 0);
+
+    var valeur = getValeur(numeroLigne, currentMonth);
+    if (widget.indicateur.unite == "%" && valeur != null) {
+      valeur = valeur * 100;
+    }
+    var valide = getValidation(numeroLigne, currentMonth);
+
+    return widget.indicateur.type == "Test"
+        ? Row(
+            children: [
+              Container(
+                height: 40,
+                width: 110,
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    Text(
+                      "${valeur == 0 ? "Faux" : valeur == 1 ? "Vrai": "---"} ",
+                      textAlign: TextAlign.left,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.green),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          )
+        : Row(
+            children: [
+              Container(
+                  width: 64,
+                  height: 40,
+                  alignment: Alignment.center,
+                  child: Text(formatNumber(valeur) ?? "")),
+              Container(
+                  width: 32,
+                  height: 40,
+                  alignment: Alignment.centerLeft,
+                  child: estConsolide
+                      ? null
+                      : (widget.indicateur.type == "Primaire" &&
+                              valide != true &&
+                              valideRealise != true)
+                          ? IconButton(
+                              splashRadius: 15,
+                              splashColor: Colors.amber,
+                              onPressed: () async {
+                                final acces = checkAccesEdition();
+                                if (acces) {
+                                  renseignerLaDonnee(context, widget.indicateur,
+                                      valeur, currentMonth, numeroLigne);
+                                } else {
+                                  _showMyDialog(
+                                      "Vous n'avez pas l'accès à éditeur.");
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.edit,
+                                size: 12,
+                              ))
+                          : null),
+              Container(
+                  width: 32,
+                  height: 40,
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 2.0, left: 2.0),
+                    child: isValidatingMonth
+                        ? loadingValidation()
+                        : Checkbox(
+                            value: valide ?? false,
+                            splashRadius: 15,
+                            checkColor: valide == true
+                                ? Colors.white
+                                : Colors.transparent,
+                            side: MaterialStateBorderSide.resolveWith(
+                              (states) {
+                                var validated = valide;
+                                return BorderSide(
+                                    width: 2.0,
+                                    color: validated == true
+                                        ? Colors.green
+                                        : valeur != null
+                                            ? Colors.amber
+                                            : Colors.grey);
+                              },
+                            ),
+                            fillColor: MaterialStateProperty.resolveWith(
+                                (states) => valide == true
+                                    ? Colors.green
+                                    : Colors.transparent),
+                            onChanged: (valeur == null ||
+                                    valideRealise == true ||
+                                    isValidatingMonth == true)
+                                ? null
+                                : (value) async {
+                                    final acces = await checkAccesValidation();
+                                    if (acces) {
+                                      var validation = value;
+                                      if (validation == true) {
+                                        await validerIndicateur(
+                                            validation!,
+                                            valeur,
+                                            widget.indicateur.numero - 1,
+                                            currentMonth,
+                                            widget.indicateur.reference);
+                                        tableauBordController.consolidation(
+                                            tableauBordController
+                                                .currentYear.value);
+                                        setState(() {
+                                          isValidatingMonth = true;
+                                        });
+                                      }
+                                      if (validation == false) {
+                                        await annulerValidationIndic(
+                                            validation!,
+                                            widget.indicateur.numero - 1,
+                                            currentMonth,
+                                            widget.indicateur.reference);
+                                        tableauBordController.consolidation(
+                                            tableauBordController
+                                                .currentYear.value);
+                                        await tableauBordController
+                                            .updateDataIndicateur();
+                                        setState(() {
+                                          isValidatingMonth = false;
+                                          valide = false;
+                                          valideState = true;
+                                        });
+                                      }
+                                    } else {
+                                      _showMyDialog(
+                                          "Vous n'avez pas l'accès à validateur.");
+                                    }
+                                    if (entitePilotageController
+                                            .entityAppartenance.value !=
+                                        "vide") {
+                                      tableauBordController
+                                          .updateSuiviDataEntityAppartenance(
+                                              tableauBordController
+                                                  .currentYear.value,
+                                              widget.indicateur.processus,
+                                              numeroLigne,
+                                              tableauBordController
+                                                  .currentMonth.value);
+                                    }
+                                    tableauBordController.updateSuiviDate(
+                                        tableauBordController.currentYear.value,
+                                        widget.indicateur.processus,
+                                        numeroLigne,
+                                        tableauBordController
+                                            .currentMonth.value);
+                                    await Future.delayed(
+                                        const Duration(seconds: 1));
+                                    setState(() {
+                                      isValidatingMonth = false;
+                                    });
+                                  }),
+                  )),
+              Container(
+                width: 32,
+                height: 40,
+                alignment: Alignment.centerLeft,
+                child: valeur != null
+                    ? valide == true
+                        ? icons[0]
+                        : icons[1]
+                    : icons[2],
+              ),
+              const SizedBox(
+                width: 3,
+              ),
+              Container(
+                height: 35,
+                color: Colors.grey,
+                width: 2,
+              )
+            ],
+          );
   }
 
   //widget pour la editer la cible
@@ -836,9 +1057,9 @@ accesAdmin
   Future validerIndicateur(
       bool valide, num? valeur, int numero, int colonne, String idLigne) async {
     if (valeur == null) {
-      var message = "La donnée n'est pas encore renseignée..";
+      var message = "La donnée n'est pas encore renseignée";
       ScaffoldMessenger.of(context)
-          .showSnackBar(showSnackBar("Erreur", message, Colors.red));
+          .showSnackBar(showSnackBar("Echec", message, Colors.red));
     } else {
       var result = await tableauBordController.validerIndicateurMois(
         valide: valide,
@@ -847,11 +1068,11 @@ accesAdmin
       );
       if (result == true) {
         tableauBordController.updateDataIndicateur();
-        var message = "La donnée a été validée avec succès.";
-        ScaffoldMessenger.of(context)
-            .showSnackBar(showSnackBar("Succès", message, Colors.green));
+        var message = "La donnée a été validée avec succès";
+        ScaffoldMessenger.of(context).showSnackBar(
+            showSnackBar("Succès", message, Colors.green));
       } else {
-        var message = "La donnée n'a pas été validée.";
+        var message = "La donnée n'a pas été validée";
         ScaffoldMessenger.of(context)
             .showSnackBar(showSnackBar("Echec", message, Colors.red));
       }
@@ -862,12 +1083,12 @@ accesAdmin
       bool valide, int numero, int colonne, String idLigne) async {
     var result = await tableauBordController.annulerValidationMois(
         valide: valide, numeroLigne: numero, colonne: colonne);
-    var message = "Validation annulee avec succes";
+    var message = "Validation annulée avec succès";
     if (result == true) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(showSnackBar("Succes", message, Colors.green));
+      ScaffoldMessenger.of(context).showSnackBar(
+          showSnackBar("Succès", message, Colors.green));
     } else {
-      var message = "Validation non annulee";
+      var message = "Validation non annulée";
       ScaffoldMessenger.of(context)
           .showSnackBar(showSnackBar("Echec", message, Colors.red));
     }

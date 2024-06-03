@@ -18,12 +18,12 @@ final List<Content> contentData = [
   ),
   Content(
     text: "Organigrame",
-    pathImage: "assets/images/organigramme.png",
+    pathImage: "assets/images/Organigramme-de-collecte-2024-SIFCA-01.png",
     backImage: "assets/images/box2.png",
   ),
   Content(
     text: "Contributeurs",
-    pathImage: "",
+    pathImage: "assets/images/Liste-des-Contributeurs-SIFCA-01.jpg",
     backImage: "assets/images/box4.png",
   ),
 

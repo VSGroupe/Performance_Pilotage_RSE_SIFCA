@@ -1,115 +1,117 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/helper/helper_methods.dart';
 import 'package:quds_popup_menu/quds_popup_menu.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../../widgets/export_widget.dart';
 
 class HeaderMainPage extends StatefulWidget {
   final String title;
   final Map mainPageData;
-  const HeaderMainPage({Key? key, required this.title, required this.mainPageData}) : super(key: key);
+
+  const HeaderMainPage(
+      {Key? key, required this.title, required this.mainPageData})
+      : super(key: key);
 
   @override
   State<HeaderMainPage> createState() => _HeaderMainPageState();
 }
 
 class _HeaderMainPageState extends State<HeaderMainPage> {
-
   final storage = const FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
-      final nom = widget.mainPageData["user"]["nom"];
-      final prenom = widget.mainPageData["user"]["prenom"];
-      final email = widget.mainPageData["user"]["email"];
-      return Container(
-        height: 60,
-        color: const Color(0xFFAAA095),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                const SizedBox(
-                  width: 20,
-                ),
-                Image.asset(
-                  "assets/logos/logo_sifca_blanc.jpg",
-                  height: 50,
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                CustomText(
-                  text: "Accueil ${widget.title}",
-                  color: Colors.black,
+    final nom = widget.mainPageData["user"]["nom"];
+    final prenom = widget.mainPageData["user"]["prenom"];
+    final email = widget.mainPageData["user"]["email"];
+    return Container(
+      height: 60,
+      color: const Color(0xFFAAA095),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              const SizedBox(
+                width: 20,
+              ),
+              Image.asset(
+                "assets/logos/logo_sifca_blanc.jpg",
+                height: 50,
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              const CustomText(
+                text: "Accueil",
+                color: Colors.black,
+                weight: FontWeight.bold,
+                size: 30,
+              )
+            ],
+          ),
+          Row(
+            children: [
+              Center(
+                child: CustomText(
+                  text: "$prenom $nom",
+                  color: Colors.white,
                   weight: FontWeight.bold,
-                  size: 30,
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Center(
-                  child: CustomText(
-                    text: "$prenom $nom",
-                    color: Colors.white,
-                    weight: FontWeight.bold,
-                    size: 20,
-                  ),
+                  size: 20,
                 ),
-                const SizedBox(
-                  width: 20,
-                ),
-                QudsPopupButton(
-                  items: getMenuItems(shortName: "${prenom![0]}${nom![0]}",name: "$prenom $nom",email: email!),
-                  child: CircleAvatar(
-                    backgroundColor: const Color(0xFFFFFF00),
-                    child: Center(
-                      child: CustomText(
-                        text: "${prenom![0]}${nom![0]}",
-                        color: const Color(0xFFF1C232),
-                        weight: FontWeight.bold,
-                      ),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              QudsPopupButton(
+                items: getMenuItems(
+                    shortName: "${prenom![0]}${nom![0]}",
+                    name: "$prenom $nom",
+                    email: email!),
+                child: CircleAvatar(
+                  backgroundColor: const Color(0xFFFFFF00),
+                  child: Center(
+                    child: CustomText(
+                      text: "${prenom![0]}${nom![0]}",
+                      color: const Color(0xFFF1C232),
+                      weight: FontWeight.bold,
                     ),
                   ),
                 ),
-                const SizedBox(
-                  width: 30,
+              ),
+              const SizedBox(
+                width: 30,
+              ),
+              TextButton(
+                child: const Text(
+                  "À propos",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 20,
+                      decoration: TextDecoration.underline),
                 ),
-                TextButton(
-                  child: const Text(
-                    "A propos de Perf RSE",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
-                        fontSize: 20,
-                        decoration: TextDecoration.underline),
-                  ),
-                  onPressed: () async {
-                    const url = "https://huboutils.visionstrategie.com";
-                    final uri = Uri.parse(url);
-                    if (await canLaunchUrl(uri)) {
-                      await launchUrl(uri);
-                    }
-                    else {
-                      throw "Could not launch $url";
-                    }
-                  },
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-              ],
-            )
-          ],
-        ),
-      );
+                onPressed: () {
+                  _showMyDialog(context, "assets/images/Presentation-PERFORMANCE-RSE.jpg", "Performance RSE");
+                },
+              ),
+              const SizedBox(
+                width: 30,
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 
-  List<QudsPopupMenuBase> getMenuItems({required String shortName,required String name,required String email,}) {
+  List<QudsPopupMenuBase> getMenuItems({
+    required String shortName,
+    required String name,
+    required String email,
+  }) {
     return [
       QudsPopupMenuItem(
           leading: CircleAvatar(
@@ -140,28 +142,33 @@ class _HeaderMainPageState extends State<HeaderMainPage> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('Voulez-vous quitter cette application ?'),
-                            content: const SizedBox(width:200,child: Text('Cliquez sur Oui pour vous déconnecter.')),
+                            title: const Text(
+                                "Êtes-vous sûr de vouloir vous déconnecter ?"),
+                            content: const SizedBox(
+                                width: 200,
+                                child: Text(
+                                    "Vous allez être déconnecté.")),
                             actionsAlignment: MainAxisAlignment.spaceBetween,
                             actions: <Widget>[
                               OutlinedButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: const Text('Non'),
+                                child: const Text("Non"),
                               ),
                               OutlinedButton(
-                                onPressed: () async{
+                                onPressed: () async {
                                   await storage.write(key: 'logged', value: "");
                                   await storage.write(key: 'email', value: "");
                                   await storage.deleteAll();
                                   context.go('/account/login');
                                 },
-                                child: const Text('Oui'),
+                                child: const Text("Oui"),
                               ),
                             ],
                           );
-                        },);
+                        },
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amber,
@@ -180,3 +187,83 @@ class _HeaderMainPageState extends State<HeaderMainPage> {
     ];
   }
 }
+
+Future<void> _showMyDialog(
+    BuildContext context, String imagePath, String title) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        scrollable: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                color: Color(0xFFFFC000),
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        content: ImageWidget(imagePath: imagePath),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "Fermer",
+              style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+              ),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+class ImageWidget extends StatelessWidget {
+  final String imagePath;
+
+  const ImageWidget({Key? key, required this.imagePath}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      width: 700,
+      imagePath,
+      fit: BoxFit.fill,
+      frameBuilder: (
+        BuildContext context,
+        Widget child,
+        int? pixel,
+        bool isShow,
+      ) {
+        if (pixel == null) {
+          return SizedBox(
+            width: 700,
+            height: 500,
+            child: Column(
+              children: [
+                loadingPageWidget(),
+              ],
+            ),
+          );
+        }
+        return child;
+      },
+    );
+  }
+}
+

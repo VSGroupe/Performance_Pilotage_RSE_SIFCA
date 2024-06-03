@@ -73,7 +73,7 @@ class _AppBarPilotageState extends State<AppBarPilotage> {
             SizedBox(
               width: responsive == "cas-0" ? 10 : 20,
             ),
-            responsive == "cas-0" ? const Text("Sucrivoire Siège ",style: TextStyle(fontSize: 18),) :
+            responsive == "cas-0" ? const Text("Votre Espace ",style: TextStyle(fontSize: 18),) :
             EntityWidget(title: entiteRes["nom_entite"],color: mapColor["secondary"]!,hoverColor: mapColor["primary"]!,),
             Expanded(child: Container()),
             const Icon(
@@ -86,7 +86,7 @@ class _AppBarPilotageState extends State<AppBarPilotage> {
             ),
             InkWell(
               onTap: (){
-                context.go("/pilotage/espace/sucrivoire-siege/profil");
+                context.go("/pilotage/espace/${entitePilotageController.currentEntite.value}/profil");
               },
               radius: 20,
               child: CircleAvatar( backgroundColor: const Color(0xFFFFFF00),

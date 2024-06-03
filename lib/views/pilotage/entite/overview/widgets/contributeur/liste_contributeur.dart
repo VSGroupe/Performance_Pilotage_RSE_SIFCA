@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/views/pilotage/controllers/entite_pilotage_controler.dart';
+import 'package:perf_rse/views/pilotage/controllers/profil_pilotage_controller.dart';
 import '../../../../../../constants/constant_double.dart';
 import '../../../../../../helper/responsive.dart';
 import '../../../../../../models/pilotage/contributeur_model.dart';
@@ -21,24 +23,59 @@ class ListeContributeur extends StatefulWidget {
 
 class _ListeContributeurState extends State<ListeContributeur> {
   final OverviewPilotageController overviewPilotageController = Get.find();
-
+  final EntitePilotageController entitePilotageController = Get.find();
+  final ProfilPilotageController profilPilotageController = Get.find();
 
   String returnOneName(String chaine) {
-  String resultat = '';
-  
-  for (int i = 0; i < chaine.length; i++) {
-    if (chaine[i] == ' ') {
-      break;
-    }
-    resultat += chaine[i];
-  }
-  
-  return resultat;
-}
+    String resultat = '';
 
+    for (int i = 0; i < chaine.length; i++) {
+      if (chaine[i] == ' ') {
+        break;
+      }
+      resultat += chaine[i];
+    }
+
+    return resultat;
+  }
 
   void loading() async {
     await overviewPilotageController.getAllUserEntite();
+  }
+
+  bool checkAccesAdmin() {
+    final access = profilPilotageController.accesPilotageModel.value;
+    if (access.estAdmin == true) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Accès refusé"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Text("Action non autorisée"),
+                const SizedBox(
+                  height: 20,
+                ),
+                Image.asset(
+                  "assets/images/forbidden.png",
+                  width: 50,
+                  height: 50,
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -50,6 +87,7 @@ class _ListeContributeurState extends State<ListeContributeur> {
   @override
   Widget build(BuildContext context) {
     Random random = Random();
+    bool adminAcces = checkAccesAdmin();
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(
@@ -84,8 +122,13 @@ class _ListeContributeurState extends State<ListeContributeur> {
                       ),
                     ),
                     onPressed: () {
-                      context.go("/pilotage/espace/sucrivoire-siege/admin",
-                          extra: "Contributeurs");
+                      if (adminAcces) {
+                        context.go(
+                            "/pilotage/espace/${entitePilotageController.currentEntite.value}/admin",
+                            extra: "Contributeurs");
+                      } else {
+                        _showMyDialog();
+                      }
                     },
                     icon: const Icon(Icons.add),
                     label: const Text("Ajouter"),
@@ -100,7 +143,7 @@ class _ListeContributeurState extends State<ListeContributeur> {
                           child: SizedBox(
                         width: 300,
                         height: 50,
-                        child: Text("Aucun Contributeur associé à cette entité"),
+                        child: Text("Aucun contributeur disponible."),
                       )),
                     )
                   : SizedBox(
@@ -111,25 +154,28 @@ class _ListeContributeurState extends State<ListeContributeur> {
                         child: DataTable(
                             columnSpacing: 40,
                             horizontalMargin: 12,
-                            columns: const [
-                              DataColumn(
+                            columns: [
+                              const DataColumn(
                                 label: Text("Nom"),
                               ),
                               // DataColumn(
                               //   label: Text("Filiale"),
                               // ),
-                              DataColumn(
+                              const DataColumn(
                                 label: Text("Entité"),
                               ),
                               // DataColumn(
                               //   label: Text("Accès"),
                               // ),
-                              DataColumn(label: Text("Processus"),),
+                              const DataColumn(
+                                label: Text("Processus"),
+                              ),
                             ],
                             rows: List.generate(
                               contributeurs.length,
                               (index) => contributeursDataRow(
-                                  contributeurs[index], colors[random.nextInt(8)]),
+                                  contributeurs[index],
+                                  colors[random.nextInt(8)]),
                             )),
                       ),
                     )
@@ -174,12 +220,10 @@ class _ListeContributeurState extends State<ListeContributeur> {
               const SizedBox(
                 width: 10,
               ),
-Expanded(
-  child: Text(
-                    "${fileInfo.nom} ${returnOneName(fileInfo.prenom)}"
-                    ),
-),
-              
+              Expanded(
+                child:
+                    Text("${fileInfo.nom} ${returnOneName(fileInfo.prenom)}"),
+              ),
             ],
           ),
         ),
@@ -187,13 +231,14 @@ Expanded(
         DataCell(Text(
           fileInfo.entite,
           maxLines: 2,
-          )),
+        )),
         //DataCell(Text(fileInfo.access)),
         DataCell(Text(
           fileInfo.processus,
           maxLines: 2,
-          )),
+        )),
       ],
     );
   }
 }
+

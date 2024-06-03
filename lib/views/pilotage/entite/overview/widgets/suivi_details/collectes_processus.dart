@@ -21,7 +21,7 @@ class _CollecteByProcessus extends State<CollecteByProcessus> {
   var last_month = 0;
   late int paginationItems;
   int selectedProcessusIndex = 0;
-  final List<String> listProcessus = [
+  List<String> listProcessus = [
     "Agricole",
     "Développement Durable",
     "Finances",
@@ -164,7 +164,7 @@ class _CollecteByProcessus extends State<CollecteByProcessus> {
                     width: 50,
                     height: 50,
                     child: status == -1
-                        ? const Text("Aucune donnée")
+                        ? const Text("Aucune donnée disponible.")
                         : const CircularProgressIndicator(),
                   ),
                 ),
@@ -201,7 +201,7 @@ class _CollecteByProcessus extends State<CollecteByProcessus> {
                       horizontalMargin: 12,
                       columns: [
                         const DataColumn(
-                          label: Text("Filiale/Entités"),
+                          label: Text("Entités des filiales"),
                         ),
                         DataColumn(
                           label: Text("${obtenirNomMois(last_month)}"),
@@ -879,17 +879,17 @@ class _CollecteByProcessus extends State<CollecteByProcessus> {
   String? obtenirNomMois(num chiffreMois) {
     Map<int, String> moisMap = {
       1: "Janvier",
-      2: "Fevrier",
+      2: "Février",
       3: "Mars",
       4: "Avril",
       5: "Mai",
       6: "Juin",
       7: "Juillet",
-      8: "Aout",
+      8: "Août",
       9: "Septembre",
       10: "Octobre",
       11: "Novembre",
-      12: "Decembre",
+      12: "Décembre"
     };
 
     String? nomMois = moisMap[chiffreMois];
