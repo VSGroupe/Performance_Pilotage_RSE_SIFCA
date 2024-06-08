@@ -45,6 +45,7 @@ class TableauBordController extends GetxController {
   final editing = false.obs;
   var currentYear = 0.obs;
   var currentMonth = 0.obs;
+  var indicatorCheck = false.obs;
   var monthsToCurrentMonth = [];
   var allYearsList = [].obs;
 
@@ -123,6 +124,16 @@ class TableauBordController extends GetxController {
     }
   }
 
+  void filtreIndicateursWithValues(int month) {
+    final List<IndicateurModel> Klist = [];
+    for (var indicateur in indicateursList) {
+      if (dataIndicateur.value.valeurs[indicateur.numero - 1][month] != null) {
+        Klist.add(indicateur);
+      }
+    }
+    indicateursListApparente.value = Klist;
+  }
+
   List<String>? getProcessUser(AccesPilotageModel userProcessus) {
     return userProcessus.processus;
   }
@@ -181,8 +192,8 @@ class TableauBordController extends GetxController {
         await dataBaseController.getAllDataRowIndicateur(idDataIndicateur);
     dataIndicateurPastYear.value = await dataBaseController
         .getAllDataRowIndicateur(idDataIndicateurPastYear);
-    dataIndicateurSousEntite.value = await
-        getAllDataRowsIndicateur(entitePilotageController.sousEntite);
+    dataIndicateurSousEntite.value =
+        await getAllDataRowsIndicateur(entitePilotageController.sousEntite);
     if (dataIndicateur.value.entite != "" && dataIndicateur.value.annee != 0) {
       dataBaseController.updateAPIDatabase(idDataIndicateur);
       statusIntialisation.value = true;
@@ -199,8 +210,7 @@ class TableauBordController extends GetxController {
 
     for (String? sousEntite in sousEntites) {
       if (sousEntite != null) {
-        final idDataIndicateur =
-            '${sousEntite}_${currentYear.value}';
+        final idDataIndicateur = '${sousEntite}_${currentYear.value}';
         resultMap[sousEntite] =
             await dataBaseController.getAllDataRowIndicateur(idDataIndicateur);
       }
@@ -383,9 +393,8 @@ class TableauBordController extends GetxController {
     }
   }
 
-Future<bool> supprimerIndicateurMois(
-      {
-      required int numeroLigne,
+  Future<bool> supprimerIndicateurMois(
+      {required int numeroLigne,
       required int colonne,
       required String type,
       required String formule}) async {
@@ -421,7 +430,6 @@ Future<bool> supprimerIndicateurMois(
       return false;
     }
   }
-
 
   // Future<bool> renseignerDataCible(
   //     {required num dataCible,

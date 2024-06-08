@@ -4,8 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:perf_rse/views/pilotage/controllers/entite_pilotage_controler.dart';
 import 'package:perf_rse/views/pilotage/controllers/profil_pilotage_controller.dart';
-import 'package:switcher/core/switcher_size.dart';
-import 'package:switcher/switcher.dart';
 import '../../controllers/side_menu_controller.dart';
 
 class MenuNavPilotage extends StatefulWidget {

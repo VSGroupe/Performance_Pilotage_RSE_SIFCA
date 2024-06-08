@@ -16,8 +16,8 @@ class DashBoardUtils {
           title: Text(
             value == null
                 ? "Renseigner la donnée de l'indicateur"
-                : "Mettre à jour la donnée de l'indicateur",
-            style: TextStyle(color: value == null ? Colors.blue : Colors.green),
+                : "Supprimer la donnée de l'indicateur",
+            style: TextStyle(color: value == null ? Colors.blue : Color.fromARGB(255, 175, 150, 76)),
           ),
           contentPadding: const EdgeInsets.all(30),
           shape:
@@ -123,6 +123,249 @@ class _ContentEditionState extends State<ContentEdition> {
     });
   }
 
+  num? AplusB(num? A, num? B) {
+    if (A != null && B != null) {
+      return A + B;
+    } else if (A == null && B != null) {
+      return B;
+    } else if (A != null && B == null) {
+      return A;
+    } else {
+      return null;
+    }
+  }
+
+  num? AmoinsB(num? A, num? B) {
+    if (A != null && B != null) {
+      return A - B;
+    } else {
+      return null;
+    }
+  }
+
+  bool AVGcontrolDenominateurValue(num value, int month, int ligne) {
+    Map<int, List<int>> purcentIndicatorsKeys = {
+      4: [2],
+      18: [17],
+      45: [3],
+      32: [16, 30],
+      35: [11],
+      37: [10],
+      39: [13],
+      41: [13],
+      43: [11],
+      47: [49],
+      128: [127],
+      132: [49],
+      134: [49],
+      140: [48],
+      82: [49],
+      187: [49],
+      191: [190],
+      207: [13],
+      209: [13],
+      214: [49],
+      243: [220],
+      276: [13],
+      263: [11],
+      282: [46],
+      284: [218],
+      219: [286],
+      281: [288],
+      137: [58, 59],
+      63: [64, 58, 59],
+      64: [63, 58, 59]
+    }; // cas particuliers : 137 / (58 + 59) et (63 + 64) / (58 + 59)
+    var dataListIndicator = tableauBordController.dataIndicateur.value.valeurs;
+    bool checkResult = purcentIndicatorsKeys.containsKey(ligne);
+
+    if (checkResult) {
+      if (ligne != 137 && ligne != 63) {
+        List<int> listTemp = purcentIndicatorsKeys[ligne]!;
+        for (int index in listTemp) {
+          num? denominateur = dataListIndicator[index - 1][month];
+          if (denominateur != null) {
+            if (denominateur < value) {
+              return false;
+            }
+            if (denominateur > value &&
+                listTemp.indexOf(index) == listTemp.length - 1) {
+              return true;
+            }
+          }
+        }
+      } else if (ligne == 137) {
+        List<int> listTemp = purcentIndicatorsKeys[ligne]!;
+        num? denominateurItemA = dataListIndicator[listTemp[0] - 1][month];
+        num? denominateurItemB = dataListIndicator[listTemp[1] - 1][month];
+        num? denominateur = AplusB(denominateurItemA, denominateurItemB);
+        if (denominateur != null) {
+          if (denominateur < value) {
+            return false;
+          }
+        } else {
+          return true;
+        }
+      } else if (ligne == 64 || ligne == 63) {
+        List<int> listTemp = purcentIndicatorsKeys[ligne]!;
+        num? numerateurItemA = dataListIndicator[63][month]; // L64
+        num? numerateurItemB = dataListIndicator[62][month]; // L63
+        num? numerateur = AplusB(numerateurItemA, numerateurItemB);
+        num? denominateurItemA = dataListIndicator[listTemp[1] - 1][month];
+        num? denominateurItemB = dataListIndicator[listTemp[2] - 1][month];
+        num? denominateur = AplusB(denominateurItemA, denominateurItemB);
+        if (denominateurItemA == null || denominateurItemB == null) {
+          return true;
+        } else if (denominateur != null && numerateur != null) {
+          if (denominateur < numerateur) {
+            return false;
+          } else {
+            return true;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  bool AVGcontrolNumerateurValue(num value, int month, int ligne) {
+    Map<int, List<int>> purcentIndicatorsKeys = {
+      2: [4],
+      17: [18],
+      3: [45],
+      30: [32],
+      16: [32],
+      11: [35, 43, 263],
+      10: [37],
+      13: [39, 41, 207, 209, 276],
+      49: [47, 132, 134, 82, 187, 214],
+      127: [128],
+      48: [140],
+      190: [191],
+      220: [243],
+      46: [282],
+      218: [284],
+      286: [219],
+      288: [281],
+      58: [59, 137, 63, 64],
+      59: [58, 137, 63, 64],
+    }; // cas particuliers : 58/59
+    var dataListIndicator = tableauBordController.dataIndicateur.value.valeurs;
+    bool checkResult = purcentIndicatorsKeys.containsKey(ligne);
+
+    if (checkResult) {
+      if (ligne != 58 && ligne != 59) {
+        List<int> listTemp = purcentIndicatorsKeys[ligne]!;
+        for (int index in listTemp) {
+          num? numerateur = dataListIndicator[index - 1][month];
+          if (numerateur != null) {
+            if (numerateur > value) {
+              return false;
+            }
+            if (numerateur < value &&
+                listTemp.indexOf(index) == listTemp.length - 1) {
+              return true;
+            }
+          }
+        }
+      } else if (ligne == 58 || ligne == 59) {
+        // cas numerateur L137
+        List<int> listTemp = purcentIndicatorsKeys[ligne]!;
+        num? numerateur = dataListIndicator[listTemp[1] - 1][month];
+        num? denominateurItem = dataListIndicator[listTemp[0]][month];
+        num? denominateur = AplusB(value, denominateurItem);
+        // cas numerateurs L63 + L64
+        num? numerateurA = dataListIndicator[listTemp[2] - 1][month];
+        num? numerateurB = dataListIndicator[listTemp[3] - 1][month];
+        num? numerateurAB = AplusB(numerateurA, numerateurB);
+        if (numerateur != null && denominateur != null) {
+          if (numerateur > denominateur) {
+            return false;
+          }
+        } else if (numerateurAB != null && denominateur != null) {
+          if (numerateurAB > denominateur) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  bool SUBcontrolValue(num value, int month, int ligne) {
+    Map<int, int> SubIndicatorsKeys = {
+      56: 61,
+      57: 62,
+      58: 63,
+      59: 54,
+      70: 74,
+      71: 75, //
+      72: 76, //
+      82: 87, //
+      83: 88, //
+      84: 89, //
+      121: 123, //
+      130: 131, //
+      249: 253,
+      61: 56,
+      62: 57,
+      63: 58,
+      54: 59,
+      74: 70,
+      75: 71,
+      76: 72,
+      87: 82,
+      88: 83,
+      89: 84,
+      123: 121,
+      131: 130,
+      253: 249
+    };
+    List<int> particularKeyList = [
+      61,
+      62,
+      63,
+      54,
+      74,
+      75,
+      76,
+      87,
+      88,
+      89,
+      123,
+      131,
+      253
+    ];
+    var dataListIndicator = tableauBordController.dataIndicateur.value.valeurs;
+    bool checkResult = SubIndicatorsKeys.containsKey(ligne);
+
+    if (checkResult) {
+      if (!particularKeyList.contains(ligne)) {
+        int key = SubIndicatorsKeys[ligne]!;
+        num? indicatorData =
+            dataListIndicator[key - 1][month];
+        num? subResult = AmoinsB(value, indicatorData);
+        if (subResult == null) {
+          return true;
+        } else if (subResult < 0) {
+          return false;
+        }
+      } else if (particularKeyList.contains(ligne)) {
+        int key = SubIndicatorsKeys[ligne]!;
+        num? indicatorData =
+            dataListIndicator[key - 1][month];
+        num? subResult = AmoinsB(value, indicatorData);
+        //print(subResult);
+        if (subResult == null) {
+          return true;
+        } else if (subResult > 0) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   void cancelDelete() {
     setState(() {
       deleting = false;
@@ -187,8 +430,7 @@ class _ContentEditionState extends State<ContentEdition> {
             ),
             content: Column(
               children: [
-                Text(
-                    "Suppression dans $counter secondes..."),
+                Text("Suppression dans $counter secondes..."),
               ],
             ),
             actions: [
@@ -337,7 +579,19 @@ class _ContentEditionState extends State<ContentEdition> {
                 if (value < 0) {
                   return "La valeur ne peut être négative";
                 }
-                return null;
+                bool checkAVGdenominateur = AVGcontrolDenominateurValue(
+                    value, widget.colonne, widget.numeroLigne + 1);
+                bool checkAVGnumerateur = AVGcontrolNumerateurValue(
+                    value, widget.colonne, widget.numeroLigne + 1);
+                bool checkSubDatas = SUBcontrolValue(
+                    value, widget.colonne, widget.numeroLigne + 1);
+                if (checkAVGdenominateur &&
+                    checkAVGnumerateur &&
+                    checkSubDatas) {
+                  return null;
+                } else {
+                  return "Erreur, donnée pas permise : calcul erronné";
+                }
               },
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),

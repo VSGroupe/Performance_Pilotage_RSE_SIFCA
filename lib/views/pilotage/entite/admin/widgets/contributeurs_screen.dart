@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/api/send_mail.dart';
 import 'package:perf_rse/models/pilotage/acces_pilotage_model.dart';
 import 'package:perf_rse/views/pilotage/controllers/entite_pilotage_controler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -522,6 +523,8 @@ class AjoutContributeur extends StatefulWidget {
 class _AjoutContributeurState extends State<AjoutContributeur> {
   final supabase = Supabase.instance.client;
 
+  final SendMailController sendMailController = SendMailController();
+
   bool isSubmetted = false;
   List<String> entiteName = [];
   List<String> selectedProcess = [];
@@ -809,6 +812,9 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                                           email: emailEditingController.text,
                                           password: pwd,
                                           data: {"password": pwd});
+                                  final passwordMail =
+                                      await sendMailController.sendMail(
+                                          emailEditingController.text, pwd);
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(

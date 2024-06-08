@@ -12,10 +12,10 @@ class OverviewPilotage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
+        const Expanded(
             flex: 5,
             child: Column(
               children: [
@@ -24,13 +24,13 @@ class OverviewPilotage extends StatelessWidget {
                 ListeContributeur()
               ],
             )),
-        SizedBox(width: defaultPadding),
+        const SizedBox(width: defaultPadding),
         SizedBox(
           width: 320,
           height: 1000,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+          child: ListView(
+            //crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
               CustomText(
                 text: "Progrès de collecte",
                 weight: FontWeight.bold,
@@ -43,7 +43,7 @@ class OverviewPilotage extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(width: defaultPadding),
+        const SizedBox(width: defaultPadding),
       ],
     );
   }

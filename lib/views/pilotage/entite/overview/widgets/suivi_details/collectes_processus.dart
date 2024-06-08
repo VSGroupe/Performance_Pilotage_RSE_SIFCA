@@ -201,7 +201,7 @@ class _CollecteByProcessus extends State<CollecteByProcessus> {
                       horizontalMargin: 12,
                       columns: [
                         const DataColumn(
-                          label: Text("Entités des filiales"),
+                          label: Text("Entités/filiales"),
                         ),
                         DataColumn(
                           label: Text("${obtenirNomMois(last_month)}"),

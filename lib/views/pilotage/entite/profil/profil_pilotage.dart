@@ -61,16 +61,16 @@ class _ProfilPilotageState extends State<ProfilPilotage> with SingleTickerProvid
                       color: Colors.amber,
                       paintingStyle: PaintingStyle.fill,
                     )),
-                tabs:  [
-                  const CustomText(
+                tabs:  const [
+                  CustomText(
                     text: "Informations Personnelles",
                     size: 15,
                   ),
-                  const CustomText(
+                  CustomText(
                     text: "Informations du Compte",
                     size: 15,
                   ),
-                  const CustomText(
+                  CustomText(
                     text: "Modifier mon mot de passe",
                     size: 15,
                   ),

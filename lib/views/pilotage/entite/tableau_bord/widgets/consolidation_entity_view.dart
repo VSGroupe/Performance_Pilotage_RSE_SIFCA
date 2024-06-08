@@ -173,19 +173,19 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
         ),
       ),
       for (int month in tableauBordController.monthsToCurrentMonth)
-      GridColumn(
-        columnName: moisEquivalent(month),
-        width: 150,
-        label: Container(
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            moisEquivalent(month),
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+        GridColumn(
+          columnName: moisEquivalent(month),
+          width: 150,
+          label: Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              moisEquivalent(month),
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         ),
-      ),
       GridColumn(
         columnName: '###',
         width: 50,
@@ -277,6 +277,7 @@ class EntityConsoDataGridSource extends DataGridSource {
       }
     }
   }
+
   String moisEquivalent(int mois) {
     const moisNoms = [
       'Janvier',
@@ -327,37 +328,41 @@ class EntityConsoDataGridSource extends DataGridSource {
           "reference": indicateur.reference
         }),
         DataGridCell<Map<String, dynamic>>(columnName: 'formule', value: {
-          "valeur": indicateur.formule,
+          "valeur": indicateur.formule ?? '----',
           "type": indicateur.type,
           "numero": indicateur.numero,
           "reference": indicateur.reference
         }),
         DataGridCell<Map<String, dynamic>>(columnName: 'processus', value: {
-          "valeur": indicateur.processus,
+          "valeur": indicateur.processus ?? '----',
           "type": indicateur.type,
           "numero": indicateur.numero,
           "reference": indicateur.reference
         }),
         DataGridCell<Map<String, dynamic>>(columnName: 'realise', value: {
           "valeur":
-              '${tableauBordController.dataIndicateur.value.valeurs[indicateur.numero - 1][0] ?? '----'}',
+              '${tableauBordController.dataIndicateur.value.valeurs[indicateur.numero - 1][0] ?? '----'}', // 
           "type": indicateur.type,
           "numero": indicateur.numero,
           "reference": indicateur.reference
         }),
-        for(int month in tableauBordController.monthsToCurrentMonth)
-        DataGridCell<Map<String, dynamic>>(columnName: moisEquivalent(month), value: {
-          "valeur": '${tableauBordController.dataIndicateur.value.valeurs[indicateur.numero - 1][month] ?? '----'}',
-          "type": indicateur.type,
-          "numero": indicateur.numero,
-          "reference": indicateur.reference
-        })
+        for (int month in tableauBordController.monthsToCurrentMonth)
+          DataGridCell<Map<String, dynamic>>(
+              columnName: moisEquivalent(month),
+              value: {
+                "valeur":
+                    '${tableauBordController.dataIndicateur.value.valeurs[indicateur.numero - 1][month] ?? '----'}', // 
+                "type": indicateur.type,
+                "numero": indicateur.numero,
+                "reference": indicateur.reference
+              })
       ];
 
       // Ajouter des DataGridCell pour chaque sous-entité
       if (sousEntites.isNotEmpty) {
-        cells.add(const DataGridCell<Map<String, dynamic>>(
-            columnName: '###', value: {"valeur": "----"}));
+        cells.add(DataGridCell<Map<String, dynamic>>(
+            columnName: '###',
+            value: {"valeur": "----", "type": indicateur.type}));
         for (int i = 0; i < sousEntites.length; i++) {
           DataIndicateurRowModel? entiteDataIndicateur = tableauBordController
               .dataIndicateurSousEntite['${sousEntites[i]}'];
@@ -365,7 +370,7 @@ class EntityConsoDataGridSource extends DataGridSource {
               columnName: '${sousEntites[i]}',
               value: {
                 "valeur":
-                    '${entiteDataIndicateur?.valeurs[indicateur.numero - 1][0] ?? '----'}',
+                    '${entiteDataIndicateur?.valeurs[indicateur.numero - 1][0] ?? '----'}', // 
                 "type": indicateur.type,
                 "numero": indicateur.numero,
                 "reference": indicateur.reference,
@@ -374,8 +379,9 @@ class EntityConsoDataGridSource extends DataGridSource {
         }
       } else {
         // Si sousEntites est vide, ajouter une cellule par défaut
-        cells.add(const DataGridCell<Map<String, dynamic>>(
-            columnName: '###', value: {"valeur": "----"}));
+        cells.add(DataGridCell<Map<String, dynamic>>(
+            columnName: '###',
+            value: {"valeur": "----", "type": indicateur.type}));
       }
       return DataGridRow(cells: cells);
     }).toList();
@@ -387,64 +393,74 @@ class EntityConsoDataGridSource extends DataGridSource {
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
-        cells: row.getCells().map<Widget>((DataGridCell dataCell) {
-      if (dataCell.value is Map<String, dynamic>) {
-        Map<String, dynamic> valueMap = dataCell.value;
-        if (valueMap.containsKey("type") && valueMap.containsKey("valeur")) {
-          if (valueMap["type"] is! String || valueMap["valeur"] is! String) {
-            // Log si les types ne sont pas ceux attendus
+      cells: row.getCells().map<Widget>((DataGridCell dataCell) {
+        // Vérification et extraction des valeurs de la cellule
+        Map<String, dynamic> valueMap;
+        String type = "";
+        String valeur = "";
+
+        if (dataCell.value is Map<String, dynamic>) {
+          valueMap = dataCell.value;
+
+          // Vérifier et assigner les clés
+          if (valueMap.containsKey("type") && valueMap["type"] is String) {
+            type = valueMap["type"];
+          } else {
             print(
-                "Type mismatch: Expected 'String' for 'type' and 'valeur', but got ${valueMap["type"].runtimeType} and ${valueMap["valeur"].runtimeType}");
+                "Missing or invalid 'type' key: Expected 'String' but got ${valueMap["type"]?.runtimeType}");
+          }
+
+          if (valueMap.containsKey("valeur") && valueMap["valeur"] is String) {
+            valeur = valueMap["valeur"];
+          } else {
+            print(
+                "Missing or invalid 'valeur' key: Expected 'String' but got ${valueMap["valeur"]?.runtimeType}");
           }
         } else {
-          // Log si les clés ne sont pas présentes
           print(
-              "Missing keys: Expected 'type' and 'valeur' in value map, but got keys ${valueMap.keys}");
+              "Type mismatch: Expected Map<String, dynamic>, but got ${dataCell.value.runtimeType}");
         }
-      } else {
-        // Log si la valeur n'est pas du type attendu
-        print(
-            "Type mismatch: Expected Map<String, dynamic>, but got ${dataCell.value.runtimeType}");
-      }
-      switch (dataCell.columnName) {
-        case "intitule":
-          return Container(
-            color: dataCell.value["type"] == "Calculé"
-                ? const Color(0xFFFDDDCC)
-                : dataCell.value["type"] == "Test"
-                    ? const Color(0xFFB3B9C0)
-                    : Colors.transparent,
-            padding: const EdgeInsets.only(left: 8.0),
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: [
-                Flexible(
-                  child: Text(
-                              "${dataCell.value["valeur"]}",
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            )
-                )
 
-              ],
-            ),
-          );
-        default:
-          return Container(
-            color: dataCell.value["type"] == "Calculé"
-                ? const Color(0xFFFDDDCC)
-                : dataCell.value["type"] == "Test"
-                    ? const Color(0xFFB3B9C0)
-                    : Colors.transparent,
-            padding: const EdgeInsets.only(left: 8.0),
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "${dataCell.value["valeur"] ?? "---"}",
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          );
-      }
-    }).toList());
+        // Création du widget pour chaque cellule selon le nom de la colonne
+        switch (dataCell.columnName) {
+          case "intitule":
+            return Container(
+              color: type == "Calculé"
+                  ? const Color(0xFFFDDDCC)
+                  : type == "Test"
+                      ? const Color(0xFFB3B9C0)
+                      : Colors.transparent,
+              padding: const EdgeInsets.only(left: 8.0),
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      valeur.isNotEmpty ? valeur : "---",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          default:
+            return Container(
+              color: type == "Calculé"
+                  ? const Color(0xFFFDDDCC)
+                  : type == "Test"
+                      ? const Color(0xFFB3B9C0)
+                      : Colors.transparent,
+              padding: const EdgeInsets.only(left: 8.0),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                valeur.isNotEmpty ? valeur : "---",
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            );
+        }
+      }).toList(),
+    );
   }
 }

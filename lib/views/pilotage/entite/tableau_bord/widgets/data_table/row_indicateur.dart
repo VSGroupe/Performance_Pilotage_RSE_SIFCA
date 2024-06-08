@@ -91,7 +91,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                       width: 2,
                     ),
                   Text(
-                    "#${widget.indicateur.numero} ${widget.indicateur.reference}", //${widget.indicateur.numero}
+                    "#${widget.indicateur.reference}", //${widget.indicateur.numero}
                     style: const TextStyle(fontSize: 12),
                   ),
                 ],

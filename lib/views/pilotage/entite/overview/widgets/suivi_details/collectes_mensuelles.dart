@@ -133,7 +133,7 @@ class _CollecteMensuelleEntites extends State<CollecteMensuelleEntites> {
                       horizontalMargin: 12,
                       columns: [
                         const DataColumn(
-                          label: Text("Entités des filiales"),
+                          label: Text("Entités/filiales"),
                         ),
                         DataColumn(
                           label: Text("${obtenirNomMois(last_month)}"),
