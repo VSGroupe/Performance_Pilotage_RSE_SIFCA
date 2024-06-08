@@ -483,10 +483,30 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
   final TableauBordController tableauBordController = Get.find();
   final DropDownController dropDownController = Get.find();
   final ProfilPilotageController profilPilotageController = Get.find();
+  final EntitePilotageController entitePilotageController = Get.find();
+
+  static const Map<String, String> translations = {
+  "Agricole": "Agricultural",
+  "Développement Durable": "Sustainable development",
+  "Finances": "Finance",
+  "Achats": "Purchases",
+  "Juridique": "Legal",
+  "Ressources Humaines": "Human ressources",
+  "Médecin": "Doctor",
+  "Infrastructures": "Infrastructure",
+  "Ressources Humaines / Juridique": "Human ressources / Legal",
+  "Gestion des Stocks / Logistique": "Stock Management / Logistics",
+  "Emissions": "Emissions",
+  "Usine": "Factory",
+};
 
   @override
   void initState() {
     super.initState();
+  }
+
+  String getTranslation(String key) {
+    return translations[key]!;
   }
 
   @override
@@ -561,7 +581,9 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
       width: 200,
       height: 100,
       margin: const EdgeInsets.all(10),
-      child: Column(
+      child: 
+      entitePilotageController.langue == "fr"
+       ? Column(
         children: [
           if (isAdmin)
             const Expanded(
@@ -621,9 +643,71 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
             ],
           )
         ],
-      ),
+      )
+      : Column(
+        children: [
+          if (isAdmin)
+            const Expanded(
+                child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CheckBoxWidget(processus: 'Agricultural'),
+                      CheckBoxWidget(processus: 'Finance'),
+                      CheckBoxWidget(processus: 'SD'),
+                      CheckBoxWidget(processus: 'Legal'),
+                      CheckBoxWidget(processus: 'Purchases'),
+                      CheckBoxWidget(processus: 'HR')
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CheckBoxWidget(processus: 'SM / Logistics'),
+                      CheckBoxWidget(processus: 'Emissions'),
+                      CheckBoxWidget(processus: 'Factory'),
+                      CheckBoxWidget(processus: 'Doctor'),
+                      CheckBoxWidget(processus: 'Infrastructure'),
+                      CheckBoxWidget(processus: 'HR / Legal')
+                    ],
+                  ),
+                )
+              ],
+            ))
+          else
+            Expanded(
+                child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  for (String process in processListUser ?? [])
+                    CheckBoxWidget(processus: getTranslation(process)),
+                ],
+              ),
+            )),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              OutlinedButton(
+                  style:
+                      OutlinedButton.styleFrom(foregroundColor: Colors.black),
+                  onPressed: () {
+                    dropDownController.effacerFiltreProcessus();
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Uncheck all")),
+            ],
+          )
+        ],
+      )
     );
   }
+
 }
 
 class CheckBoxWidget extends StatefulWidget {
@@ -636,6 +720,7 @@ class CheckBoxWidget extends StatefulWidget {
 
 class _CheckBoxWidgetState extends State<CheckBoxWidget> {
   final DropDownController dropDownController = Get.find();
+  final EntitePilotageController entitePilotageController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -647,13 +732,22 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
         margin: const EdgeInsets.all(2),
         child: Row(
           children: [
-            Checkbox(
+            entitePilotageController.langue == "fr"
+            ? Checkbox(
                 checkColor: Colors.green,
                 value: filtreProcessus
                     .contains(matchAbrProcess(abr: widget.processus)),
                 onChanged: (value) {
                   dropDownController.addRemoveProcessus(
                       matchAbrProcess(abr: widget.processus), value!);
+                })
+              : Checkbox(
+                checkColor: Colors.green,
+                value: filtreProcessus
+                    .contains(matchAbrProcessEN(abr: widget.processus)),
+                onChanged: (value) {
+                  dropDownController.addRemoveProcessus(
+                      matchAbrProcessEN(abr: widget.processus), value!);
                 }),
             const SizedBox(
               width: 10,
@@ -679,6 +773,21 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
         return "Développement Durable";
       case "GS / Logistique":
         return "Gestion des Stocks / Logistique";
+      default:
+        return abr;
+    }
+  }
+
+  String matchAbrProcessEN({required String abr}) {
+    switch (abr) {
+      case "HR":
+        return "Human ressources";
+      case "HR / Legal":
+        return "Human ressources / Legal";
+      case "SD":
+        return "Sustainable development";
+      case "SM / Logistics":
+        return "Stock Management / Logistics";
       default:
         return abr;
     }

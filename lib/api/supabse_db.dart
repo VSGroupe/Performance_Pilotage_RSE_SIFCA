@@ -23,6 +23,16 @@ class DataBaseController {
     return indicateurs;
   }
 
+  Future<List<IndicateurModel>> getAllIndicateurEN() async {
+    final List<dynamic> docs = await supabase
+        .from('Indicateurs_en')
+        .select()
+        .order('reference', ascending: true);
+    final indicateurs =
+        docs.map((json) => IndicateurModel.fromJson(json)).toList();
+    return indicateurs;
+  }
+
   Future<List<IndicateurModel>> getProcessUserIndicators(
       List<String> UserProcessList) async {
     final List<dynamic> docs = await supabase

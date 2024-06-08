@@ -15,6 +15,7 @@ class EntitePilotageController extends GetxController {
   final sousEntite = [].obs;
   final supabase = Supabase.instance.client;
   final entites = [].obs;
+  var langue = "";
 
   Future<Uint8List?> downloadImageAsUint8List(String imageUrl) async {
     try {

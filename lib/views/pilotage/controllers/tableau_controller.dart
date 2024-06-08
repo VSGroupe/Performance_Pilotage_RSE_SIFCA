@@ -48,6 +48,7 @@ class TableauBordController extends GetxController {
   var indicatorCheck = false.obs;
   var monthsToCurrentMonth = [];
   var allYearsList = [].obs;
+  var langue = "";
 
   var colonnesTableauBord = [
     "realise",
@@ -79,9 +80,26 @@ class TableauBordController extends GetxController {
     "Novembre",
     "Décembre"
   ];
+      static const Map<String, String> translations = {
+      "Agricole": "Agricultural",
+      "Développement Durable": "Sustainable development",
+      "Finances": "Finance",
+      "Achats": "Purchases",
+      "Juridique": "Legal",
+      "Ressources Humaines": "Human ressources",
+      "Médecin": "Doctor",
+      "Infrastructures": "Infrastructure",
+      "Ressources Humaines / Juridique": "Human ressources / Legal",
+      "Gestion des Stocks / Logistique": "Stock Management / Logistics",
+      "Emissions": "Emissions",
+      "Usine": "Factory",
+    };
 
   int getIndicateurLength() {
     return indicateursList.length;
+  }
+  String getTranslation(String key) {
+    return translations[key]!;
   }
 
   void filtreListApparente() {
@@ -106,8 +124,14 @@ class TableauBordController extends GetxController {
       if (processListUser!.isNotEmpty) {
         for (var process in processListUser) {
           for (var instance in indicateursList) {
-            if (process == instance.processus) {
+            if (entitePilotageController.langue == "fr"){
+                if (process == instance.processus) {
               userIncateurList.add(instance);
+            }
+            }else{
+                if (getTranslation(process) == instance.processus) {
+              userIncateurList.add(instance);
+            }
             }
           }
         }
@@ -178,10 +202,15 @@ class TableauBordController extends GetxController {
   }
 
   void initialisation(BuildContext context) async {
+    langue = entitePilotageController.langue;
     allYearsList.value = TimeSystemController.years;
     //dataCibleList.value = await dataBaseController.getValeurCibleIndicateur();
     isLoading.value = true;
-    indicateursList.value = await dataBaseController.getAllIndicateur();
+    if (langue == "en"){
+      indicateursList.value = await dataBaseController.getAllIndicateurEN();
+    } else {
+      indicateursList.value = await dataBaseController.getAllIndicateur();
+    }    
     await initialisationDataIndicateur();
     indicateursListApparente.value = indicateursList;
     final idDataIndicateur =

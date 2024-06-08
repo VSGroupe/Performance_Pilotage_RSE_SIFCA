@@ -124,6 +124,10 @@ class _EntityPilotageMainState extends State<EntityPilotageMain> {
         .from('Entites')
         .select('groupe')
         .eq('id_entite', currentEntite);
+    final responseLanguage = await supabase
+        .from('Entites')
+        .select('langue')
+        .eq('id_entite', currentEntite);
     PostgrestList responseSousEntite = await supabase
         .from('Entites')
         .select('sous_entites')
@@ -138,6 +142,7 @@ class _EntityPilotageMainState extends State<EntityPilotageMain> {
         responseFiliereAndFialiale.first["filiale"];
     entitePilotageController.filiereCurrentEntity.value =
         responseFiliereAndFialiale.first["filiere"];
+    entitePilotageController.langue = responseLanguage.first["langue"];
     try {
       entitePilotageController.sousEntite.value =
           responseSousEntite[0]["sous_entites"];
