@@ -32,7 +32,24 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
     final List responseIndicateurs = await supabase
         .from("Indicateurs")
         .select()
-        .order('numero', ascending: true);
+        .order('reference', ascending: true);
+    final listIndicateur = responseIndicateurs
+        .map((json) => IndicateurModel.fromJson(json))
+        .toList();
+    setState(() {
+      isLoading = false;
+    });
+    return listIndicateur;
+  }
+
+  Future<List<IndicateurModel>> getListIndicateursEN() async {
+    setState(() {
+      isLoading = true;
+    });
+    final List responseIndicateurs = await supabase
+        .from("Indicateurs_en")
+        .select()
+        .order('reference', ascending: true);
     final listIndicateur = responseIndicateurs
         .map((json) => IndicateurModel.fromJson(json))
         .toList();
@@ -43,7 +60,12 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
   }
 
   void refreshData() async {
-    final response = await getListIndicateurs();
+    var response;
+    if (entitePilotageController.langue == "en") {
+      response = await getListIndicateursEN();
+    } else {
+      response = await getListIndicateurs();
+    }
     setState(() {
       entityConsoDataGridSource =
           EntityConsoDataGridSource(indicateurs: response);
@@ -341,7 +363,7 @@ class EntityConsoDataGridSource extends DataGridSource {
         }),
         DataGridCell<Map<String, dynamic>>(columnName: 'realise', value: {
           "valeur":
-              '${tableauBordController.dataIndicateur.value.valeurs[indicateur.numero - 1][0] ?? '----'}', // 
+              '${tableauBordController.dataIndicateur.value.valeurs[indicateur.numero - 1][0] ?? '----'}', //
           "type": indicateur.type,
           "numero": indicateur.numero,
           "reference": indicateur.reference
@@ -351,7 +373,7 @@ class EntityConsoDataGridSource extends DataGridSource {
               columnName: moisEquivalent(month),
               value: {
                 "valeur":
-                    '${tableauBordController.dataIndicateur.value.valeurs[indicateur.numero - 1][month] ?? '----'}', // 
+                    '${tableauBordController.dataIndicateur.value.valeurs[indicateur.numero - 1][month] ?? '----'}', //
                 "type": indicateur.type,
                 "numero": indicateur.numero,
                 "reference": indicateur.reference
@@ -370,7 +392,7 @@ class EntityConsoDataGridSource extends DataGridSource {
               columnName: '${sousEntites[i]}',
               value: {
                 "valeur":
-                    '${entiteDataIndicateur?.valeurs[indicateur.numero - 1][0] ?? '----'}', // 
+                    '${entiteDataIndicateur?.valeurs[indicateur.numero - 1][0] ?? '----'}', //
                 "type": indicateur.type,
                 "numero": indicateur.numero,
                 "reference": indicateur.reference,
