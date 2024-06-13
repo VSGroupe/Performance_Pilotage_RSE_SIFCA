@@ -172,7 +172,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                     alignment: Alignment.center,
                     child: buildEcartsColumn(),
                   )
-                : SizedBox(), // Affichez un conteneur vide si accessAdmin est faux
+                : const SizedBox(), // Affichez un conteneur vide si accessAdmin est faux
 
 //actif/inactif
             accesAdmin
@@ -184,7 +184,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                     child:
                         _toggleButons, // Affichez _toggleButtons si accessAdmin est vrai
                   )
-                : SizedBox(), // Affichez un conteneur vide si accessAdmin est faux
+                : const SizedBox(), // Affichez un conteneur vide si accessAdmin est faux
           ]),
         ),
       ),
@@ -220,7 +220,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
             content: Text("$selection l'indicateur ?"),
             actions: [
               TextButton(
-                child: Text(
+                child: const Text(
                   "Non",
                   style: TextStyle(color: Color.fromARGB(255, 114, 244, 54)),
                 ),
@@ -229,7 +229,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                 },
               ),
               TextButton(
-                child: Text(
+                child: const Text(
                   "Oui",
                   style: TextStyle(color: Color.fromARGB(255, 232, 142, 31)),
                 ),

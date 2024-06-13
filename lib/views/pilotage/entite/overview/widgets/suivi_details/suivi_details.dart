@@ -36,8 +36,8 @@ class _SuiviDetailsState extends State<SuiviDetails> {
 
     final String entite = suiviDocList.first["nom_entite"];
     final int number = suiviDocList.first["indicateur_total"];
-    int numberValide = suiviDocList.first["indicateur_valides"];
-    int numberCollecte = suiviDocList.first["indicateur_collectes"];
+    numberValide = suiviDocList.first["indicateur_valides"];
+    numberCollecte = suiviDocList.first["indicateur_collectes"];
 
     setState(() {
       eniteName = entite;

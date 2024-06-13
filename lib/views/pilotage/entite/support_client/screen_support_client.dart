@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:perf_rse/views/pilotage/entite/support_client/widgets/destinataire_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../helper/helper_methods.dart';
@@ -78,6 +79,10 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const Text("Destinataire(s)",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
+                            const SizedBox(height: 20),
+                            const DestinataireWidget(),
+                            const SizedBox(height: 20),
                             const Text("Sujet",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
                             const SizedBox(height: 10),
                             sujetWidget(),

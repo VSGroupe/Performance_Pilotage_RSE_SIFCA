@@ -167,7 +167,7 @@ class _SuiviMensuelChartState extends State<SuiviMensuelChart> {
         majorGridLines: MajorGridLines(width: 0),
       ),
       primaryYAxis: NumericAxis(
-          title: AxisTitle(text: "Indicateurs"),
+          title: const AxisTitle(text: "Indicateurs"),
           maximum: numberTotal.toDouble(),
           minimum: 0,
           interval: 40,
@@ -186,7 +186,7 @@ class _SuiviMensuelChartState extends State<SuiviMensuelChart> {
           width: index == 1 ? 95 : name.length.toDouble()*14,
           child: Row(
             children: [
-              SizedBox(height: 30, width: 30,child: _getImage(index),),
+              Expanded(child: _getImage(index),),
               const SizedBox(width: 10,height: 10,),
               Text(name),
               const SizedBox(width: 10,height: 10,),
@@ -206,7 +206,7 @@ class _SuiviMensuelChartState extends State<SuiviMensuelChart> {
           width: isCardView ? 0.5 : _columnWidth,
           spacing: isCardView ? 0.2 : _columnSpacing,
           dataSource: chartData!,
-          color: Colors.red,
+          color: Color.fromARGB(255, 212, 197, 216),
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.y,
           name: "Champs vides"),
