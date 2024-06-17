@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:perf_rse/views/pilotage/controllers/entite_pilotage_controler.dart';
 import 'package:perf_rse/views/pilotage/controllers/profil_pilotage_controller.dart';
 import '../../../../../../constants/constant_double.dart';
@@ -57,11 +58,11 @@ class _ListeContributeurState extends State<ListeContributeur> {
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Accès refusé"),
+          title:  Text(tr.accesDenied),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                const Text("Action non autorisée"),
+                 Text(tr.unauthorizedAction),
                 const SizedBox(
                   height: 20,
                 ),
@@ -109,8 +110,8 @@ class _ListeContributeurState extends State<ListeContributeur> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const CustomText(
-                    text: "Liste des contributeurs",
+                   CustomText(
+                    text: tr.listOfContributors,
                     weight: FontWeight.bold,
                   ),
                   ElevatedButton.icon(
@@ -131,19 +132,19 @@ class _ListeContributeurState extends State<ListeContributeur> {
                       }
                     },
                     icon: const Icon(Icons.add),
-                    label: const Text("Ajouter"),
+                    label:  Text(tr.add),
                   )
                 ],
               ),
               contributeurs.isEmpty
-                  ? const SizedBox(
+                  ?  SizedBox(
                       width: double.infinity,
                       height: 270,
                       child: Center(
                           child: SizedBox(
                         width: 300,
                         height: 50,
-                        child: Text("Aucun contributeur disponible."),
+                        child: Text(tr.noContributorsAvailable),
                       )),
                     )
                   : SizedBox(
@@ -155,20 +156,20 @@ class _ListeContributeurState extends State<ListeContributeur> {
                             columnSpacing: 40,
                             horizontalMargin: 12,
                             columns: [
-                              const DataColumn(
-                                label: Text("Nom"),
+                               DataColumn(
+                                label: Text(tr.name),
                               ),
                               // DataColumn(
                               //   label: Text("Filiale"),
                               // ),
-                              const DataColumn(
-                                label: Text("Entité"),
+                               DataColumn(
+                                label: Text(tr.entity),
                               ),
                               // DataColumn(
                               //   label: Text("Accès"),
                               // ),
-                              const DataColumn(
-                                label: Text("Processus"),
+                               DataColumn(
+                                label: Text(tr.process),
                               ),
                             ],
                             rows: List.generate(

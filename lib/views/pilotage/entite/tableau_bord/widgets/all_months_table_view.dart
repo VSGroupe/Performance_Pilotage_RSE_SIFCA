@@ -2,6 +2,7 @@ import 'package:dynamic_table/dynamic_table.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:perf_rse/models/pilotage/indicateur_model.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:perf_rse/views/pilotage/controllers/tableau_controller.dart';
 
 class AllMonthsTable extends StatefulWidget {
@@ -40,19 +41,19 @@ class _AllMonthsTableState extends State<AllMonthsTable> {
   }
 
     String moisEquivalent(int mois) {
-    const moisNoms = [
-      'Janvier',
-      'Février',
-      'Mars',
-      'Avril',
-      'Mai',
-      'Juin',
-      'Juillet',
-      'Août',
-      'Septembre',
-      'Octobre',
-      'Novembre',
-      'Décembre'
+    List moisNoms = [
+     tr.monthLong("january"),
+      tr.monthLong("february"),
+      tr.monthLong("march"),
+      tr.monthLong("april"),
+      tr.monthLong("may"),
+      tr.monthLong("june"),
+      tr.monthLong("july"),
+      tr.monthLong("august"),
+      tr.monthLong("september"),
+      tr.monthLong("october"),
+     tr.monthLong("november"),
+     tr.monthLong("december")
     ];
 
     return moisNoms[mois - 1];
@@ -66,9 +67,9 @@ class _AllMonthsTableState extends State<AllMonthsTable> {
           padding: const EdgeInsets.all(8.0),
           child: TextField(
             controller: _textController,
-            decoration: const InputDecoration(
-              hintText: "Entrez la réference des indicateurs recherchés",
-              border: OutlineInputBorder(),
+            decoration:  InputDecoration(
+              hintText:tr.referenceIndicators,
+              border: const OutlineInputBorder(),
             ),
             onChanged: _onSearchTextChanged,
           ),
@@ -77,7 +78,7 @@ class _AllMonthsTableState extends State<AllMonthsTable> {
           width: MediaQuery.of(context).size.width * 0.8,
           child: DynamicTable(
             showCheckboxColumn: false,
-            header: Text("Affichage des données jusqu'au mois de ""${moisEquivalent(tableauBordController.monthsToCurrentMonth.length)}"),
+            header: Text("${tr.displayingDataMonth} ""${moisEquivalent(tableauBordController.monthsToCurrentMonth.length)}"),
             showActions: false,
             dataRowMaxHeight: 60,
             dataRowMinHeight: 60,
@@ -114,20 +115,20 @@ class _AllMonthsTableState extends State<AllMonthsTable> {
                             )))),
             columns: [
               DynamicTableDataColumn(
-                  label: const Text("Réference"),
+                  label:  Text(tr.reference),
                   dynamicTableInputType: DynamicTableTextInput()),
               DynamicTableDataColumn(
-                label: const Text("Intitulé"),
+                label:  Text(tr.title),
                 dynamicTableInputType: DynamicTableTextInput(),
                 isEditable: false,
               ),
               DynamicTableDataColumn(
-                label: const Text("Processus"),
+                label:  Text(tr.process),
                 dynamicTableInputType: DynamicTableTextInput(),
                 isEditable: false,
               ),
               DynamicTableDataColumn(
-                label: const Text("Realisé"),
+                label:  Text(tr.completed),
                 dynamicTableInputType: DynamicTableTextInput(),
                 isEditable: false,
               ),
@@ -159,9 +160,9 @@ class _AllMonthsTableState extends State<AllMonthsTable> {
         tempList.add("----");
       } else if (valueType == "Test") {
         if (value == 1) {
-          tempList.add("Vrai");
+          tempList.add(tr.trueV);
         } else {
-          tempList.add("Faux");
+          tempList.add(tr.falseV);
         }
       } else {
         tempList.add("${value}");
@@ -176,9 +177,9 @@ class _AllMonthsTableState extends State<AllMonthsTable> {
           tempList.add("----");
         } else if (valueType == "Test") {
           if (value == 1) {
-            tempList.add("Vrai");
+            tempList.add(tr.trueV);
           } else {
-            tempList.add("Faux");
+            tempList.add(tr.falseV);
           }
         } else {
           tempList.add("${value}");

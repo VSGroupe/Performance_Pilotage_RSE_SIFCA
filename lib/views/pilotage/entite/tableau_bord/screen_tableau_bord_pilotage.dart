@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../helper/helper_methods.dart';
 import '../../../../utils/pilotage_utils.dart';
@@ -55,7 +56,7 @@ class _ScreenTableauBordPilotageState extends State<ScreenTableauBordPilotage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Tableau de bord",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
+             Text(tr.dashboard,style: const TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
             Expanded(child: Center(child: loadingPageWidget())),
           ],
         ),
@@ -65,7 +66,7 @@ class _ScreenTableauBordPilotageState extends State<ScreenTableauBordPilotage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Tableau de bord",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
+                 Text(tr.dashboard,style: const TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
                 const SizedBox(height: 10,),
                 Center(
                   child: Card(
@@ -80,9 +81,8 @@ class _ScreenTableauBordPilotageState extends State<ScreenTableauBordPilotage> {
                           borderRadius: BorderRadius.circular(20)
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: const Center(child: Text(
-                        "GOUVERNANCE ET STRATEGIE DD",
-                        style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),)),
+                      child:  Center(child: Text(tr.governanceSustainableDevelopmentStrategy,
+                        style: const TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),)),
                     ),
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/utils/i18n.dart';
 
 class UpdatedPage extends StatefulWidget {
   const UpdatedPage({super.key});
@@ -36,23 +37,20 @@ class _UpdatedPageState extends State<UpdatedPage> {
                             borderRadius: BorderRadius.circular(20.0),
                             child: Image.asset("assets/images/new_verion_app.png",height: 300,fit: BoxFit.fill,)),
                       ),
-                      const Text("Une nouvelle version de l'application est disponible.",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
+                       Text(tr.newVersionAvailable,style: const TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
                       const SizedBox(height: 20,),
                       Container(
                         alignment: Alignment.topLeft,
-                        child: const Text("Pour accéder aux dernières améliorations de l'application, "
-                            "nous vous invitons à rafraîchir la page en cliquant sur l'icône de mise à jour. "
-                            "Cette mise à jour apporte des fonctionnalités et des performances améliorées, "
-                            "garantissant une expérience utilisateur optimale.",style: TextStyle(fontSize: 24),
+                        child:  Text(tr.newVersionNote,style: const TextStyle(fontSize: 24),
                         ),
                       ),
                       const SizedBox(height: 20,),
                       OutlinedButton(onPressed: (){
                         context.go("/");
-                      }, child: const SizedBox(
+                      }, child:  SizedBox(
                         width: 200,
                         height: 40,
-                        child: Center(child: Text("Aller à l'accueil général")),
+                        child: Center(child: Text(tr.goToHome)),
                       )
                       )
                     ],

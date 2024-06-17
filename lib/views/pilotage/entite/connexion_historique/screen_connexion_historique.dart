@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ScreenConnexionHistorique extends StatefulWidget {
@@ -53,7 +54,7 @@ class _ScreenConnexionHistoriqueState extends State<ScreenConnexionHistorique> {
           children: [
             Row(
               children: [
-                const Text("Journal d'activités",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
+                 Text(tr.activityLog,style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
                 const SizedBox(width: 20,),
                 IconButton(padding: EdgeInsets.zero,onPressed: (){ loadingData(); },splashRadius: 20, icon: const Icon(Icons.refresh,color: Colors.green,size: 30,))
               ],
@@ -78,9 +79,9 @@ class _ScreenConnexionHistoriqueState extends State<ScreenConnexionHistorique> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Padding(
+           Padding(
             padding: EdgeInsets.all(20.0),
-            child: Text("Aucune donnée",style:TextStyle(fontSize: 20) ,),
+            child: Text(tr.noData,style:const TextStyle(fontSize: 20) ,),
           ),
           const SizedBox(height: 10,),
           IconButton(padding: EdgeInsets.zero,onPressed: (){ loadingData();}, icon: const Icon(Icons.refresh,color: Colors.green,size: 40,))
@@ -99,12 +100,12 @@ class _ScreenConnexionHistoriqueState extends State<ScreenConnexionHistorique> {
             headingTextStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             headingRowColor: MaterialStateColor.resolveWith((states) => Colors.blue.withOpacity(0.5)),
             horizontalMargin: 12,
-            columns: const [
-              DataColumn(label: Text('#')),
-              DataColumn(label: Text('Email')),
-              DataColumn(label: Text('Action')),
-              DataColumn(label: Text('Date & Heure')),
-              DataColumn(label: Text('Localisation approximative')),
+            columns:  [
+              const DataColumn(label: Text('#')),
+              DataColumn(label: Text(tr.email)),
+             const  DataColumn(label: Text('Action')),
+              DataColumn(label: Text('Date & ${tr.hour}')),
+              DataColumn(label: Text(tr.approximateLocation)),
             ],
             rows: List.generate(
               dataHistory.length, (index) => historiqueDataRow(index),

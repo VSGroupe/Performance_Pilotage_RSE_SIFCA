@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:perf_rse/views/pilotage/entite/overview/widgets/suivi_details/collectes_mensuelles.dart';
 import 'package:perf_rse/views/pilotage/entite/overview/widgets/suivi_details/collectes_processus.dart';
 import '../../../../constants/constant_double.dart';
@@ -30,16 +31,16 @@ class OverviewPilotage extends StatelessWidget {
           height: 1000,
           child: ListView(
             //crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children:  [
               CustomText(
-                text: "Progrès de collecte",
+                text:tr.collectionProgress,
                 weight: FontWeight.bold,
               ),
-              SizedBox(height: defaultPadding),
-              CollecteByProcessus(),
-              CollecteMensuelleEntites(),
+              const SizedBox(height: defaultPadding),
+             const  CollecteByProcessus(),
+             const  CollecteMensuelleEntites(),
               //SizedBox(height: defaultPadding),
-              CollecteGlobaleEntites()
+              const CollecteGlobaleEntites()
             ],
           ),
         ),

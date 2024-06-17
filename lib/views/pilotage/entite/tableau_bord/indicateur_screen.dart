@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:perf_rse/modules/styled_scrollview.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:perf_rse/views/pilotage/controllers/profil_pilotage_controller.dart';
 import 'package:perf_rse/views/pilotage/entite/tableau_bord/widgets/consolidation_entity_view.dart';
 import 'package:perf_rse/views/pilotage/entite/tableau_bord/widgets/data_table/not_admin_dashboard_header.dart';
@@ -83,9 +84,8 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Text(
-                    "Tableau de bord",
-                    style: TextStyle(
+                   Text(tr.dashboard,
+                    style: const TextStyle(
                         fontSize: 24,
                         color: Color(0xFF3C3D3F),
                         fontWeight: FontWeight.bold),
@@ -175,8 +175,8 @@ class _IndicateurScreenState extends State<IndicateurScreen> {
                     }).toList(),
                   ),
                 ) // Affichez une colonne d'indicateurs si l'utilisateur n'a pas accès
-          : const Center(
-              child: Text("Aucune Donnée"), // Affichez un message "Aucunes données" si le statut est faux
+          :  Center(
+              child: Text(tr.noData), // Affichez un message "Aucunes données" si le statut est faux
             ),
 )
 );
@@ -272,8 +272,8 @@ class _IndicateurTabsState extends State<IndicateurTabs>
       indicatorSize: TabBarIndicatorSize.label,
       indicatorColor:const Color.fromARGB(255, 27, 193, 187), 
       tabs: [
-        IndicateurTab(text: "Edition", isSelected: selectedIndex == 0),
-        IndicateurTab(text: "Vue d'ensemble", isSelected: selectedIndex == 1),
+        IndicateurTab(text: tr.edition, isSelected: selectedIndex == 0),
+        IndicateurTab(text: tr.overview, isSelected: selectedIndex == 1),
       ],
     );
   }

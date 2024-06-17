@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -159,7 +160,7 @@ class _SuiviMensuelChartState extends State<SuiviMensuelChart> {
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
       title: ChartTitle(
-          text: 'Suivi mensuel des données pour ${suiviDataController.annee.value} : $eniteName',
+          text: '${tr.monthlyDataTrackingFor} ${suiviDataController.annee.value} : $eniteName',
           textStyle: const TextStyle(fontSize: 16,decoration: TextDecoration.underline)
       ),
       primaryXAxis: const CategoryAxis(
@@ -167,7 +168,7 @@ class _SuiviMensuelChartState extends State<SuiviMensuelChart> {
         majorGridLines: MajorGridLines(width: 0),
       ),
       primaryYAxis: NumericAxis(
-          title: const AxisTitle(text: "Indicateurs"),
+          title:  AxisTitle(text: tr.indicators),
           maximum: numberTotal.toDouble(),
           minimum: 0,
           interval: 40,
@@ -209,7 +210,7 @@ class _SuiviMensuelChartState extends State<SuiviMensuelChart> {
           color: Color.fromARGB(255, 212, 197, 216),
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.y,
-          name: "Champs vides"),
+          name:tr.emptyField),
       ColumnSeries<ChartSampleData, String>(
           dataSource: chartData!,
           width: isCardView ? 0.5 : _columnWidth,
@@ -217,7 +218,7 @@ class _SuiviMensuelChartState extends State<SuiviMensuelChart> {
           color: Colors.amber,
           xValueMapper: (ChartSampleData sales, _) => sales.x,
           yValueMapper: (ChartSampleData sales, _) => sales.secondSeriesYValue,
-          name: "Collectés"),
+          name: tr.collected),
       ColumnSeries<ChartSampleData, String>(
           dataSource: chartData!,
           width: isCardView ? 0.5 : _columnWidth,

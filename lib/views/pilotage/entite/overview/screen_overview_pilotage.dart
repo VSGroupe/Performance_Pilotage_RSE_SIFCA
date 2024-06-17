@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import '../../../../api/supabse_db.dart';
 import '../../../../helper/helper_methods.dart';
 import '../../../../widgets/privacy_widget.dart';
@@ -51,7 +52,7 @@ class _ScreenOverviewPilotageState extends State<ScreenOverviewPilotage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Accueil",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
+             Text(tr.home,style: const TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
             const SizedBox(height: 10,),
             display ? Expanded(child: Theme(
               data: Theme.of(context).copyWith(scrollbarTheme: ScrollbarThemeData(

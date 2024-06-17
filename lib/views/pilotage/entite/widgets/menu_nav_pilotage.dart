@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:perf_rse/views/pilotage/controllers/entite_pilotage_controler.dart';
 import 'package:perf_rse/views/pilotage/controllers/profil_pilotage_controller.dart';
 import '../../controllers/side_menu_controller.dart';
@@ -57,7 +58,7 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
                 image: "assets/icons/home.png",
                 isFullPath: false,
                 icon: Icons.home,
-                label: "Accueil",
+                label: tr.home,
                 isExtended: isExtended),
             //SizedBox(height: 10),
             CustomMenuButton(
@@ -65,7 +66,7 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
                 image: "assets/icons/table.png",
                 icon: Icons.table_chart_rounded,
                 isFullPath: false,
-                label: "Tableau de bord",
+                label:tr.dashboard,
                 isExtended: isExtended),
             //SizedBox(height: 10),
             CustomMenuButton(
@@ -81,7 +82,7 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
                 image: "assets/icons/monitoring.png",
                 icon: Icons.monitor_outlined,
                 isFullPath: false,
-                label: "Suivi des données",
+                label: tr.dataTacking,
                 isExtended: isExtended),
             //SizedBox(height: 10),
             CustomMenuButton(
@@ -89,7 +90,7 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
                 image: "assets/icons/profil.png",
                 icon: Icons.person,
                 isFullPath: false,
-                label: "Profil",
+                label:tr.profile,
                 isExtended: isExtended),
             const SizedBox(
               height: 5,
@@ -104,14 +105,14 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
                   image: "assets/icons/admin.png",
                   icon: Icons.settings,
                   isFullPath: false,
-                  label: "Paramètres",
+                  label: tr.settings,
                   isExtended: isExtended),
             //SizedBox(height: 10),
             CustomMenuButton(
                 pathMenu: '/historique-des-modifications',
                 image: "",
                 icon: Icons.track_changes_outlined,
-                label: "Historiques",
+                label: tr.logs,
                 isFullPath: false,
                 isExtended: isExtended),
             //SizedBox(height: 10),
@@ -120,7 +121,7 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
                 image: "assets/icons/casque.png",
                 icon: Icons.comment,
                 isFullPath: false,
-                label: "Support Client",
+                label:tr.support,
                 isExtended: isExtended),
             const SizedBox(
               height: 5,
@@ -135,7 +136,7 @@ class _MenuNavPilotageState extends State<MenuNavPilotage> {
                 image: "assets/icons/back.png",
                 isFullPath: true,
                 icon: Icons.arrow_circle_left_sharp,
-                label: "Accueil Pilotage",
+                label: tr.homeControl,
                 isExtended: isExtended),
             //const SizedBox(height: 10),
             // isExtended

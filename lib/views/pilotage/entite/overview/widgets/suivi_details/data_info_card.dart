@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 
 import '../../../../../../constants/constant_double.dart';
 
@@ -46,7 +47,7 @@ class DataSuiviCard extends StatelessWidget {
                     style: const TextStyle(fontSize: 12),
                   ),
                   Text(
-                    "$total indicateurs",
+                    "$total ${tr.indicators}",
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall!

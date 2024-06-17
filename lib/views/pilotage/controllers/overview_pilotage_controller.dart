@@ -1,6 +1,8 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:perf_rse/models/pilotage/acces_pilotage_model.dart';
+import 'package:perf_rse/utils/i18n.dart';
+import 'package:perf_rse/utils/operation_liste.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../models/pilotage/contributeur_model.dart';
@@ -12,6 +14,7 @@ class OverviewPilotageController extends GetxController {
   final supabase = Supabase.instance.client;
 
   var contributeurs = <ContributeurModel>[].obs;
+
 
   Future<bool> getAllUserEntite() async {
     try {
@@ -55,8 +58,11 @@ class OverviewPilotageController extends GetxController {
         final acces = accesPilotageJson != null
             ? getAccesTypeUtils(AccesPilotageModel.fromJson(accesPilotageJson))
             : "---";
-        final resultProcessus =
-            concatenationListe(accesPilotageJson["processus"]);
+
+          print( accesPilotageJson["processus"]);
+
+        final resultProcessus =  concatenationListe(tr.abrLange.toLowerCase()=='en' ? await OperationList().getTranslateProcessEn(accesPilotageJson["processus"]) : accesPilotageJson["processus"] );
+     
         final resultFiliale = concatenationListe(user["entreprise"]);
 
         final kUser = ContributeurModel(

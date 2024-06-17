@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:perf_rse/views/pilotage/entite/support_client/widgets/destinataire_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -55,7 +56,7 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Support client",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
+               Text(tr.customerSupport,style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
               const SizedBox(height: 5,),
               Card(
                 elevation: 3,
@@ -66,9 +67,9 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 5,),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-                        child: Text("Ouvrir un nouveau ticket",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
+                       Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                        child: Text(tr.openNewTicket,style: const TextStyle(fontSize: 16,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
                       ),
                       const SizedBox(height: 5,),
                       const Divider(),
@@ -79,19 +80,19 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Destinataire(s)",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
+                             Text("${tr.recipient}(s)",style: const TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
                             const SizedBox(height: 20),
                             const DestinataireWidget(),
                             const SizedBox(height: 20),
-                            const Text("Sujet",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
+                             Text(tr.subject,style: const TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
                             const SizedBox(height: 10),
                             sujetWidget(),
                             const SizedBox(height: 20),
-                            const Text("Votre requête",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
+                             Text(tr.yourRequest,style: const TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
                             const SizedBox(height: 20),
                             requestWidget(),
                             const SizedBox(height: 20),
-                            Text( fileState == true ? "Fichier : $messageFormFile" : "Joindre un document",style: const TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
+                            Text( fileState == true ? "${tr.file} : $messageFormFile" : tr.attachDocument,style: const TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
                             const SizedBox(height: 10),
                             filePickerWidget(),
                             Visibility(
@@ -131,7 +132,7 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
     final objet = _sujetController.text;
     final message = _requestController.text;
 
-    EasyLoading.show(status: 'Envoi en cours ...');
+    EasyLoading.show(status: '${tr.sendingProgress} ...');
     await Future.delayed(const Duration(seconds: 1));
 
     try {
@@ -159,7 +160,7 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
       setState(() {
         fileState = null;
       });
-      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Succès", "Votre réquête a été envoyé avec succès." , Colors.green));
+      ScaffoldMessenger.of(context).showSnackBar(showSnackBar(tr.success, tr.succesSendMessage , Colors.green));
     }catch (e) {
       EasyLoading.dismiss();
       ScaffoldMessenger.of(context).showSnackBar(showSnackBar(e.toString(), "", Colors.red));
@@ -185,13 +186,13 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
             border: Border.all(color: const Color(0xFFEAEAEA),width: 3),
             borderRadius: BorderRadius.circular(10)
         ),
-        child: const Padding(
+        child:  Padding(
           padding: EdgeInsets.all(8.0),
           child: Row(
             children: [
-              Icon(Icons.add_circle_outline_sharp,color: Colors.grey,),
-              SizedBox(width: 10,),
-              Text("Cliquer ici pour télécharger un fichier.",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
+              const Icon(Icons.add_circle_outline_sharp,color: Colors.grey,),
+              const SizedBox(width: 10,),
+              Text(tr.downloadFile,style: const TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
             ],
           ),
         ),
@@ -219,7 +220,7 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
       } else {
         setState(() {
           fileState = false;
-          messageFormFile = "La taille du fichier dépasse la limite de 500 Ko.";
+          messageFormFile = tr.fileSizeExceeds;
         });
       }
     }
@@ -233,7 +234,7 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
         maxLines: 5,
         validator: (value) {
           if (value !=null && value.length < 20 ) {
-            return "Une erreur est survenue.";
+            return tr.occurredErrorMessage;
           }
           return null;
         },
@@ -256,7 +257,7 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
       controller: _sujetController,
       validator: (value) {
         if (value!=null && value.length < 10 ) {
-          return "Une erreur est survenue.";
+          return tr.occurredErrorMessage;
         }
         return null;
       },
@@ -293,9 +294,9 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
                 color: Colors.amber,
               ),
               borderRadius: const BorderRadius.all(Radius.circular(40))),
-          child: const Center(
+          child:  Center(
               child: CustomText(
-                text: "Envoyer",
+                text: tr.send,
                 size: 20,
                 weight: FontWeight.bold,
                 color: Colors.white,

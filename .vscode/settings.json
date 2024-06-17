@@ -1,3 +1,4 @@
 {
-    "editor.fontFamily": "Montserrat , Roboto , 'Open Sans', monospace"
+  "editor.fontFamily": "Montserrat , Roboto , 'Open Sans', monospace",
+  "dart.flutterSdkPath": ".fvm/versions/3.19.6"
 }

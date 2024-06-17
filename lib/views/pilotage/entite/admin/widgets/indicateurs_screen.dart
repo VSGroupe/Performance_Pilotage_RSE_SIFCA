@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:perf_rse/helper/helper_methods.dart';
 import 'package:perf_rse/models/pilotage/indicateur_model.dart';
+import 'package:perf_rse/utils/i18n.dart';
+import 'package:perf_rse/utils/operation_liste.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -27,7 +29,9 @@ class _IndicateursScreenState extends State<IndicateursScreen> {
     setState(() {
       isLoading = true;
     });
-    final List responseIndicateurs = await supabase.from("Indicateurs").select().order('numero', ascending: true);
+    print(tr.abrLange.toLowerCase());
+    final List responseIndicateurs = tr.abrLange.toLowerCase()=='fr' ?  await supabase.from("Indicateurs").select().order('numero', ascending: true) : await supabase.from("Indicateurs_en").select().order('numero', ascending: true);
+
     final listIndicateur = responseIndicateurs.map((json) => IndicateurModel.fromJson(json)).toList();
     setState(() {
       isLoading = false;
@@ -73,10 +77,9 @@ class _IndicateursScreenState extends State<IndicateursScreen> {
               label: Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.all(8.0),
-                child: const Text(
-                  'Numéro',
+                child:  Text(tr.number,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               )),
           GridColumn(
@@ -85,10 +88,9 @@ class _IndicateursScreenState extends State<IndicateursScreen> {
             label: Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                'Référence',
+              child:  Text(tr.reference,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style:const  TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -98,10 +100,10 @@ class _IndicateursScreenState extends State<IndicateursScreen> {
             label: Container(
               padding: const EdgeInsets.all(8.0),
               alignment: Alignment.centerLeft,
-              child: const Text(
-                'Intitulé',
+              child:  Text(
+                tr.title,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -111,10 +113,9 @@ class _IndicateursScreenState extends State<IndicateursScreen> {
             label: Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                'Définition',
+              child:  Text(tr.definition,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -124,10 +125,9 @@ class _IndicateursScreenState extends State<IndicateursScreen> {
               label: Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.all(8.0),
-                  child: const Text(
-                    'Unité',
+                  child:  Text(tr.unit,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ))),
           GridColumn(
               columnName: 'type',
@@ -146,10 +146,9 @@ class _IndicateursScreenState extends State<IndicateursScreen> {
             label: Container(
                 padding: const EdgeInsets.all(8.0),
                 alignment: Alignment.centerLeft,
-                child: const Text(
-                  'Formule',
+                child:  Text(tr.formulas,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 )),
           ),
           GridColumn(
@@ -158,10 +157,9 @@ class _IndicateursScreenState extends State<IndicateursScreen> {
             label: Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                'Processus',
+              child:  Text(tr.process,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -210,17 +208,17 @@ class _IndicateursScreenState extends State<IndicateursScreen> {
                 borderRadius: BorderRadius.circular(10)
             ),
             padding: const EdgeInsets.all(8),
-            child: const Row(
+            child:  Row(
               children: [
-                Icon(Icons.refresh_sharp,size: 25,color: Colors.green),
-                SizedBox(width: 5,),
-                Text("Rafraîchir")
+                const Icon(Icons.refresh_sharp,size: 25,color: Colors.green),
+                const SizedBox(width: 5,),
+                Text(tr.reflesh)
               ],
             ),
           ),
         ),
         const SizedBox(width: 10,),
-        const Text("Edition"),
+         Text(tr.edition),
         const SizedBox(width: 5,),
         Switch(value: edition, onChanged: (value){
           setState(() {
@@ -274,8 +272,8 @@ class IndicateurDataGridSource extends DataGridSource {
         DataGridCell<Map<String,dynamic>>(columnName: 'intitule', value: {"valeur":indicateur.intitule,"type":indicateur.type,"numero":indicateur.numero,"reference":indicateur.reference}),
         DataGridCell<Map<String,dynamic>>(columnName: 'definition', value: {"valeur":indicateur.definition,"type":indicateur.type,"numero":indicateur.numero,"reference":indicateur.reference}),
         DataGridCell<Map<String,dynamic>>(columnName: 'unite', value: {"valeur":indicateur.unite,"type":indicateur.type,"numero":indicateur.numero,"reference":indicateur.reference}),
-        DataGridCell<Map<String,dynamic>>(columnName: 'type', value: {"valeur":indicateur.type,"type":indicateur.type,"numero":indicateur.numero,"reference":indicateur.reference}),
-        DataGridCell<Map<String,dynamic>>(columnName: 'formule', value: {"valeur":indicateur.formule,"type":indicateur.type,"numero":indicateur.numero,"reference":indicateur.reference}),
+        DataGridCell<Map<String,dynamic>>(columnName: 'type', value: {"valeur":OperationList().transTypeOperation(indicateur.type),"type":indicateur.type,"numero":indicateur.numero,"reference":indicateur.reference}),
+        DataGridCell<Map<String,dynamic>>(columnName: 'formule', value: {"valeur":indicateur.formule !=null ?  OperationList().transTypeFormule(indicateur.formule!):"(__)","type":indicateur.type,"numero":indicateur.numero,"reference":indicateur.reference}),
         DataGridCell<Map<String,dynamic>>(columnName: 'processus', value: {"valeur":indicateur.processus,"type":indicateur.type,"numero":indicateur.numero,"reference":indicateur.reference}),
         DataGridCell<Map<String,dynamic>>(columnName: 'odd', value: {"valeur":indicateur.odd,"type":indicateur.type,"numero":indicateur.numero,"reference":indicateur.reference}),
         DataGridCell<Map<String,dynamic>>(columnName: 'gri', value: {"valeur":indicateur.gri,"type":indicateur.type,"numero":indicateur.numero,"reference":indicateur.reference}),
@@ -361,7 +359,7 @@ class _EditIndicateurState extends State<EditIndicateur> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text("Indicateur ${widget.reference} -- Champ : ${widget.champ == "initule" ? "Initulé" : "Définition"}",style: const TextStyle(color:Colors.red),),
+                title: Text("${tr.indicator} ${widget.reference} -- ${tr.field} : ${widget.champ == "initule" ? tr.title : tr.definition}",style: const TextStyle(color:Colors.red),),
                 contentPadding: const EdgeInsets.all(30),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 titlePadding: const EdgeInsets.only(top: 20,right: 20,left: 20),
@@ -381,7 +379,7 @@ class _EditIndicateurState extends State<EditIndicateur> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextButton(
-                          child: const Text('Annuler'),
+                          child:  Text(tr.cancel),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                         ElevatedButton(
@@ -389,7 +387,7 @@ class _EditIndicateurState extends State<EditIndicateur> {
                               await Supabase.instance.client.from('Indicateurs').update({widget.champ: valueController.text}).eq('reference',widget.reference);
                               Navigator.of(context).pop();
                             },
-                            child: const Text('Valider')
+                            child:  Text(tr.confirm)
                         )
                       ],
                     )

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import '../../../../../../helper/helper_methods.dart';
 import '../../../../../../models/pilotage/indicateur_model.dart';
 import '../../../../controllers/tableau_controller.dart';
@@ -15,8 +16,8 @@ class DashBoardUtils {
         return AlertDialog(
           title: Text(
             value == null
-                ? "Renseigner la donnée de l'indicateur"
-                : "Supprimer la donnée de l'indicateur",
+                ? tr.enterIndicatorValueMessage
+                : tr.deleteIndicatorData,
             style: TextStyle(color: value == null ? Colors.blue : Color.fromARGB(255, 175, 150, 76)),
           ),
           contentPadding: const EdgeInsets.all(30),
@@ -45,7 +46,7 @@ class DashBoardUtils {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            "${value == null ? "Renseigner la cible de" : "Mettre à jour la donnée de"} l'indicateur",
+            value == null ? tr.enterTargetOf : tr.updateIndicatorValueMessage,
             style: TextStyle(color: value == null ? Colors.blue : Colors.green),
           ),
           contentPadding: const EdgeInsets.all(30),
@@ -384,9 +385,9 @@ class _ContentEditionState extends State<ContentEdition> {
 
     if (result == true) {
       await tableauBordController.updateDataIndicateur();
-      var message = "La donnée a été supprimée avec succès.";
+      var message = tr.successDeletedDataMessage;
       ScaffoldMessenger.of(context).showSnackBar(
-        showSnackBar("Succès", message, Colors.green),
+        showSnackBar(tr.success, message, Colors.green),
       );
       tableauBordController.updateSuiviDate(
         tableauBordController.currentYear.value,
@@ -395,9 +396,9 @@ class _ContentEditionState extends State<ContentEdition> {
         widget.colonne,
       );
     } else {
-      var message = "La donnée n'a pas été supprimée.";
+      var message = tr.failDeletedDataMessage;
       ScaffoldMessenger.of(context).showSnackBar(
-        showSnackBar("Echec", message, Colors.red),
+        showSnackBar(tr.fail, message, Colors.red),
       );
       setState(() {
         resultDelete = -1; // Failure
@@ -415,12 +416,11 @@ class _ContentEditionState extends State<ContentEdition> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Row(
+            title:  Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  "Votre donnée sera supprimée en fin de compte à rebours",
-                  style: TextStyle(
+                Text(tr.countdownMessageTitle,
+                  style: const TextStyle(
                     color: Color(0xFFFFC000),
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -430,7 +430,7 @@ class _ContentEditionState extends State<ContentEdition> {
             ),
             content: Column(
               children: [
-                Text("Suppression dans $counter secondes..."),
+                Text("${tr.deletionIn} $counter ${tr.seconds}..."),
               ],
             ),
             actions: [
@@ -440,7 +440,7 @@ class _ContentEditionState extends State<ContentEdition> {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
-                child: const Text("Annuler"),
+                child:  Text(tr.cancel),
               )
             ],
           );
@@ -470,19 +470,19 @@ class _ContentEditionState extends State<ContentEdition> {
         case 0:
           return Container();
         case -1:
-          return const Padding(
-            padding: EdgeInsets.only(top: 8.0),
+          return  Padding(
+            padding: const EdgeInsets.only(top: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
+               const  Icon(
                   Icons.dangerous,
                   color: Colors.red,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
-                Text("Echec lors de l'édition")
+                Text(tr.editionFailed)
               ],
             ),
           );
@@ -508,36 +508,36 @@ class _ContentEditionState extends State<ContentEdition> {
         case 0:
           return Container();
         case -1:
-          return const Padding(
+          return  Padding(
             padding: EdgeInsets.only(top: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
+               const  Icon(
                   Icons.dangerous,
                   color: Colors.red,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
-                Text("Echec lors de la suppression")
+                Text(tr.deletionFailed)
               ],
             ),
           );
         case 1:
-          return const Padding(
+          return  Padding(
             padding: EdgeInsets.only(top: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.check_circle,
+               const  Icon(
+                   Icons.check_circle,
                   color: Colors.green,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
-                Text("La donnée a été supprimée avec succès.")
+                Text(tr.successDeletedDataMessage)
               ],
             ),
           );
@@ -573,11 +573,11 @@ class _ContentEditionState extends State<ContentEdition> {
               controller: valueController,
               validator: (val) {
                 if (!GetUtils.isNum(val!)) {
-                  return "Erreur de saisie";
+                  return tr.dataEntryError;
                 }
                 num value = num.parse(val);
                 if (value < 0) {
-                  return "La valeur ne peut être négative";
+                  return tr.negativeData;
                 }
                 bool checkAVGdenominateur = AVGcontrolDenominateurValue(
                     value, widget.colonne, widget.numeroLigne + 1);
@@ -590,7 +590,7 @@ class _ContentEditionState extends State<ContentEdition> {
                     checkSubDatas) {
                   return null;
                 } else {
-                  return "Erreur, donnée pas permise : calcul erronné";
+                  return tr.erroneousCalculation;
                 }
               },
               decoration: const InputDecoration(
@@ -617,14 +617,14 @@ class _ContentEditionState extends State<ContentEdition> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                   ),
-                  child: const Text("Supprimer"),
+                  child:  Text(tr.delete),
                 ),
               TextButton(
-                child: const Text("Annuler"),
+                child:  Text(tr.cancel),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               deleting
-                  ? Text('Suppression dans $countdown...')
+                  ? Text('${tr.deletionIn} $countdown...')
                   : const SizedBox(),
               widget.value == null
                   ? ElevatedButton(
@@ -653,11 +653,10 @@ class _ContentEditionState extends State<ContentEdition> {
                                       .updateDataIndicateur();
                                   await Future.delayed(
                                       const Duration(seconds: 1));
-                                  var message =
-                                      "La donnée a été modifiée avec succès.";
+                                  var message =tr.successUpdatingData;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       showSnackBar(
-                                          "Succès", message, Colors.green));
+                                          tr.success, message, Colors.green));
                                   //print("hello");
                                   tableauBordController.updateSuiviDate(
                                       tableauBordController.currentYear.value,
@@ -665,11 +664,10 @@ class _ContentEditionState extends State<ContentEdition> {
                                       widget.indicator.numero - 1,
                                       widget.colonne);
                                 } else {
-                                  var message =
-                                      "La donnée n'a pas été mise à jour.";
+                                  var message =tr.failUpdatingData;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       showSnackBar(
-                                          "Echec", message, Colors.red));
+                                          tr.fail, message, Colors.red));
                                 }
                                 await Future.delayed(
                                     const Duration(milliseconds: 500));
@@ -677,7 +675,7 @@ class _ContentEditionState extends State<ContentEdition> {
                                 Navigator.of(context).pop();
                               }
                             },
-                      child: const Text("Valider"))
+                      child:  Text(tr.confirm))
                   : const SizedBox(),
             ],
           )
@@ -738,19 +736,19 @@ class _ContentEditionCible extends State<ContentEditionCible> {
         case 0:
           return Container();
         case -1:
-          return const Padding(
-            padding: EdgeInsets.only(top: 8.0),
+          return  Padding(
+            padding:const  EdgeInsets.only(top: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
+                const Icon(
                   Icons.dangerous,
                   color: Colors.red,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
-                Text("Echec lors de l'édition")
+                Text(tr.editionFailed)
               ],
             ),
           );
@@ -787,7 +785,7 @@ class _ContentEditionCible extends State<ContentEditionCible> {
             child: TextFormField(
               controller: valueController,
               validator: (val) =>
-                  GetUtils.isNum("$val") ? null : "Erreur de saisie",
+                  GetUtils.isNum("$val") ? null : tr.dataEntryError,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
@@ -801,7 +799,7 @@ class _ContentEditionCible extends State<ContentEditionCible> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-                child: const Text('Annuler'),
+                child:  Text(tr.cancel),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               ElevatedButton(
@@ -840,7 +838,7 @@ class _ContentEditionCible extends State<ContentEditionCible> {
                             Navigator.of(context).pop();
                           }
                         },
-                  child: const Text('Valider'))
+                  child:  Text(tr.confirm))
             ],
           )
         ],

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../api/supabse_db.dart';
 import 'custom_text.dart';
@@ -45,8 +46,6 @@ class _CopyRightState extends State<CopyRight> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
     return Container(
       height: 40,
       decoration: BoxDecoration(
@@ -82,10 +81,10 @@ class _CopyRightState extends State<CopyRight> {
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: RichText(
               text: TextSpan(
-                text: "Statut : ",
+                text: "${tr.status} : ",
                 children: [
                   TextSpan(
-                      text: isConnected ? "Connecté" : "Aucune connection internet" ,
+                      text: isConnected ? tr.online : tr.offline ,
                       style: TextStyle(color: isConnected ? Colors.green: Colors.red))
                 ],
                 style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.white),

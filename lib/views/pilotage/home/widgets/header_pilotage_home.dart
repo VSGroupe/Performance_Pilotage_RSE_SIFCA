@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 
 import '../../../../constants/constant_colors.dart';
 import '../../../../widgets/custom_text.dart';
@@ -23,7 +24,7 @@ class _HeaderPilotageHomeState extends State<HeaderPilotageHome> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomText(
-                text: "PILOTAGE DE DEVELOPEMENT DURABLE",
+                text: tr.pilotageHearder,
                 weight: FontWeight.bold,
                 size: 30,
               ),

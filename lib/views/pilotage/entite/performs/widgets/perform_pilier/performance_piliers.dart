@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:get/get.dart';
@@ -45,21 +46,21 @@ class _PerformancePiliersState extends State<PerformancePiliers> {
     _tooltipBehavior = TooltipBehavior(enable: true);
     chartData = <ChartSampleData>[
       ChartSampleData(
-          x: "Gouvernance",
+          x: tr.governance,
           y: datasPilierListB[0] ?? 0,
           secondSeriesYValue:
               datasPilierListA[0] ?? 0,
           thirdSeriesYValue: 13),
       ChartSampleData(
-          x: "Emploi",
+          x:tr.employment,
           y: datasPilierListB[1] ?? 0,
           secondSeriesYValue:
               datasPilierListA[1] ?? 0,
           thirdSeriesYValue: 7),
       ChartSampleData(
-          x: "Société", y: datasPilierListB[2] ?? 0, secondSeriesYValue: datasPilierListA[2] ?? 0, thirdSeriesYValue: 5),
+          x: tr.community, y: datasPilierListB[2] ?? 0, secondSeriesYValue: datasPilierListA[2] ?? 0, thirdSeriesYValue: 5),
       ChartSampleData(
-          x: "Environnement",
+          x: tr.environment,
           y: datasPilierListB[3] ?? 0,
           secondSeriesYValue: datasPilierListA[3] ?? 0,
           thirdSeriesYValue: 14)
@@ -102,18 +103,18 @@ class _PerformancePiliersState extends State<PerformancePiliers> {
   SfCartesianChart _buildSpacingColumnChart() {
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
-      title: const ChartTitle(
-          text: "PERFORMANCE PAR AXE STRATEGIQUE",
-          textStyle: TextStyle(
+      title:  ChartTitle(
+          text:tr.axePerformanceGraphTitle,
+          textStyle: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,
               decoration: TextDecoration.underline)),
-      primaryXAxis: const CategoryAxis(
-        title: AxisTitle(text: "Les Axes Stratégiques"),
-        majorGridLines: MajorGridLines(width: 0),
+      primaryXAxis:  CategoryAxis(
+        title: AxisTitle(text: tr.strategicAxes),
+        majorGridLines: const MajorGridLines(width: 0),
       ),
-      primaryYAxis: const NumericAxis(
-          title: AxisTitle(text: "Performance en %"),
+      primaryYAxis:  NumericAxis(
+          title: AxisTitle(text: tr.performanceIn),
           maximum: 100,
           minimum: 0,
           interval: 1,

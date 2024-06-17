@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../api/supabse_db.dart';
 import '../../../controller/time_system_controller.dart';
@@ -202,7 +203,7 @@ class TableauBordController extends GetxController {
   }
 
   void initialisation(BuildContext context) async {
-    langue = entitePilotageController.langue;
+    langue = tr.abrLange.toLowerCase();
     allYearsList.value = TimeSystemController.years;
     //dataCibleList.value = await dataBaseController.getValeurCibleIndicateur();
     isLoading.value = true;

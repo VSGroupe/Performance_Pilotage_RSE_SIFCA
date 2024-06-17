@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import '../../../../../api/supabse_db.dart';
 import '../../../../../helper/helper_methods.dart';
 import '../../../../../widgets/custom_text.dart';
@@ -52,7 +53,7 @@ class _InfosPiloteState extends State<InfosPilote> {
     setState(() {
       isUpdating = true;
     });
-    EasyLoading.show(status: "Mise à jour du profil en cours");
+    EasyLoading.show(status: tr.profileUpdateProgress);
     await Future.delayed(const Duration(seconds: 1));
     String email = profilController.userModel.value.email;
     final reponse = await dataBaseController.updateUser(
@@ -69,9 +70,9 @@ class _InfosPiloteState extends State<InfosPilote> {
 
     if (reponse) {
       await profilController.updateProfil();
-      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Succès", "La mise à jour a été effectuée avec succès", Colors.green));
+      ScaffoldMessenger.of(context).showSnackBar(showSnackBar(tr.success, tr.updatingSuccessMessage, Colors.green));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Échec", "La mise à jour a échoué", Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(showSnackBar(tr.fail, tr.updatingFailMessage, Colors.red));
     }
     EasyLoading.dismiss();
     setState(() {
@@ -139,9 +140,9 @@ class _InfosPiloteState extends State<InfosPilote> {
                     color: Colors.amber,
                   ),
                   borderRadius: const BorderRadius.all(Radius.circular(40))),
-              child: const Center(
+              child:  Center(
                   child: CustomText(
-                text: "Enregistrer",
+                text:tr.save,
                 size: 20,
                 weight: FontWeight.bold,
                 color: Colors.white,
@@ -157,8 +158,8 @@ class _InfosPiloteState extends State<InfosPilote> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const CustomText(
-          text: "Utilisateur",
+         CustomText(
+          text:tr.user,
           size: 20,
           weight: FontWeight.bold,
         ),
@@ -173,8 +174,8 @@ class _InfosPiloteState extends State<InfosPilote> {
               children: [
                 Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CustomText(
-                      text: "Titre de l'utilisateur",
+                     CustomText(
+                      text:tr.userTilte,
                       size: 15,
                     ),
                     const SizedBox(
@@ -184,8 +185,8 @@ class _InfosPiloteState extends State<InfosPilote> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const CustomText(
-                      text: "Nom",
+                     CustomText(
+                      text:tr.name,
                       size: 15,
                     ),
                     const SizedBox(
@@ -198,8 +199,8 @@ class _InfosPiloteState extends State<InfosPilote> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const CustomText(
-                      text: "Prénom",
+                     CustomText(
+                      text:tr.forename,
                       size: 15,
                     ),
                     const SizedBox(
@@ -223,8 +224,8 @@ class _InfosPiloteState extends State<InfosPilote> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const CustomText(
-          text: "Contacts",
+         CustomText(
+          text: tr.contacts,
           size: 20,
           weight: FontWeight.bold,
         ),
@@ -239,8 +240,8 @@ class _InfosPiloteState extends State<InfosPilote> {
                 Expanded(child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CustomText(
-                      text: "Numéro de téléphone",
+                     CustomText(
+                      text:tr.phoneNumber,
                       size: 15,
                     ),
                     const SizedBox(
@@ -253,8 +254,8 @@ class _InfosPiloteState extends State<InfosPilote> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const CustomText(
-                      text: "Pays",
+                     CustomText(
+                      text:tr.country,
                       size: 15,
                     ),
                     const SizedBox(
@@ -267,8 +268,8 @@ class _InfosPiloteState extends State<InfosPilote> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const CustomText(
-                      text: "Ville",
+                     CustomText(
+                      text: tr.city,
                       size: 15,
                     ),
                     const SizedBox(
@@ -286,8 +287,8 @@ class _InfosPiloteState extends State<InfosPilote> {
                 Expanded(child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CustomText(
-                      text: "Filiales",
+                     CustomText(
+                      text:tr.subsidiaries,
                       size: 15,
                     ),
                     const SizedBox(
@@ -297,8 +298,8 @@ class _InfosPiloteState extends State<InfosPilote> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const CustomText(
-                      text: "Entités",
+                     CustomText(
+                      text: tr.entity,
                       size: 15,
                     ),
                     const SizedBox(
@@ -308,8 +309,8 @@ class _InfosPiloteState extends State<InfosPilote> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const CustomText(
-                      text: "Rôle",
+                     CustomText(
+                      text: tr.role,
                       size: 15,
                     ),
                     const SizedBox(
@@ -327,8 +328,8 @@ class _InfosPiloteState extends State<InfosPilote> {
                 Expanded(child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CustomText(
-                      text: "Adresse",
+                     CustomText(
+                      text: tr.adress,
                       size: 15,
                     ),
                     const SizedBox(

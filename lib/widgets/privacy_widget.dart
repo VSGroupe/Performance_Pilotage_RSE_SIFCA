@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 
 import '../utils/utils.dart';
 
@@ -19,9 +20,9 @@ class _PrivacyWidgetState extends State<PrivacyWidget> {
       children: [
         Text("© 2023 Vision & Stratégie Groupe",style: TextStyle(fontSize: responsive =="cas-1"? 12 : null),),
         const SizedBox(width: 15,),
-        Text("Confidentialité",style: TextStyle(color: const Color(0xFF114693),fontSize: responsive =="cas-1"? 12 : null),),
+        Text(tr. privacy,style: TextStyle(color: const Color(0xFF114693),fontSize: responsive =="cas-1"? 12 : null),),
         const SizedBox(width: 15,),
-        Text("Conditions d'utilisation",style: TextStyle(color: const Color(0xFF114693),fontSize: responsive =="cas-1"? 12 : null),)
+        Text(tr.termsConditions,style: TextStyle(color: const Color(0xFF114693),fontSize: responsive =="cas-1"? 12 : null),)
       ],
     );
   }

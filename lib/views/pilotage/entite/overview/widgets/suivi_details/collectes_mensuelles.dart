@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:perf_rse/api/supabse_db.dart';
 import 'package:perf_rse/constants/constant_double.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:perf_rse/views/pilotage/controllers/entite_pilotage_controler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -120,7 +121,7 @@ class _CollecteMensuelleEntites extends State<CollecteMensuelleEntites> {
                     width: 50,
                     height: 50,
                     child: status == -1
-                        ? const Text("Aucune donnée disponible.")
+                        ?  Text(tr.noDataAvailable)
                         : const CircularProgressIndicator(),
                   ),
                 ),
@@ -132,8 +133,8 @@ class _CollecteMensuelleEntites extends State<CollecteMensuelleEntites> {
                       columnSpacing: 12,
                       horizontalMargin: 12,
                       columns: [
-                        const DataColumn(
-                          label: Text("Entités/filiales"),
+                         DataColumn(
+                          label: Text("${tr.entities}/${tr.subsidiaries}"),
                         ),
                         DataColumn(
                           label: Text("${obtenirNomMois(last_month)}"),
@@ -188,18 +189,18 @@ class _CollecteMensuelleEntites extends State<CollecteMensuelleEntites> {
 
   String? obtenirNomMois(num chiffreMois) {
     Map<int, String> moisMap = {
-      1: "Janvier",
-      2: "Février",
-      3: "Mars",
-      4: "Avril",
-      5: "Mai",
-      6: "Juin",
-      7: "Juillet",
-      8: "Août",
-      9: "Septembre",
-      10: "Octobre",
-      11: "Novembre",
-      12: "Décembre"
+     1: tr.monthLong("january"),
+      2: tr.monthLong("february"),
+      3: tr.monthLong("march"),
+      4: tr.monthLong("april"),
+      5: tr.monthLong("may"),
+      6: tr.monthLong("june"),
+      7: tr.monthLong("july"),
+      8: tr.monthLong("august"),
+      9: tr.monthLong("september"),
+      10: tr.monthLong("october"),
+      11: tr.monthLong("november"),
+      12: tr.monthLong("december")
     };
 
     String? nomMois = moisMap[chiffreMois];

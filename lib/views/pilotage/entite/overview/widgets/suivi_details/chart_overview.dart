@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 
 import '../../../../../../constants/constant_double.dart';
 
@@ -57,8 +58,8 @@ class _ChartOverviewState extends State<ChartOverview> {
                         height: 0.5,
                       ),
                 ),
-                Text("(collectés et validés)",style: Theme.of(context).textTheme.bodySmall,),
-                Text("sur ${widget.nombreTotal} indicateurs",style: Theme.of(context).textTheme.bodyMedium,)
+                Text("(${tr.collectedValidated})",style: Theme.of(context).textTheme.bodySmall,),
+                Text("${tr.on} ${widget.nombreTotal}  ${tr.indicators}",style: Theme.of(context).textTheme.bodyMedium,)
               ],
             ),
           ),

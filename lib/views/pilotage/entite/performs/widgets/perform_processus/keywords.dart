@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 
 class KeywordsGrid extends StatelessWidget {
   const KeywordsGrid({Key? key}) : super(key: key);
@@ -32,11 +33,10 @@ class KeywordsGrid extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Chiffre clé",
+                     Text(tr.keyNumber,
                       maxLines: 2,
                       softWrap: true,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                         color: Color(0xff8EA3B7),
                       ),

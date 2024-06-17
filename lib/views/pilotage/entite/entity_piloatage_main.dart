@@ -119,7 +119,7 @@ class _EntityPilotageMainState extends State<EntityPilotageMain> {
     //print(checkEntite);
     data["user"] = user[0];
     data["accesPilotage"] = accesPilotage[0];
-    final currentEntite = GoRouter.of(context).location.split("/")[3];
+    final currentEntite = GoRouter.of(context)!.location.split("/")[3];
     final responseAppartenance = await supabase
         .from('Entites')
         .select('groupe')

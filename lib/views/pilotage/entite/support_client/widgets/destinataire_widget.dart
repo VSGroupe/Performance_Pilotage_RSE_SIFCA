@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class DestinataireWidget extends StatefulWidget {
@@ -17,7 +18,7 @@ class _DestinataireWidgetState extends State<DestinataireWidget> {
       children: [
         Row(
           children: [
-            const Text("Support Technique"),
+             Text(tr.technicalSupport),
             const SizedBox(width: 30),
             ToggleSwitch(
               cornerRadius: 90.0,
@@ -43,7 +44,7 @@ class _DestinataireWidgetState extends State<DestinataireWidget> {
               controller: _emailController,
               validator: (value) {
                 if (value!=null && value.length < 10 ) {
-                  return "Une erreur est survenue.";
+                  return tr.occurredErrorMessage;
                 }
                 return null;
               },
@@ -60,11 +61,11 @@ class _DestinataireWidgetState extends State<DestinataireWidget> {
               ),
             ),
         const SizedBox(height: 40),
-        const Row(
+         Row(
           children: [
-            Text("Envoyer à :"),
-            SizedBox(width: 30),
-            Wrap()
+            Text("'${tr.sendTo} :"),
+            const SizedBox(width: 30),
+            const Wrap()
           ],
         )
       ],
