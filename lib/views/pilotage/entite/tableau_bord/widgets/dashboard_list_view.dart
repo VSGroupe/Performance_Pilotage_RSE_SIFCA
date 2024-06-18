@@ -68,7 +68,7 @@ class _DashBoardListViewAdminState extends State<DashBoardListViewAdmin> {
           indicateurs: listIndicateurs,
         ),
         RowAxe(
-          title: "Gouvernance éthique",
+          title: "Gouvernance et éthique",
           color: const Color(0xFF3F93D0),
           idAxe: "axe_1",
           imagePath: "assets/icons/gouvernance.png",
@@ -82,14 +82,14 @@ class _DashBoardListViewAdminState extends State<DashBoardListViewAdmin> {
           indicateurs: listIndicateurs,
         ),
         RowAxe(
-          title: "Intégration des attentes DD des clients et consommateurs",
+          title: "Communauté et innovation sociétale",
           color: const Color(0xFFFAAF7B),
           idAxe: "axe_3",
           imagePath: "assets/icons/social.png",
           indicateurs: listIndicateurs,
         ),
         RowAxe(
-          title: "Égalité de traitement",
+          title: "Préservation de l’Environnement",
           color: const Color(0xFF97C3A8),
           idAxe: "axe_4",
           imagePath: "assets/icons/environnement.png",

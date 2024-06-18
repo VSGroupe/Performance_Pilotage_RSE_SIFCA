@@ -36,7 +36,7 @@ List demoPiliers = [
   ),
   PilierInfoModel(
     axeId : "axe_4",
-    title: "ENVIRONNEMENT",
+    title: "PRESERVATION DE L'ENVIRONNEMENT",
     svgSrc: "assets/icons/environnement.png",
     color: Colors.green,
   ),

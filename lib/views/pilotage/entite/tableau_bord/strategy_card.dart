@@ -57,7 +57,7 @@ class _StrategieContainerState extends State<StrategieContainer> {
                     axeId: "axe_1",
                     color: Color(0xFF3F93D0),
                     imagePilier: "assets/icons/gouvernance.png",
-                    titlePilier: "Gouvernance éthique",
+                    titlePilier: "Gouvernance et éthique",
                     enjeux: [
                       {
                         "key": "1",
@@ -110,7 +110,7 @@ class _StrategieContainerState extends State<StrategieContainer> {
                     axeId: "axe_4",
                     color: Color(0xFF97C3A8),
                     imagePilier: "assets/icons/environnement.png",
-                    titlePilier: "Environnement",
+                    titlePilier: "Préservation de l'Environnement",
                     enjeux: [
                       {
                         "key": "8",

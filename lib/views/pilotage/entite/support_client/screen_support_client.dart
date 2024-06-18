@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:perf_rse/modules/styled_scrollview.dart';
 import 'package:perf_rse/views/pilotage/entite/support_client/widgets/destinataire_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -51,72 +52,74 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
         padding: const EdgeInsets.only(top: 16,left: 10),
         child: Form(
           key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("Support client",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
-              const SizedBox(height: 5,),
-              Card(
-                elevation: 3,
-                child: SizedBox(
-                  width: 1000,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 5,),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-                        child: Text("Ouvrir un nouveau ticket",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
-                      ),
-                      const SizedBox(height: 5,),
-                      const Divider(),
-                      const SizedBox(height: 5,),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text("Destinataire(s)",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
-                            const SizedBox(height: 20),
-                            const DestinataireWidget(),
-                            const SizedBox(height: 20),
-                            const Text("Sujet",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
-                            const SizedBox(height: 10),
-                            sujetWidget(),
-                            const SizedBox(height: 20),
-                            const Text("Votre requête",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
-                            const SizedBox(height: 20),
-                            requestWidget(),
-                            const SizedBox(height: 20),
-                            Text( fileState == true ? "Fichier : $messageFormFile" : "Joindre un document",style: const TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
-                            const SizedBox(height: 10),
-                            filePickerWidget(),
-                            Visibility(
-                              visible: fileState == false,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 20.0),
-                                child: Column(
-                                  children: [
-                                    const SizedBox(height: 5),
-                                    Text(messageFormFile,style: const TextStyle(color: Color(0xFFD88292),fontSize: 15),)
-                                  ],
+          child: StyledScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Support client",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
+                const SizedBox(height: 5,),
+                Card(
+                  elevation: 3,
+                  child: SizedBox(
+                    width: 1000,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // const SizedBox(height: 5,),
+                        // const Padding(
+                        //   padding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                        //   child: Text("Ouvrir un nouveau ticket",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
+                        // ),
+                        // const SizedBox(height: 5,),
+                        // const Divider(),
+                        // const SizedBox(height: 5,),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // const Text("Destinataire(s)",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
+                              // const SizedBox(height: 10),
+                              // const DestinataireWidget(),
+                              // const SizedBox(height: 20),
+                              const Text("Sujet",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
+                              const SizedBox(height: 10),
+                              sujetWidget(),
+                              const SizedBox(height: 20),
+                              const Text("Votre requête",style: TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
+                              const SizedBox(height: 20),
+                              requestWidget(),
+                              const SizedBox(height: 20),
+                              Text( fileState == true ? "Fichier : $messageFormFile" : "Joindre un document",style: const TextStyle(fontSize: 16,color: Color(0xFF3C3D3F)),),
+                              const SizedBox(height: 10),
+                              filePickerWidget(),
+                              Visibility(
+                                visible: fileState == false,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20.0),
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 5),
+                                      Text(messageFormFile,style: const TextStyle(color: Color(0xFFD88292),fontSize: 15),)
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 20),
-                            buttonEnvoyer(),
-                            const SizedBox(height: 20),
-                          ],
-                        ),
-                      )
-                    ],
+                              const SizedBox(height: 20),
+                              buttonEnvoyer(),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toggle_switch/toggle_switch.dart';
+import 'package:get/get_utils/src/get_utils/get_utils.dart';
 
 class DestinataireWidget extends StatefulWidget {
   const DestinataireWidget({super.key});
@@ -11,63 +11,106 @@ class DestinataireWidget extends StatefulWidget {
 class _DestinataireWidgetState extends State<DestinataireWidget> {
   final TextEditingController _emailController = TextEditingController();
 
+  List<String> _mailsList = [];
+  final List<String> _technicalSupportMails = [
+    "projet.it@visionstrategie.com",
+    "projet.dd@visionstrategie.com",
+    "ing@visionstrategie.com"
+  ];
+
+  bool _isTechnicalSupportActive = false;
+
+  void _toggleTechnicalSupport(bool isActive) {
+    setState(() {
+      _isTechnicalSupportActive = isActive;
+      if (isActive) {
+        for (var email in _technicalSupportMails) {
+          if (!_mailsList.contains(email)) {
+            _mailsList.add(email);
+          }
+        }
+      } else {
+        _mailsList.removeWhere((email) => _technicalSupportMails.contains(email));
+      }
+    });
+  }
+
+  void _addEmail(String email) {
+    if (!_mailsList.contains(email)) {
+      setState(() {
+        _mailsList.add(email);
+        _emailController.clear();
+      });
+    }
+  }
+
+  void _removeEmail(String email) {
+    setState(() {
+      _mailsList.remove(email);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
           children: [
-            const Text("Support Technique"),
-            const SizedBox(width: 30),
-            ToggleSwitch(
-              cornerRadius: 90.0,
-              initialLabelIndex: 0,
-              activeFgColor: Colors.white,
-              activeBgColors: [
-                [Colors.red[800]!],
-                [Colors.green[800]!]
-              ],
-              inactiveFgColor: Colors.white,
-              totalSwitches: 2,
-              minHeight: 15,
-              minWidth: 15,
-              radiusStyle: true,
-              // cancelToggle: (index) async {
-              //   return;
-              // },
+            const Text("Joindre le support technique, Oui"),
+            const SizedBox(width: 5),
+            Checkbox(
+              checkColor: Colors.green,
+              value: _isTechnicalSupportActive,
+              onChanged: (bool? value) {
+                _toggleTechnicalSupport(value ?? false);
+              },
             ),
           ],
         ),
-        const SizedBox(height: 40),
+        const SizedBox(height: 10),
         TextFormField(
-              controller: _emailController,
-              validator: (value) {
-                if (value!=null && value.length < 10 ) {
-                  return "Une erreur est survenue.";
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                  hintText: "",
-                  contentPadding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  border: const OutlineInputBorder(),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor,
-                          width: 2
-                      )
-                  )
+          controller: _emailController,
+          onFieldSubmitted: (value) {
+            if (GetUtils.isEmail(value)) {
+              _addEmail(value);
+            }
+          },
+          decoration: InputDecoration(
+            hintText: "Entrez l'adresse mail du destinataire",
+            contentPadding: const EdgeInsets.only(left: 10.0, right: 10.0),
+            border: const OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Theme.of(context).primaryColor,
+                width: 2,
               ),
             ),
-        const SizedBox(height: 40),
-        const Row(
+          ),
+        ),
+        const SizedBox(height: 20),
+        Row(
           children: [
-            Text("Envoyer à :"),
-            SizedBox(width: 30),
-            Wrap()
+            const Text("Envoyé à :"),
+            const SizedBox(width: 30),
+            Expanded(
+              child: Wrap(
+                spacing: 8.0,
+                runSpacing: 4.0,
+                children: _mailsList
+                    .map((email) => Chip(
+                          label: Text(email),
+                          onDeleted: () => _removeEmail(email),
+                        ))
+                    .toList(),
+              ),
+            ),
           ],
-        )
+        ),
       ],
     );
   }
 }
+
+
+
+

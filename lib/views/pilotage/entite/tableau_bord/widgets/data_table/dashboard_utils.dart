@@ -297,7 +297,7 @@ class _ContentEditionState extends State<ContentEdition> {
       56: 61,
       57: 62,
       58: 63,
-      59: 54,
+      59: 64,
       70: 74,
       71: 75, //
       72: 76, //
@@ -310,7 +310,7 @@ class _ContentEditionState extends State<ContentEdition> {
       61: 56,
       62: 57,
       63: 58,
-      54: 59,
+      64: 59,
       74: 70,
       75: 71,
       76: 72,
@@ -325,7 +325,7 @@ class _ContentEditionState extends State<ContentEdition> {
       61,
       62,
       63,
-      54,
+      64,
       74,
       75,
       76,
