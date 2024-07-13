@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/utils/i18n.dart';
+import 'package:perf_rse/utils/localization_provider.dart';
+import 'package:provider/provider.dart';
 import '../../../../utils/utils.dart';
 import '../../../../widgets/custom_text.dart';
 import '../../controllers/entite_pilotage_controler.dart';
 import '../../controllers/side_menu_controller.dart';
 import 'entity_widget_pilotage.dart';
-
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 class AppBarPilotage extends StatefulWidget {
   final String shortName;
   const AppBarPilotage({super.key, required this.shortName});
@@ -30,6 +33,7 @@ class _AppBarPilotageState extends State<AppBarPilotage> {
   Widget build(BuildContext context) {
     int width = MediaQuery.of(context).size.width.round();
     String responsive = responsiveRule(width);
+      final providerLocal =  Provider.of<LocalizationProvider>(context);
     return Container(
       height: 60,
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -91,7 +95,30 @@ class _AppBarPilotageState extends State<AppBarPilotage> {
               radius: 20,
               child: CircleAvatar( backgroundColor: const Color(0xFFFFFF00),
                   child: Center(child: CustomText(text: widget.shortName,color: const Color(0xFFF1C232),weight: FontWeight.bold,),)),
-            ),//Image.asset("assets/images/person1.png", height: 50,width: 50, fit: BoxFit.fitWidth)),
+            ),
+             SizedBox(
+              width: responsive == "cas-0" ? 10 : 20,
+            ),
+            Container(
+                child: Row(children: [
+                  Icon(Icons.language_rounded),
+                          SizedBox(
+                            height: 50,
+                            width: 150,
+                            child:  Container(
+                              child: CustomDropdown(
+                                  hintText:tr.abrLange.toLowerCase()=="en" ? "English":"Français",
+                                  items:  ["Français","English"],
+                                  onChanged: (value){
+                                      providerLocal.chnageLanguage(value);
+                                      context.go('/');
+                                    },
+                              ),
+                          ),
+                        )
+                ],),
+              )
+            //Image.asset("assets/images/person1.png", height: 50,width: 50, fit: BoxFit.fitWidth)),
           ],
         );
       }),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '/modules/styled_scrollview.dart';
 
@@ -40,11 +41,11 @@ class _OverviewExpansionItemState extends State<OverviewExpansionItem> {
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Accès refusé'),
+          title:  Text(tr.accesDenied),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                const Text("Vous n'avez pas accès à cet espace."),
+                 Text("${tr.accesRefusedToSpace}."),
                 const SizedBox(
                   height: 20,
                 ),
@@ -62,7 +63,7 @@ class _OverviewExpansionItemState extends State<OverviewExpansionItem> {
   }
 
   Future<bool> goToEspaceEntitePilotage(String idEntite) async {
-    EasyLoading.show(status: 'Chargement...');
+    EasyLoading.show(status:tr.loading);
     String? email = await storage.read(key: 'email');
     if (email == null) {
       EasyLoading.dismiss();

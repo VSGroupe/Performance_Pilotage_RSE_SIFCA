@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import '../../../../helper/helper_methods.dart';
 import '../../../../widgets/privacy_widget.dart';
 import '../../controllers/suivi_data_controller.dart';
@@ -38,9 +39,8 @@ class _ScreenPilotageSuiviState extends State<ScreenPilotageSuivi> {
         return Padding(
           padding: const EdgeInsets.only(top: 16, left: 10),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Text(
-              "Suivi des données",
-              style: TextStyle(
+             Text(tr.dataTacking,
+              style: const TextStyle(
                   fontSize: 24,
                   color: Color(0xFF3C3D3F),
                   fontWeight: FontWeight.bold),

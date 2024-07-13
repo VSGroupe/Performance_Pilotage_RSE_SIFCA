@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:perf_rse/helper/helper_methods.dart';
+import 'package:perf_rse/utils/i18n.dart';
+import 'package:perf_rse/utils/localization_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:quds_popup_menu/quds_popup_menu.dart';
 import '../../../../widgets/export_widget.dart';
-
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 class HeaderMainPage extends StatefulWidget {
   final String title;
   final Map mainPageData;
@@ -25,6 +28,7 @@ class _HeaderMainPageState extends State<HeaderMainPage> {
     final nom = widget.mainPageData["user"]["nom"];
     final prenom = widget.mainPageData["user"]["prenom"];
     final email = widget.mainPageData["user"]["email"];
+    final providerLocal =  Provider.of<LocalizationProvider>(context);
     return Container(
       height: 60,
       color: const Color(0xFFAAA095),
@@ -43,8 +47,8 @@ class _HeaderMainPageState extends State<HeaderMainPage> {
               const SizedBox(
                 width: 20,
               ),
-              const CustomText(
-                text: "Accueil",
+               CustomText(
+                text: tr.home,
                 color: Colors.black,
                 weight: FontWeight.bold,
                 size: 30,
@@ -84,9 +88,8 @@ class _HeaderMainPageState extends State<HeaderMainPage> {
                 width: 30,
               ),
               TextButton(
-                child: const Text(
-                  "À propos",
-                  style: TextStyle(
+                child:  Text(tr.about,
+                  style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic,
@@ -100,6 +103,25 @@ class _HeaderMainPageState extends State<HeaderMainPage> {
               const SizedBox(
                 width: 30,
               ),
+              Container(
+                child: Row(children: [
+                  Icon(Icons.language_rounded),
+                          SizedBox(
+                            height: 50,
+                            width: 150,
+                            child:  Container(
+                              child: CustomDropdown(
+                                  hintText:tr.abrLange.toLowerCase()=="en" ? "English":"Français",
+                                  items:  ["Français","English"],
+                                  onChanged: (value){
+                                      providerLocal.chnageLanguage(value);
+                                      context.go("/");  
+                                     },
+                              ),
+                          ),
+                        )
+                ],),
+              )
             ],
           )
         ],
@@ -142,19 +164,19 @@ class _HeaderMainPageState extends State<HeaderMainPage> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text(
-                                "Êtes-vous sûr de vouloir vous déconnecter ?"),
-                            content: const SizedBox(
+                            title:  Text(
+                                "'${tr.logOutQuestion}?"),
+                            content:  SizedBox(
                                 width: 200,
                                 child: Text(
-                                    "Vous allez être déconnecté.")),
+                                    "${tr.logOutWarning}.")),
                             actionsAlignment: MainAxisAlignment.spaceBetween,
                             actions: <Widget>[
                               OutlinedButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: const Text("Non"),
+                                child:  Text(tr.no),
                               ),
                               OutlinedButton(
                                 onPressed: () async {
@@ -163,7 +185,7 @@ class _HeaderMainPageState extends State<HeaderMainPage> {
                                   await storage.deleteAll();
                                   context.go('/account/login');
                                 },
-                                child: const Text("Oui"),
+                                child:  Text(tr.yes),
                               ),
                             ],
                           );
@@ -178,8 +200,8 @@ class _HeaderMainPageState extends State<HeaderMainPage> {
                       alignment: Alignment.center,
                       width: double.maxFinite,
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: const CustomText(
-                        text: "Se déconnecter",
+                      child:  CustomText(
+                        text: tr.logOut,
                         color: Colors.white,
                       ),
                     )),
@@ -218,9 +240,8 @@ Future<void> _showMyDialog(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text(
-              "Fermer",
-              style: TextStyle(
+            child:  Text(tr.close,
+              style: const TextStyle(
                 color: Colors.red,
                 fontWeight: FontWeight.bold,
                 fontSize: 22,

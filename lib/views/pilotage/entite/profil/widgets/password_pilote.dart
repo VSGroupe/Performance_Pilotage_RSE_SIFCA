@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../api/supabse_db.dart';
@@ -34,7 +35,7 @@ class _PasswordPiloteState extends State<PasswordPilote> {
   bool obscureTextcurrentPassword = false;
 
   void updatePassword(context) async {
-    EasyLoading.show(status: "Mise à jour...");
+    EasyLoading.show(status:tr.loadingUpdating);
     final lastPassword = currentPassordTextEditingController.text;
     final newPassword = newPassordTextEditingController.text;
     final checkPassword = checkNewPassordTextEditingController.text;
@@ -51,15 +52,15 @@ class _PasswordPiloteState extends State<PasswordPilote> {
         newPassordTextEditingController.text = "";
         checkNewPassordTextEditingController.text = "";
         ScaffoldMessenger.of(context).showSnackBar(showSnackBar(
-            "Succès", "Votre mot de passe a été mis à jour avec succès", Colors.green));
+            tr.success, tr.passwordSuccessfullyUpdatedMessage, Colors.green));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-            showSnackBar("Échec", "La mise à jour a échoué", Colors.red));
+            showSnackBar(tr.fail, tr.updatingFailMessage, Colors.red));
       }
     } on Exception {
       ScaffoldMessenger.of(context).showSnackBar(showSnackBar(
-          "Échec",
-          "Le mot de passe est incorrect",
+          tr.fail,
+         tr.passwordIncorrectMessage,
           Colors.red,
           const Duration(seconds: 6)));
     }
@@ -98,8 +99,8 @@ class _PasswordPiloteState extends State<PasswordPilote> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const CustomText(
-                            text: "Mot de passe actuel",
+                           CustomText(
+                            text: tr.currentPassword,
                             size: 15,
                           ),
                           const SizedBox(
@@ -111,7 +112,7 @@ class _PasswordPiloteState extends State<PasswordPilote> {
                             controller: currentPassordTextEditingController,
                             validator: (value) {
                               if (spaceRegex.hasMatch(value!)) {
-                                return "Le mot de passe ne doit pas contenir d'espaces.";
+                                return tr.passwordMustNotContainSpace;
                               }
                               return null;
                             },
@@ -127,7 +128,7 @@ class _PasswordPiloteState extends State<PasswordPilote> {
                                       ? Icons.visibility
                                       : Icons.visibility_off),
                                 ),
-                                hintText: "Mot de passe",
+                                hintText:tr.password,
                                 prefixIcon: const Icon(Icons.vpn_key_sharp),
                                 contentPadding: const EdgeInsets.only(
                                     left: 20.0, right: 20.0),
@@ -146,8 +147,8 @@ class _PasswordPiloteState extends State<PasswordPilote> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const CustomText(
-                            text: "Nouveau mot de passe",
+                           CustomText(
+                            text:tr.newPassword,
                             size: 15,
                           ),
                           const SizedBox(
@@ -159,7 +160,7 @@ class _PasswordPiloteState extends State<PasswordPilote> {
                             controller: newPassordTextEditingController,
                             validator: (value) {
                               if (spaceRegex.hasMatch(value!)) {
-                                return "Le mot de passe ne doit pas contenir d'espaces.";
+                                return tr.passwordMustNotContainSpace;
                               }
                               return null;
                             },
@@ -175,7 +176,7 @@ class _PasswordPiloteState extends State<PasswordPilote> {
                                       ? Icons.visibility
                                       : Icons.visibility_off),
                                 ),
-                                hintText: "Mot de passe",
+                                hintText:tr.password,
                                 prefixIcon: const Icon(Icons.vpn_key_sharp),
                                 contentPadding: const EdgeInsets.only(
                                     left: 20.0, right: 20.0),
@@ -194,8 +195,8 @@ class _PasswordPiloteState extends State<PasswordPilote> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const CustomText(
-                            text: "Confirmation mot de passe",
+                           CustomText(
+                            text: tr.confirmPassword,
                             size: 15,
                           ),
                           const SizedBox(
@@ -208,7 +209,7 @@ class _PasswordPiloteState extends State<PasswordPilote> {
                             validator: (value) {
                               if (checkNewPassordTextEditingController.text !=
                                   newPassordTextEditingController.text) {
-                                return "Les mots de passe ne correspondent pas.";
+                                return tr.passwordNoMatch;
                               }
                               return null;
                             },
@@ -224,7 +225,7 @@ class _PasswordPiloteState extends State<PasswordPilote> {
                                       ? Icons.visibility
                                       : Icons.visibility_off),
                                 ),
-                                hintText: "Mot de passe",
+                                hintText:tr.password,
                                 prefixIcon: const Icon(Icons.vpn_key_sharp),
                                 contentPadding: const EdgeInsets.only(
                                     left: 20.0, right: 20.0),
@@ -259,9 +260,9 @@ class _PasswordPiloteState extends State<PasswordPilote> {
                       ),
                       borderRadius:
                           const BorderRadius.all(Radius.circular(40))),
-                  child: const Center(
+                  child:  Center(
                       child: CustomText(
-                    text: "Enregistrer",
+                    text: tr.save,
                     size: 20,
                     weight: FontWeight.bold,
                     color: Colors.white,

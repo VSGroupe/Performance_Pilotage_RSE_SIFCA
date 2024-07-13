@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:perf_rse/models/pilotage/data_indicateur_row_model.dart';
 import 'package:perf_rse/models/pilotage/indicateur_model.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:perf_rse/views/pilotage/controllers/performs_data_controller.dart';
 
 class NonEditableTable extends StatefulWidget {
@@ -73,7 +74,7 @@ class _NonEditableTableState extends State<NonEditableTable> {
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
           child: DynamicTable(
-            header: const Text("Performance sur vos indicateurs"),
+            header:  Text(tr.performanceIndicators),
             rowsPerPage: 5,
             showFirstLastButtons: _showFirstLastButtons,
             availableRowsPerPage: const [
@@ -119,17 +120,17 @@ class _NonEditableTableState extends State<NonEditableTable> {
             ),
             columns: [
               DynamicTableDataColumn(
-                  label: const Text("Reference"), // Name
+                  label:  Text(tr.reference), // Name
                   onSort: (columnIndex, ascending) {},
                   dynamicTableInputType: DynamicTableTextInput()),
               // dynamicTableInputType: DynamicTableInputType.text()),
               DynamicTableDataColumn(
-                  label: const Text("Intitule"), // Unique ID
+                  label: Text(tr.title), // Unique ID
                   onSort: (columnIndex, ascending) {},
                   isEditable: false,
                   dynamicTableInputType: DynamicTableTextInput()),
               DynamicTableDataColumn(
-                  label: const Text("Processus"), // Unique ID
+                  label:  Text(tr.process), // Unique ID
                   onSort: (columnIndex, ascending) {},
                   isEditable: false,
                   dynamicTableInputType: DynamicTableTextInput()),
@@ -213,7 +214,7 @@ class _NonEditableTableState extends State<NonEditableTable> {
       if (performsDataController
               .dataIndicateur.value.ecarts[indicateur.numero - 1] ==
           null) {
-        tempList.add("Aucune donnée");
+        tempList.add(tr.noData);
       } else {
         tempList.add(performsDataController
             .dataIndicateur.value.ecarts[indicateur.numero - 1]);

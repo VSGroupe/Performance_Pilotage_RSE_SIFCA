@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 
 class SideMenuController extends GetxController {
-  var selectedMenu = "Vue d'ensemble".obs;
+  var selectedMenu =tr.overview.obs;
   var cas4Extended = true.obs;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 

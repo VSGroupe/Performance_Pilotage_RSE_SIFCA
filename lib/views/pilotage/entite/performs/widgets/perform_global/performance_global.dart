@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../controllers/performs_data_controller.dart';
@@ -107,7 +108,7 @@ class _PerformanceGlobaleState extends State<PerformanceGlobale> {
                     height: 5,
                   ),
                   Text(
-                    "Performance Globale ${performsDataController.annee.value}",
+                    "${tr.overallPerformance}  ${performsDataController.annee.value}",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold),

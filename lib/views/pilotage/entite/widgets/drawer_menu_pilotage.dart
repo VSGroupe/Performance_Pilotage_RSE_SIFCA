@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:switcher/core/switcher_size.dart';
 import 'package:switcher/switcher.dart';
 import '../../controllers/profil_pilotage_controller.dart';
@@ -37,7 +38,7 @@ class _DrawerMenuPilotageState extends State<DrawerMenuPilotage> {
                     isFullPath: false,
                     image: "assets/icons/home.png",
                     icon: Icons.home,
-                    label: "Accueil",
+                    label:tr.home,
                     isExtended: isExtended),
                 //SizedBox(height: 10),
                 CustomMenuButton(
@@ -45,7 +46,7 @@ class _DrawerMenuPilotageState extends State<DrawerMenuPilotage> {
                     icon: Icons.table_chart_rounded,
                     image: "assets/icons/table.png",
                     isFullPath: false,
-                    label: "Tableau de bord",
+                    label: tr.dashboard,
                     isExtended: isExtended),
                 //SizedBox(height: 10),
                 CustomMenuButton(
@@ -61,7 +62,7 @@ class _DrawerMenuPilotageState extends State<DrawerMenuPilotage> {
                     icon: Icons.monitor_outlined,
                     image: "assets/icons/monitoring.png",
                     isFullPath: false,
-                    label: "Suivi des données",
+                    label: tr.dataTacking,
                     isExtended: isExtended
                 ),
                 //SizedBox(height: 10),
@@ -70,7 +71,7 @@ class _DrawerMenuPilotageState extends State<DrawerMenuPilotage> {
                     image: "assets/icons/profil.png",
                     icon: Icons.person,
                     isFullPath: false,
-                    label: "Profil",
+                    label:tr.profile,
                     isExtended: isExtended),
                 const SizedBox(
                   height: 5,
@@ -84,13 +85,13 @@ class _DrawerMenuPilotageState extends State<DrawerMenuPilotage> {
                     image: "assets/icons/admin.png",
                     icon: Icons.settings,
                     isFullPath: false,
-                    label: "Paramètres",
+                    label: tr.settings,
                     isExtended: isExtended),
                 //SizedBox(height: 10),
                 CustomMenuButton(
                     pathMenu: '/historique-des-modifications',
                     icon: Icons.track_changes_outlined,
-                    label: "Historiques",
+                    label:tr.logs,
                     image: "",
                     isFullPath: false,
                     isExtended: isExtended),
@@ -100,7 +101,7 @@ class _DrawerMenuPilotageState extends State<DrawerMenuPilotage> {
                     image: "assets/icons/casque.png",
                     icon: Icons.comment,
                     isFullPath: false,
-                    label: "Support Client",
+                    label: tr.support,
                     isExtended: isExtended),
                 const SizedBox(
                   height: 5,
@@ -112,7 +113,7 @@ class _DrawerMenuPilotageState extends State<DrawerMenuPilotage> {
                 CustomMenuButton(
                     pathMenu: '/pilotage',
                     icon: Icons.arrow_circle_left_sharp,
-                    label: "Accueil Pilotage",
+                    label: tr.homeControl,
                     image: "assets/icons/back.png",
                     isFullPath: true,
                     isExtended: isExtended),

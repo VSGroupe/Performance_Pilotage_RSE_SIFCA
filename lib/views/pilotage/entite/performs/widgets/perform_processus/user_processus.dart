@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:perf_rse/utils/i18n.dart';
 
 import 'package:perf_rse/views/pilotage/controllers/profil_pilotage_controller.dart';
 
@@ -52,9 +53,9 @@ class ProcessGrid extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                      const Text(
-                        "90 indicateurs",
-                        style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                       Text(
+                        "90 ${tr.indicators}",
+                        style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                       ),
                     ],
                   ),

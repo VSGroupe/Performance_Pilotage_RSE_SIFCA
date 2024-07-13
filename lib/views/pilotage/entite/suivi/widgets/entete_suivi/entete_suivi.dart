@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import '../../../../../../constants/constant_colors.dart';
 import '../../../../../../widgets/custom_text.dart';
 import '../../../../../../widgets/menu_deroulant.dart';
@@ -39,11 +40,11 @@ class _EnteteSuiviState extends State<EnteteSuivi> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const CustomText(text: "Fiktre", size: 20,),
+         CustomText(text: tr.filter, size: 20,),
         const SizedBox(width: 5,),
         Container(height: 30,width: 1,color: Colors.grey,),
         const SizedBox(width: 20,),
-        const CustomText(text: "Année",size: 20,),
+         CustomText(text: tr.year,size: 20,),
         const SizedBox(width: 5,),
         MenuDeroulant(
           indication: "",
@@ -77,8 +78,8 @@ class _EnteteSuiviState extends State<EnteteSuivi> {
                 UnimplementedWidget.showDialog();
               },
               icon: const Icon(Icons.print,color: Colors.white,),
-              label: const CustomText(
-                text: "Imprimer",
+              label:  CustomText(
+                text: tr.print,
                 color: light,
                 size: 15,
               )),

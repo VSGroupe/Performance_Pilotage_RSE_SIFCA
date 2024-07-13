@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:perf_rse/views/pilotage/controllers/profil_pilotage_controller.dart';
 
 import '../../../../../widgets/custom_text.dart';
@@ -51,8 +52,8 @@ class _CollecteStatusState extends State<CollecteStatus> {
               //Text("${tableauBordController.currentMonth.value}"),
               Row(
                 children: [
-                  const CustomText(
-                    text: "Le progrès de collecte est égale à",
+                   CustomText(
+                    text:tr.collectionProgressMessage,
                     size: 15,
                   ),
                   CustomText(
@@ -92,16 +93,15 @@ class _CollecteStatusState extends State<CollecteStatus> {
           ),
           Row(
             children: [
-              const Tooltip(
-                message:
-                    "Cochez la checkbox pour ne voir que les indicateurs renseignés.\nDécochez pour revenir a l'état anterieur.",
-                child: Icon(
+               Tooltip(
+                message:tr.checkTheCheckboxMessage,
+                child: const Icon(
                   Icons.info_outline,
                   color: Colors.blue,
                 ),
               ),
               const SizedBox(width: 10),
-              const Text("Voir les indicateurs renseigés"),
+               Text(tr.indicatedIndicators),
               const SizedBox(width: 10),
               Checkbox(
                 checkColor: Colors.green,

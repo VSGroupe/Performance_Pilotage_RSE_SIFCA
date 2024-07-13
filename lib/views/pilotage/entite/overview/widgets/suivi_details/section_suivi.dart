@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import '../../../../../../constants/constant_double.dart';
 import '../../../../../../helper/responsive.dart';
 import '../../../../../../widgets/custom_text.dart';
@@ -15,11 +16,11 @@ class SectionSuivi extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     return Column(
       children: [
-        const Row(
+         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CustomText(
-              text: "Les Axes Stratégiques",
+              text:tr.strategicAxes,
               weight: FontWeight.bold,
             ),
           ],
@@ -56,14 +57,14 @@ class PilierInfoCardGridView extends StatelessWidget {
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: demoPiliers.length,
+      itemCount:  tr.abrLange.toLowerCase()=='en'  ?  enDemoPiliers.length : demoPiliers.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
         crossAxisSpacing: defaultPadding,
         mainAxisSpacing: defaultPadding,
         childAspectRatio: childAspectRatio,
       ),
-itemBuilder: (context, index) => PilierInfoCard(info: demoPiliers[index], annee: DateTime.now().year,),
+itemBuilder: (context, index) => PilierInfoCard(info: tr.abrLange.toLowerCase()=='en' ? enDemoPiliers[index] :demoPiliers[index], annee: DateTime.now().year,),
     );
   }
 }

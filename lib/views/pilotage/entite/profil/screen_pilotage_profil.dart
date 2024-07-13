@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../controllers/profil_pilotage_controller.dart';
 import 'profil_pilotage.dart';
@@ -35,7 +36,7 @@ class _ScreenPilotageProfilState extends State<ScreenPilotageProfil> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Profil",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
+                Text(tr.profile,style: const TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
                 const SizedBox(height: 5,),
                 Expanded(
                   child: Column(

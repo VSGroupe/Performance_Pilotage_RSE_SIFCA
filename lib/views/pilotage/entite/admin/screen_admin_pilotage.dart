@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import '../../../../helper/helper_methods.dart';
 import '../../../../widgets/privacy_widget.dart';
 import 'admin_pilotage.dart';
@@ -29,14 +30,14 @@ class _ScreenPilotageAdminState extends State<ScreenPilotageAdmin> {
 
   @override
   Widget build(BuildContext context) {
-    int width = MediaQuery.of(context).size.width.round();
+  
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 16,left: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Panneau d'administration",style: TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
+             Text(tr.adminPanelText,style: const TextStyle(fontSize: 24,color: Color(0xFF3C3D3F),fontWeight: FontWeight.bold),),
             const SizedBox(height: 5,),
             _isLoaded ? Expanded(
               child: Column(

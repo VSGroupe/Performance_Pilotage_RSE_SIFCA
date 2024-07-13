@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:perf_rse/api/send_mail.dart';
 import 'package:perf_rse/models/pilotage/acces_pilotage_model.dart';
+import 'package:perf_rse/utils/i18n.dart';
+import 'package:perf_rse/utils/operation_liste.dart';
 import 'package:perf_rse/views/pilotage/controllers/entite_pilotage_controler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -31,7 +33,7 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
   List<String> entitesId = [];
   List<String> filiales = [];
   List<String> processList = [];
-
+  List<Map<String, dynamic>> processAll = [];
   void loadEntite() async {
     final email = profilcontroller.userModel.value.email;
     List accessibleEntityId = [];
@@ -41,9 +43,12 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
         .select("restrictions")
         .eq("email", email);
     final List restrictionList = responseRestrictions.first["restrictions"];
-    final List<Map<String, dynamic>> responseProcess =
-        await supabase.from("Indicateurs").select("processus");
+    final List<Map<String, dynamic>> responseProcess = await supabase
+        .from("Processus")
+        .select("nom_processus, nom_processus_en");
+    processAll = responseProcess;
     processList = getProcessus(responseProcess);
+
     for (var data in response) {
       entitesName.add(data["nom_entite"]);
       entitesId.add(data["id_entite"]);
@@ -73,12 +78,38 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
     Set<String> result = {};
 
     for (var element in liste) {
-      if (element.containsKey("processus") && element["processus"] != null) {
-        result.add(element["processus"]);
+      if (tr.abrLange.toLowerCase() == 'en') {
+        if (element.containsKey("nom_processus_en") &&
+            element["nom_processus_en"] != null) {
+          result.add(element["nom_processus_en"]);
+        }
+      } else {
+        if (element.containsKey("nom_processus") &&
+            element["nom_processus"] != null) {
+          result.add(element["nom_processus"]);
+        }
       }
     }
 
     return result.toList();
+  }
+
+  Future<List<ContributeurModel>> translateEnProcessContributeurs(
+      List<ContributeurModel> contributeurs) async {
+    final List<ContributeurModel> currentContributeur = [];
+    Set<String> result = {};
+    for (var contrib in contributeurs) {
+      for (var element in processAll) {
+        if (element.containsKey("nom_processus_en") &&
+            element["nom_processus_en"] != null) {
+          result.add(element["nom_processus_en"]);
+        }
+      }
+      contrib.accesPilotageModel!.processus = result.toList();
+      currentContributeur.add(contrib);
+    }
+
+    return currentContributeur;
   }
 
   Future<List<ContributeurModel>> getListContributeurs() async {
@@ -135,9 +166,13 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
 
   void refreshData() async {
     final response = await getListContributeurs();
+    final definiivereponse = tr.abrLange.toLowerCase() == 'en'
+        ? await translateEnProcessContributeurs(response)
+        : response;
+
     setState(() {
       contributeurDataGridSource =
-          ContributeurDataGridSource(contributeurs: response);
+          ContributeurDataGridSource(contributeurs: definiivereponse);
     });
   }
 
@@ -170,8 +205,8 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
               label: Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.all(8.0),
-                child: const Text(
-                  'Nom',
+                child: Text(
+                  tr.name,
                   overflow: TextOverflow.ellipsis,
                 ),
               )),
@@ -181,8 +216,8 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
             label: Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                'Prénom',
+              child: Text(
+                tr.forename,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -193,8 +228,8 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
             label: Container(
               padding: const EdgeInsets.all(8.0),
               alignment: Alignment.centerLeft,
-              child: const Text(
-                'E-mail',
+              child: Text(
+                tr.email,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -205,8 +240,8 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
             label: Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                'Entité',
+              child: Text(
+                tr.entity,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -217,8 +252,8 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
               label: Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.all(8.0),
-                  child: const Text(
-                    'Accès',
+                  child: Text(
+                    tr.access,
                     overflow: TextOverflow.ellipsis,
                   ))),
           GridColumn(
@@ -227,8 +262,8 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
               label: Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.all(8.0),
-                  child: const Text(
-                    'Filiale',
+                  child: Text(
+                    tr.subsidiarie,
                     overflow: TextOverflow.ellipsis,
                   ))),
           GridColumn(
@@ -237,8 +272,8 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
             label: Container(
                 padding: const EdgeInsets.all(8.0),
                 alignment: Alignment.centerLeft,
-                child: const Text(
-                  'Filière',
+                child: Text(
+                  tr.filiere,
                   overflow: TextOverflow.ellipsis,
                 )),
           ),
@@ -248,8 +283,8 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
             label: Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                'Processus',
+              child: Text(
+                tr.process,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -260,8 +295,8 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
             label: Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                'Fonction',
+              child: Text(
+                tr.fonction,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -283,13 +318,13 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
           child: Container(
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
             padding: const EdgeInsets.all(8),
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.refresh_sharp, size: 25, color: Colors.green),
-                SizedBox(
+                const Icon(Icons.refresh_sharp, size: 25, color: Colors.green),
+                const SizedBox(
                   width: 5,
                 ),
-                Text("Rafraîchir")
+                Text(tr.reflesh)
               ],
             ),
           ),
@@ -302,8 +337,8 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: const Text(
-                        "Ajouter un contributeur",
+                      title: Text(
+                        tr.addContributeur,
                         style: TextStyle(color: Colors.blue),
                       ),
                       contentPadding: const EdgeInsets.all(30),
@@ -327,13 +362,13 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
                 );
               }
             },
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.add),
-                SizedBox(
+                const Icon(Icons.add),
+                const SizedBox(
                   width: 10,
                 ),
-                Text("Ajouter")
+                Text(tr.add)
               ],
             ))
       ],
@@ -425,34 +460,28 @@ class ContributeurDataGridSource extends DataGridSource {
   }
 
   Widget getAcces(AccesPilotageModel acces) {
-    if (acces.estBloque == true) {
-      return const Text(
-        "Est bloqué",
-        style: TextStyle(color: Colors.red),
-      );
-    }
     if (acces.estAdmin == true) {
-      return const Text(
-        "Admin",
-        style: TextStyle(color: Colors.green),
+      return Text(
+        tr.typeacccesList("admin"),
+        style: const TextStyle(color: Colors.green),
       );
     }
     if (acces.estValidateur == true) {
-      return const Text(
-        "Validateur",
-        style: TextStyle(color: Colors.blue),
+      return Text(
+        tr.typeacccesList("validator"),
+        style: const TextStyle(color: Colors.blue),
       );
     }
     if (acces.estEditeur == true) {
-      return const Text(
-        "Editeur",
-        style: TextStyle(color: Colors.black),
+      return Text(
+        tr.typeacccesList("editor"),
+        style: const TextStyle(color: Colors.black),
       );
     }
     if (acces.estSpectateur == true) {
-      return const Text(
-        "Spectateur",
-        style: TextStyle(color: Colors.grey),
+      return Text(
+        tr.typeacccesList("spectator"),
+        style: const TextStyle(color: Colors.grey),
       );
     }
     return Container();
@@ -525,6 +554,32 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
 
   final SendMailController sendMailController = SendMailController();
 
+  static const Map<String, String> translations = {
+    "Agricultural": "Agricole",
+    "SD": "Développement Durable",
+    "Finance": "Finances",
+    "Purchases": "Achats",
+    "Legal": "Juridique",
+    "HR": "Ressources Humaines",
+    "Doctor": "Médecin",
+    "Infrastructure": "Infrastructures",
+    "HR / Legal": "Ressources Humaines / Juridique",
+    "SM / Logistics": "Gestion des Stocks / Logistique",
+    "Emissions": "Emissions",
+    "Factory": "Usine",
+    "Agricole": "Agricole",
+    "Finances": "Finances",
+    "Juridique": "Juridique",
+    "Achats": "Achats",
+    "Usine": "Usine",
+    "Infrastructures": "Infrastructures",
+    "Médecin": "Médecin",
+    "Ressources Humaines": "Ressources Humaines",
+    "Ressources Humaines / Juridique": "Ressources Humaines / Juridique",
+    "Développement Durable": "Développement Durable",
+    "Gestion des Stocks / Logistique": "Gestion des Stocks / Logistique",
+  };
+
   bool isSubmetted = false;
   List<String> entiteName = [];
   List<String> selectedProcess = [];
@@ -550,6 +605,18 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
     }
   }
 
+  String getTranslation(String key) {
+    return translations[key]!;
+  }
+
+  List<String> getProcessUser(List<String> selectedProcess) {
+    List<String> result = [];
+      for (String process in selectedProcess) {
+        result.add(getTranslation(process));
+      }
+      return result;
+  }
+
   void _selectProcess() async {
     List<String> dropDownMenuItems = widget.processus;
 
@@ -568,13 +635,18 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
   }
 
   static const listTitres = ["M.", "Mme", "Mlle"];
-  static const listAcces = ["Spectateur", "Editeur", "Validateur", "Admin"];
+  static List<String> listAcces = [
+    tr.typeacccesList('spectator'),
+    tr.typeacccesList('editor'),
+    tr.typeacccesList('validator'),
+    tr.typeacccesList('admin')
+  ];
 
   Map accesToDoc = {
-    "Spectateur": "est_spectateur",
-    "Editeur": "est_editeur",
-    "Validateur": "est_validateur",
-    "Admin": "est_admin"
+    tr.typeacccesList('spectator'): "est_spectateur",
+    tr.typeacccesList('editor'): "est_editeur",
+    tr.typeacccesList('validator'): "est_validateur",
+    tr.typeacccesList('admin'): "est_admin"
   };
 
   String? titre;
@@ -634,10 +706,10 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                     }
                     return null;
                   },
-                  decoration: const InputDecoration(
-                    hintText: "Email",
-                    labelText: "Email",
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    hintText: tr.email,
+                    labelText: tr.email,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
               ),
@@ -652,7 +724,7 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                 trailing: DropdownButton(
                   menuMaxHeight: 400,
                   value: titre,
-                  hint: const Text('Titre'),
+                  hint: Text(tr.titleUser),
                   onChanged: (String? newValue) {
                     if (newValue != null) {
                       setState(() => titre = newValue);
@@ -662,8 +734,7 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                 ),
               ),
               ListTile(
-                title: const Text(
-                    "Sélectionnez les entités à affecter à l'utilisateur"),
+                title: Text(tr.userSelectMessage),
                 trailing: ElevatedButton(
                   onPressed: () async {
                     _showMultiSelect();
@@ -673,11 +744,11 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                         entiteName.isNotEmpty ? Colors.green : Colors.blue,
                     elevation: 0,
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Espace pilotage'),
-                      Icon(
+                      Text(tr.espacePilotage),
+                      const Icon(
                         Icons.arrow_drop_down,
                         size: 24.0,
                       ),
@@ -686,7 +757,7 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                 ),
               ),
               ListTile(
-                title: const Text("Le type d'accès"),
+                title: Text(tr.accessType),
                 trailing: DropdownButton(
                   menuMaxHeight: 400,
                   value: acces,
@@ -700,8 +771,7 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                 ),
               ),
               ListTile(
-                title: const Text(
-                    "Sélectionnez les processus à affecter à l'utilisateur"),
+                title: Text(tr.userSelectProcessMessage),
                 trailing: ElevatedButton(
                   onPressed: () async {
                     _selectProcess();
@@ -711,11 +781,11 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                         selectedProcess.isNotEmpty ? Colors.green : Colors.blue,
                     elevation: 0,
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Processus'),
-                      Icon(
+                      Text(tr.process),
+                      const Icon(
                         Icons.arrow_drop_down,
                         size: 24.0,
                       ),
@@ -726,9 +796,9 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
               const SizedBox(
                 height: 40,
               ),
-              const Text(
-                "Renseigner bien tous les champs avant de soumettre ",
-                style: TextStyle(fontStyle: FontStyle.italic),
+              Text(
+                tr.completeAllFields,
+                style: const TextStyle(fontStyle: FontStyle.italic),
               ),
               const SizedBox(
                 height: 20,
@@ -737,7 +807,7 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                    child: const Text('Annuler'),
+                    child: Text(tr.cancel),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   Container(
@@ -780,6 +850,7 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                                   "est_bloque": false,
                                   "titre": titre,
                                 };
+                                //print(getProcessUser(selectedProcess));
 
                                 final userAcces = {
                                   "email":
@@ -792,7 +863,7 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                                   "est_validateur": false,
                                   "restrictions": listUserRestriction,
                                   "est_admin": false,
-                                  "processus": selectedProcess,
+                                  "processus": getProcessUser(selectedProcess),
                                 };
 
                                 userAcces[accesToDoc[acces]] = true;
@@ -813,7 +884,7 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                                           password: pwd,
                                           data: {"password": pwd});
                                   final passwordMail =
-                                      await sendMailController.sendMail(
+                                      await sendMailController.sendPasswordMail(
                                           emailEditingController.text, pwd);
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -838,14 +909,15 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                                   SnackBar(
                                     backgroundColor: Colors.green,
                                     content: Text(
-                                      'Le compte ${emailEditingController.text} a été crée .',
+                                      tr.accountHasCreated(
+                                          emailEditingController.text),
                                       style: const TextStyle(fontSize: 16),
                                     ),
                                   ),
                                 );
                               }
                             },
-                      child: const Text('Soumettre'))
+                      child: Text(tr.submit))
                 ],
               )
             ],
@@ -955,8 +1027,8 @@ class _MultiSelectState extends State<MultiSelect> {
             Expanded(
               child: TextField(
                 controller: searchController,
-                decoration: const InputDecoration(
-                  hintText: 'Recherche...',
+                decoration: InputDecoration(
+                  hintText: '${tr.recherche}...',
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -975,7 +1047,7 @@ class _MultiSelectState extends State<MultiSelect> {
             children: [
               CheckboxListTile(
                 value: _selectAll,
-                title: const Text('Tout selectionner'),
+                title: Text(tr.uncheckAll),
                 controlAffinity: ListTileControlAffinity.leading,
                 onChanged: _toggleSelectAll,
                 activeColor: Colors.blue,
@@ -995,11 +1067,11 @@ class _MultiSelectState extends State<MultiSelect> {
         actions: [
           TextButton(
             onPressed: _cancel,
-            child: const Text('Annuler'),
+            child: Text(tr.cancel),
           ),
           ElevatedButton(
             onPressed: _submit,
-            child: const Text('Valider'),
+            child: Text(tr.confirm),
           ),
         ],
       );

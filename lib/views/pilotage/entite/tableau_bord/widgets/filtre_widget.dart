@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:perf_rse/models/pilotage/acces_pilotage_model.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:popover/popover.dart';
 import '../../../../../api/supabse_db.dart';
 import 'package:animated_icon/animated_icon.dart';
@@ -199,20 +200,17 @@ class _EntityWidgetWidgetState extends State<FiltreTableauBord> {
   }
 
   String getAcces(AccesPilotageModel acces) {
-    if (acces.estBloque == true) {
-      return "Bloqué";
-    }
     if (acces.estAdmin == true) {
-      return " Admin ";
+      return tr.typeacccesList("admin");
     }
     if (acces.estValidateur == true) {
-      return "Validateur";
+      return  tr.typeacccesList("validator");
     }
     if (acces.estEditeur == true) {
-      return "Editeur";
+      return tr.typeacccesList("editor");
     }
     if (acces.estSpectateur == true) {
-      return "Spectateur";
+      return tr.typeacccesList("spectator");
     }
     return "";
   }
@@ -274,8 +272,7 @@ class _YearFiltreWidgetState extends State<YearFiltreWidget> {
       height: 50,
       child: Row(
         children: [
-          const Text(
-            "Année: ",
+           Text(tr.year,
             style: TextStyle(fontSize: 18),
           ),
           Container(
@@ -375,8 +372,7 @@ class _MonthFiltreWidgetState extends State<MonthFiltreWidget> {
       height: 50,
       child: Row(
         children: [
-          const Text(
-            "Mois  ",
+           Text(tr.month,
             style: TextStyle(fontSize: 18),
           ),
           Container(
@@ -391,7 +387,7 @@ class _MonthFiltreWidgetState extends State<MonthFiltreWidget> {
                   var currentMonth0 = tableauBordController.currentMonth.value;
                   var showMonth =
                       tableauBordController.listMonth[currentMonth0 - 1];
-                  return Text(showMonth, style: const TextStyle(fontSize: 15));
+                  return Text(tr.monthLong(showMonth), style: const TextStyle(fontSize: 15));
                 }),
                 const SizedBox(
                   width: 5,
@@ -408,7 +404,7 @@ class _MonthFiltreWidgetState extends State<MonthFiltreWidget> {
                     for (var i = 0; i < datetime.month; i++) {
                       monthList.add({
                         "id": i + 1,
-                        "month": tableauBordController.listMonth[i]
+                        "month": tr.monthLong(tableauBordController.listMonth[i])
                       });
                     }
                     return PopupMenuButton<Map<String, dynamic>>(
@@ -435,7 +431,7 @@ class _MonthFiltreWidgetState extends State<MonthFiltreWidget> {
                     for (var i = 0; i < 12; i++) {
                       monthList.add({
                         "id": i + 1,
-                        "month": tableauBordController.listMonth[i]
+                        "month": tr.monthLong(tableauBordController.listMonth[i])
                       });
                     }
                     return PopupMenuButton<Map<String, dynamic>>(
@@ -490,7 +486,7 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
   "Développement Durable": "Sustainable development",
   "Finances": "Finance",
   "Achats": "Purchases",
-  "Juridique": "Legal",
+  "Juridique": "legal",
   "Ressources Humaines": "Human ressources",
   "Médecin": "Doctor",
   "Infrastructures": "Infrastructure",
@@ -523,11 +519,10 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
           final filtreProcessus = dropDownController.filtreProcessus;
           return Row(
             children: [
-              const SizedBox(
+               SizedBox(
                 width: 80,
-                child: Text(
-                  "Processus",
-                  style: TextStyle(fontSize: 15),
+                child: Text(tr.process,
+                  style: const TextStyle(fontSize: 15),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -582,7 +577,7 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
       height: 100,
       margin: const EdgeInsets.all(10),
       child: 
-      entitePilotageController.langue == "fr"
+      tr.abrLange.toLowerCase() == "fr"
        ? Column(
         children: [
           if (isAdmin)
@@ -639,7 +634,7 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
                     dropDownController.effacerFiltreProcessus();
                     Navigator.of(context).pop();
                   },
-                  child: const Text("Tout de décocher")),
+                  child:  Text(tr.uncheckAll)),
             ],
           )
         ],
@@ -657,7 +652,7 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
                       CheckBoxWidget(processus: 'Agricultural'),
                       CheckBoxWidget(processus: 'Finance'),
                       CheckBoxWidget(processus: 'SD'),
-                      CheckBoxWidget(processus: 'Legal'),
+                      CheckBoxWidget(processus: 'legal'),
                       CheckBoxWidget(processus: 'Purchases'),
                       CheckBoxWidget(processus: 'HR')
                     ],
@@ -732,7 +727,7 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
         margin: const EdgeInsets.all(2),
         child: Row(
           children: [
-            entitePilotageController.langue == "fr"
+            tr.abrLange.toLowerCase() == "fr"
             ? Checkbox(
                 checkColor: Colors.green,
                 value: filtreProcessus

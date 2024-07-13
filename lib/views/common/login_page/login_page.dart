@@ -4,12 +4,15 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
+import 'package:perf_rse/utils/localization_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../constants/constant_colors.dart';
 import '../../../helper/helper_methods.dart';
 import '../../../utils/utils.dart';
 import '../../../widgets/export_widget.dart';
-
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -65,6 +68,15 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Future<void>hanldeLangue(String email,BuildContext context) async {
+       final List responseName =   await supabase.from('Users').select('langue').eq('email', email);
+       if (responseName.first["langue"] == "fr") {
+          Provider.of<LocalizationProvider>(context).chnageLanguage('Francais');
+        } else {
+           Provider.of<LocalizationProvider>(context).chnageLanguage('English');
+        }
+  }
+
   Future<bool> checkName(String email) async {
     final List responseName =
         await supabase.from('Users').select('nom').eq('email', email);
@@ -89,10 +101,12 @@ class _LoginPageState extends State<LoginPage> {
       final accesToken = result.session?.accessToken;
 
       if (email != null && accesToken != null) {
+       
         final date = DateTime.now();
         await storage.write(key: 'expiration', value: date.toString());
         await storage.write(key: 'logged', value: "true");
         await storage.write(key: 'email', value: email);
+        //await  hanldeLangue(email, context);
         await trackUserLogin(email);
         bool userCheckName = await checkName(email);
         if (userCheckName == false) {
@@ -102,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
               barrierDismissible: false,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: const Text("Nouvel Utilisateur"),
+                  title:  Text(tr.newUserFormTitle),
                   content: Form(
                     key: _formKeyFirstConnexion,
                     child: Column(
@@ -111,14 +125,14 @@ class _LoginPageState extends State<LoginPage> {
                         TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Veuillez votre nom svp.";
+                              return "${tr.checkNameValue}.";
                             }
                             nom = value;
                             return null;
                           },
-                          decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            labelText: "Entrez votre nom",
+                          decoration:  InputDecoration(
+                            border: const UnderlineInputBorder(),
+                            labelText:tr.nameField,
                           ),
                         ),
                         const SizedBox(
@@ -127,14 +141,14 @@ class _LoginPageState extends State<LoginPage> {
                         TextFormField(
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Veuillez entrer vos premons svp.";
+                              return tr.checkForenameValue;
                             }
                             prenoms = value;
                             return null;
                           },
-                          decoration: const InputDecoration(
-                              border: UnderlineInputBorder(),
-                              labelText: "Entrez vos prenoms"),
+                          decoration:  InputDecoration(
+                              border: const UnderlineInputBorder(),
+                              labelText: tr.forenameField),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -151,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                                 context.go("/");
                               }
                             },
-                            child: const Text("Valider"),
+                            child:  Text(tr.confirm),
                           ),
                         ),
                       ],
@@ -167,22 +181,22 @@ class _LoginPageState extends State<LoginPage> {
           });
         }
       } else {
-        var message = "Vos identifiants sont incorrectes";
+        var message = tr.incorrectLoginDetailsMessage;
         await Future.delayed(const Duration(milliseconds: 15));
         setState(() {
           isLoadedPage = false;
         });
         ScaffoldMessenger.of(context)
-            .showSnackBar(showSnackBar("Echec", message, Colors.red));
+            .showSnackBar(showSnackBar(tr.fail, message, Colors.red));
       }
     } on Exception {
-      var message = "Vos identifiants sont incorrectes";
+      var message = tr.incorrectLoginDetailsMessage;
       await Future.delayed(const Duration(milliseconds: 15));
       setState(() {
         isLoadedPage = false;
       });
       ScaffoldMessenger.of(context)
-          .showSnackBar(showSnackBar("Echec", message, Colors.red));
+          .showSnackBar(showSnackBar(tr.fail, message, Colors.red));
     }
   }
 
@@ -213,8 +227,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height.roundToDouble();
-    double width = MediaQuery.of(context).size.width.roundToDouble();
+    final providerLocal =  Provider.of<LocalizationProvider>(context);
     return Scaffold(
         body: Column(
       children: [
@@ -252,21 +265,21 @@ class _LoginPageState extends State<LoginPage> {
                       height: 20,
                     ),
                     RichText(
-                      text: const TextSpan(
+                      text:  TextSpan(
                           text: "",
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 30,
                               fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF6E4906)),
                           children: <TextSpan>[
-                            TextSpan(
+                            const TextSpan(
                                 text: "Performance ",
                                 style: TextStyle(color: Color(0xFF2A9836))),
                             TextSpan(
-                                text: "RSE",
+                                text:tr.rse,
                                 style: TextStyle(color: Color(0xFF0F70B7))),
-                            TextSpan(text: "pilotez votre stratégie de développement durable en toute simplicité."),
+                            TextSpan(text:tr.slogan),
                           ]),
                     )
                   ],
@@ -274,7 +287,26 @@ class _LoginPageState extends State<LoginPage> {
                 Expanded(
                   child: Center(
                     child: Column(
-                      children: [
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Icon(Icons.language_rounded),
+                          SizedBox(
+                            height: 60,
+                            width: 150,
+                            child:  Container(
+                              child: CustomDropdown(
+                                  hintText:tr.abrLange.toLowerCase()=="en" ? "English":"Français",
+                                  items:  ["Français","English"],
+                                  onChanged: (value)=>providerLocal.chnageLanguage(value),
+                              ),
+                          ),
+                        )
+                        ]
+
+                        ),
                         SizedBox(
                           height: 150,
                           width: 300,
@@ -302,9 +334,8 @@ class _LoginPageState extends State<LoginPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    const Text(
-                                      "Se connecter à votre compte",
-                                      style: TextStyle(
+                                    Text(tr.conexionMessage ,
+                                      style: const TextStyle(
                                           fontSize: 25,
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xFF9D6E16)),
@@ -316,12 +347,12 @@ class _LoginPageState extends State<LoginPage> {
                                             if (value == null ||
                                                 value.isEmpty ||
                                                 !GetUtils.isEmail(value)) {
-                                              return "Svp veuillez entrer un e-mail correct.";
+                                              return tr.checkEmailValueMessage;
                                             }
                                             return null;
                                           },
                                           decoration: InputDecoration(
-                                              hintText: "Courriel",
+                                              hintText:tr.email,
                                               prefixIcon:
                                                   const Icon(Icons.person),
                                               contentPadding:
@@ -345,7 +376,7 @@ class _LoginPageState extends State<LoginPage> {
                                           validator: (value) {
                                             if (value == null ||
                                                 value.isEmpty) {
-                                              return "Entrez un mot de passe valide";
+                                              return tr.passwordCheckMessage;
                                             }
                                             return null;
                                           },
@@ -360,7 +391,7 @@ class _LoginPageState extends State<LoginPage> {
                                                     ? Icons.visibility
                                                     : Icons.visibility_off),
                                               ),
-                                              hintText: "Mot de passe",
+                                              hintText:tr.password,
                                               prefixIcon: const Icon(
                                                   Icons.vpn_key_sharp),
                                               contentPadding:
@@ -417,8 +448,8 @@ class _LoginPageState extends State<LoginPage> {
                                                     color: Colors.amber,
                                                     size: 20,
                                                   )
-                                                : const CustomText(
-                                                    text: "Se connecter",
+                                                :  CustomText(
+                                                    text: tr.logIn,
                                                     color: Colors.white,
                                                     size: 20,
                                                   ),
@@ -432,8 +463,8 @@ class _LoginPageState extends State<LoginPage> {
                                           context
                                               .go('/account/forgot-password');
                                         },
-                                        child: const CustomText(
-                                          text: "J’ai oublié mon mot de passe",
+                                        child:  CustomText(
+                                          text: tr.passwordForgetten,
                                           color: activeBlue,
                                         )),
                                   ],

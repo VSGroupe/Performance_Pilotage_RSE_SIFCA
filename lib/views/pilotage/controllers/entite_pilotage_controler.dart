@@ -13,6 +13,7 @@ class EntitePilotageController extends GetxController {
   final filiereCurrentEntity = "".obs;
   final entityAppartenance = "".obs;
   final sousEntite = [].obs;
+  final sousEntiteName = [].obs;
   final supabase = Supabase.instance.client;
   final entites = [].obs;
   var langue = "";

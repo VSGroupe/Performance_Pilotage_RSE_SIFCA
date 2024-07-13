@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
+import 'package:perf_rse/utils/localization_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../../api/supabse_db.dart';
 import '../../../../../helper/helper_methods.dart';
@@ -24,7 +27,7 @@ class _InfosCompteState extends State<InfosCompte> {
   double widthTextForm = 350;
 
   void updateLanguage(String langue) async {
-    EasyLoading.show(status: "Mise à jour en cours");
+    EasyLoading.show(status:tr.updating);
     final email = profilController.userModel.value.email;
     final result =
         await dbController.updateUserLanguage(email: email, langue: langue);
@@ -32,10 +35,10 @@ class _InfosCompteState extends State<InfosCompte> {
       profilController.userModel.value.langue = langue;
       profilController.updateProfil();
       ScaffoldMessenger.of(context).showSnackBar(showSnackBar(
-          "Succès", "La mise à jour a été effectuée avec succès", Colors.green));
+          tr.success,tr.updatingSuccessMessage, Colors.green));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          showSnackBar("Échec", "La mise à jour a échoué", Colors.red));
+          showSnackBar(tr.fail, tr.updatingFailMessage, Colors.red));
     }
     EasyLoading.dismiss();
   }
@@ -53,6 +56,7 @@ class _InfosCompteState extends State<InfosCompte> {
 
   @override
   Widget build(BuildContext context) {
+    final proLocal =Provider.of<LocalizationProvider>(context);
     return Obx(() => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -73,8 +77,8 @@ class _InfosCompteState extends State<InfosCompte> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const CustomText(
-                              text: "Email de l'utilisateur",
+                             CustomText(
+                              text: tr.userEmail,
                               size: 15,
                             ),
                             const SizedBox(
@@ -91,8 +95,8 @@ class _InfosCompteState extends State<InfosCompte> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const CustomText(
-                              text: "Type d'accès",
+                             CustomText(
+                              text:tr.accessType,
                               size: 15,
                             ),
                             const SizedBox(
@@ -109,8 +113,8 @@ class _InfosCompteState extends State<InfosCompte> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const CustomText(
-                              text: "Vos processus",
+                             CustomText(
+                              text: tr.yourProcess,
                               size: 15,
                             ),
                             const SizedBox(
@@ -128,8 +132,8 @@ class _InfosCompteState extends State<InfosCompte> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const CustomText(
-                              text: "Langue",
+                             CustomText(
+                              text:tr.language,
                               size: 15,
                             ),
                             const SizedBox(
@@ -150,8 +154,10 @@ class _InfosCompteState extends State<InfosCompte> {
                               onChanged: (value) {
                                 if (value == "Français") {
                                   dropDownLangue = "fr";
+                                  proLocal.chnageLanguage('fr');
                                 } else if (value == "English") {
                                   dropDownLangue = "en";
+                                  proLocal.chnageLanguage('en');
                                 }
                               },
                             )
@@ -179,9 +185,9 @@ class _InfosCompteState extends State<InfosCompte> {
                       ),
                       borderRadius:
                           const BorderRadius.all(Radius.circular(40))),
-                  child: const Center(
+                  child:  Center(
                       child: CustomText(
-                    text: "Enregistrer",
+                    text:tr.save,
                     size: 20,
                     weight: FontWeight.bold,
                     color: Colors.white,
@@ -195,16 +201,16 @@ class _InfosCompteState extends State<InfosCompte> {
 
   String getAccesType(AccesPilotageModel accesPilotageModel) {
     if (accesPilotageModel.estAdmin ?? false) {
-      return "Admin";
+      return tr.typeacccesList('admin');
     }
     if (accesPilotageModel.estValidateur ?? false) {
-      return "Validateur";
+      return tr.typeacccesList('validator');
     }
     if (accesPilotageModel.estEditeur ?? false) {
-      return "Editeur";
+      return tr.typeacccesList('editor');
     }
     if (accesPilotageModel.estSpectateur ?? false) {
-      return "Spectateur";
+      return tr.typeacccesList('spectator');
     }
     return "";
   }

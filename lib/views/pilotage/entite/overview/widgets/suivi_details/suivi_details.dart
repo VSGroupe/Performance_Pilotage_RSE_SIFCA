@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../../../constants/constant_double.dart';
 import '../../../../../../widgets/custom_text.dart';
@@ -84,28 +85,28 @@ class _SuiviDetailsState extends State<SuiviDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomText(
-                text:"Suivi des données ${suiviDataController.annee.value}",
+                text:"${tr.dataTacking} ${suiviDataController.annee.value}",
                 weight: FontWeight.bold,
               ),
               const SizedBox(height: 10),
               ChartOverview(nombreTotal: numberTotal, numberVide: numberTotal-numberCollecte, numberCollecte: numberCollecte,),
               DataSuiviCard(
                 svgSrc: "assets/icons/data_validated.png",
-                title: "Données validées",
+                title: tr.validatedData,
                 nombre: "$numberTotal",
                 total: numberValide,
                 color: Colors.green,
               ),
               DataSuiviCard(
                 svgSrc: "assets/icons/data_collect.png",
-                title: "Données collectées",
+                title: tr.collectedData,
                 nombre: "$numberTotal",
                 total: numberCollecte,
                 color: Colors.amber,
               ),
               DataSuiviCard(
                 svgSrc: "assets/icons/no_data.png",
-                title: "Champs vides",
+                title:tr.emptyField,
                 nombre: "$numberTotal",
                 total: numberTotal-numberCollecte,
                 color: Colors.red,

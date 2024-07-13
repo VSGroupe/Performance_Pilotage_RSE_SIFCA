@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../utils/pilotage_utils.dart';
 import '../../../widgets/copyright.dart';
@@ -60,7 +61,7 @@ class _PilotageHomeState extends State<PilotageHome> {
         return Scaffold(
           body: Column(
             children: [
-              AppBarPilotageHome(title: "Pilotage", pilotageHomeData: data,),
+              AppBarPilotageHome(title: tr.controlFrameTitle, pilotageHomeData: data,),
               Expanded(child: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: const BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/background_image.jpg"), fit: BoxFit.fitWidth)),

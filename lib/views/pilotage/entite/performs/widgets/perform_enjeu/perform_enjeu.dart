@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../controllers/performs_data_controller.dart';
 import 'package:get/get.dart';
@@ -53,57 +54,57 @@ class _PerformanceEnjeuxState extends State<PerformanceEnjeux> {
     _tooltipBehavior = TooltipBehavior(enable: true);
     chartData = <ChartSampleData>[
       ChartSampleData(
-          x: "Gouvernance DD et stratégie",
+          x:tr.issue1,
           y: datasEnjeuListB[0] ?? 0,
           secondSeriesYValue: datasEnjeuListA[0] ?? 0,
           thirdSeriesYValue: 13),
       ChartSampleData(
-          x: "Pilotage DD",
+          x: tr.issue1b,
           y: datasEnjeuListB[1] ?? 0,
           secondSeriesYValue: datasEnjeuListA[1] ?? 0,
           thirdSeriesYValue: 5),
       ChartSampleData(
-          x: "Éthique des affaires et achats responsables",
+          x:tr.issue2,
           y: datasEnjeuListB[2] ?? 0,
           secondSeriesYValue: datasEnjeuListA[2] ?? 0,
           thirdSeriesYValue: 14),
       ChartSampleData(
-          x: "Intégration des attentes DD des clients et consommateurs",
+          x: tr.issue3,
           y: datasEnjeuListB[3] ?? 0,
           secondSeriesYValue: datasEnjeuListA[3] ?? 0,
           thirdSeriesYValue: 13),
       ChartSampleData(
-          x: "Égalité de traitement",
+          x: tr.issue4,
           y: datasEnjeuListB[4] ?? 0,
           secondSeriesYValue: datasEnjeuListA[4] ?? 0,
           thirdSeriesYValue: 7),
       ChartSampleData(
-          x: "Conditions de travail",
+          x:tr.issue5,
           y: datasEnjeuListB[5] ?? 0,
           secondSeriesYValue: datasEnjeuListA[5]  ?? 0,
           thirdSeriesYValue: 5),
       ChartSampleData(
-          x: "Amélioration du cadre de vie",
+          x: tr.issue6,
           y: datasEnjeuListB[6] ?? 0,
           secondSeriesYValue: datasEnjeuListA[6] ?? 0,
           thirdSeriesYValue: 14),
       ChartSampleData(
-          x: "Inclusion sociale ét dévéloppement des communautés",
+          x:tr.issue7 ,
           y: datasEnjeuListB[7] ?? 0,
           secondSeriesYValue: datasEnjeuListA[7] ?? 0,
           thirdSeriesYValue: 13),
       ChartSampleData(
-          x: "Changement climatique et déforestation",
+          x: tr.issue8,
           y: datasEnjeuListB[8] ?? 0,
           secondSeriesYValue: datasEnjeuListA[8] ?? 0,
           thirdSeriesYValue: 7),
       ChartSampleData(
-          x: "Gestion et traitement de l’eau",
+          x:tr.issue9,
           y: datasEnjeuListB[9] ?? 0,
           secondSeriesYValue: datasEnjeuListA[9] ?? 0,
           thirdSeriesYValue: 5),
       ChartSampleData(
-          x: "Gestion des ressources et déchets",
+          x:tr.issue10b,
           y: datasEnjeuListB[10]  ?? 0,
           secondSeriesYValue: datasEnjeuListA[10] ?? 0,
           thirdSeriesYValue: 14)
@@ -146,24 +147,24 @@ class _PerformanceEnjeuxState extends State<PerformanceEnjeux> {
   SfCartesianChart _buildSpacingColumnChart() {
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
-      title: const ChartTitle(
-          text: "PERFORMANCE PAR ENJEU PRIORITAIRE",
-          textStyle: TextStyle(
+      title:  ChartTitle(
+          text:tr.issuePerformanceGraphTitleA,
+          textStyle: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,
               decoration: TextDecoration.underline)),
-      primaryXAxis: const CategoryAxis(
+      primaryXAxis:  CategoryAxis(
         labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
         title: AxisTitle(
-            text: "Les enjeux prioritaires",
-            textStyle: TextStyle(fontSize: 18)),
+            text: tr.issuePerformanceGraphTitleB,
+            textStyle: const TextStyle(fontSize: 18)),
         majorGridLines: MajorGridLines(width: 0),
       ),
-      primaryYAxis: const NumericAxis(
+      primaryYAxis:  NumericAxis(
           labelAlignment: LabelAlignment.center,
           title: AxisTitle(
-              text: "Performance en %",
-              textStyle: TextStyle(fontSize: 18)),
+              text: tr.performanceIn,
+              textStyle: const TextStyle(fontSize: 18)),
           maximum: 100,
           minimum: 0,
           interval: 5,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 
 import '../../../../../../constants/constant_double.dart';
 import '../../../../../../helper/responsive.dart';
@@ -30,7 +31,7 @@ class _SuiviAxeState extends State<SuiviAxe> {
           children: [
             Obx(() => CustomText(
                   text:
-                      "Les Axes Stratégiques ,Année ${suiviDataController.annee.value}",
+                      "${tr.strategicAxes} ,${tr.year} ${suiviDataController.annee.value}",
                   weight: FontWeight.bold,
                 ))
           ],
@@ -74,7 +75,7 @@ class _PilierInfoCardGridViewState extends State<PilierInfoCardGridView> {
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: demoPiliers.length,
+      itemCount: tr.abrLange.toLowerCase()=='en'  ?  enDemoPiliers.length : demoPiliers.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: widget.crossAxisCount,
         crossAxisSpacing: defaultPadding,
@@ -83,7 +84,7 @@ class _PilierInfoCardGridViewState extends State<PilierInfoCardGridView> {
       ),
       itemBuilder: (context, index) => Obx(() =>
       PilierInfoCard(
-                info: demoPiliers[index],
+                info:  tr.abrLange.toLowerCase()=='en' ? enDemoPiliers[index] :demoPiliers[index],
                 annee: suiviDataController.annee.value,
               )
       ),

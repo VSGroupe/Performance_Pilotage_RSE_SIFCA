@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:perf_rse/constants/constant_colors.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import '../../../../widgets/custom_text.dart';
 import '../../controllers/drop_down_controller.dart';
 import '../../controllers/entite_pilotage_controler.dart';
@@ -16,7 +17,7 @@ class StrategieContainer extends StatefulWidget {
 class _StrategieContainerState extends State<StrategieContainer> {
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
+    return  SizedBox(
       height: 500,
       width: 900,
       child: Stack(
@@ -34,18 +35,17 @@ class _StrategieContainerState extends State<StrategieContainer> {
                     axeId: "axe_3",
                     color: Color(0xFFFAAF7B),
                     imagePilier: "assets/icons/social.png",
-                    titlePilier: "Communauté et innovation sociétale",
+                    titlePilier: tr.axe3,
                     enjeux: [
                       {
                         "key": "7",
-                        "enjeu":
-                            "Inclusion sociale et dévéloppement des communautés"
+                        "enjeu":tr.socialInclusionCommunity
                       },
                     ],
                   ),
                 ),
               )),
-          Positioned(
+           Positioned(
               left: 500,
               bottom: 300,
               child: SizedBox(
@@ -57,21 +57,19 @@ class _StrategieContainerState extends State<StrategieContainer> {
                     axeId: "axe_1",
                     color: Color(0xFF3F93D0),
                     imagePilier: "assets/icons/gouvernance.png",
-                    titlePilier: "Gouvernance et éthique",
+                    titlePilier:tr.axe1,
                     enjeux: [
                       {
                         "key": "1",
-                        "enjeu":
-                            "Gouvernance DD et stratégie & enjeu Pilotage DD"
+                        "enjeu":tr.issue1
                       },
                       {
                         "key": "2",
-                        "enjeu": "Éthique des affaires et achats responsables"
+                        "enjeu": tr.issue2
                       },
                       {
                         "key": "3",
-                        "enjeu":
-                            "Intégration des attentes DD des clients et consommateurs"
+                        "enjeu":tr.issue3
                       },
                     ],
                   ),
@@ -89,11 +87,11 @@ class _StrategieContainerState extends State<StrategieContainer> {
                     axeId: "axe_2",
                     color: Color(0xFFEABF64),
                     imagePilier: "assets/icons/economie.png",
-                    titlePilier: "Emploi et conditions de travail",
+                    titlePilier:tr.axe2,
                     enjeux: [
-                      {"key": "4", "enjeu": "Égalité de traitement"},
-                      {"key": "5", "enjeu": "Conditions de travail"},
-                      {"key": "10", "enjeu": "Amélioration du cadre de vie"},
+                      {"key": "4", "enjeu": tr.issue4},
+                      {"key": "5", "enjeu": tr.issue5},
+                      {"key": "10", "enjeu":tr.issue6},
                     ],
                   ),
                 ),
@@ -110,22 +108,22 @@ class _StrategieContainerState extends State<StrategieContainer> {
                     axeId: "axe_4",
                     color: Color(0xFF97C3A8),
                     imagePilier: "assets/icons/environnement.png",
-                    titlePilier: "Préservation de l'Environnement",
+                    titlePilier:tr.axe4,
                     enjeux: [
                       {
                         "key": "8",
-                        "enjeu": "Changement climatique et déforestation"
+                        "enjeu": tr.issue8
                       },
-                      {"key": "9", "enjeu": "Gestion et traitement de l’eau"},
+                      {"key": "9", "enjeu": tr.issue9},
                       {
                         "key": "10",
-                        "enjeu": "Gestion des ressources et déchets"
+                        "enjeu": tr.issue10b
                       },
                     ],
                   ),
                 ),
               )),
-          Positioned(left: 375, bottom: 175, child: GeneralButton()),
+          const Positioned(left: 375, bottom: 175, child: GeneralButton()),
         ],
       ),
     );
@@ -309,22 +307,22 @@ class _GeneralButtonState extends State<GeneralButton> {
             width: 50,
             height: 50,
             color: Colors.transparent,
-            child: const Column(
+            child:  Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CustomText(
-                  text: "Afficher",
+                  text: tr.show,
                   color: Colors.white,
                   size: 18,
                 ),
                 CustomText(
-                  text: "Tous",
+                  text:tr.all,
                   color: Colors.white,
                   size: 18,
                 ),
                 CustomText(
-                  text: "Les indicateurs",
+                  text:tr.indicators,
                   color: Colors.white,
                   size: 18,
                 )

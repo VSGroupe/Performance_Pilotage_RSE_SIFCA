@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 
 import '../../../../controllers/tableau_controller.dart';
 
@@ -30,35 +31,35 @@ class _NotAdminDashBoardHeaderState extends State<NotAdminDashBoardHeader> {
                   .listMonth[tableauBordController.currentMonth.value - 1];
               return Row(
                 children: [
-                  const NotAdminDashBoardHeaderTitle(
+                   NotAdminDashBoardHeaderTitle(
                     color: Colors.brown,
                     size: 110,
-                    title: "Réf",
+                    title: tr.reference,
                   ),
-                  const IndicateurTitle(
+                   IndicateurTitle(
                     color: Colors.brown,
                     size: 100,
-                    title: "Intitulé",
+                    title:tr.title,
                   ),
-                  const NotAdminDashBoardHeaderTitle(
+                   NotAdminDashBoardHeaderTitle(
                     color: Colors.brown,
                     size: 120,
-                    title: "Processus",
+                    title: tr.process,
                   ),
                   NotAdminDashBoardHeaderTitle(
                     color: Colors.brown,
                     size: 150,
-                    title: "Réalisé ${annee - 1}",
+                    title: "${tr.completed} ${annee - 1}",
                   ),
                   NotAdminDashBoardHeaderTitle(
                     color: Colors.brown,
                     size: 150,
-                    title: "Réalisé $annee",
+                    title: "${tr.completed} $annee",
                   ),
                   MonthHeader(
                     color: Colors.brown,
                     size: 170,
-                    title: mois,
+                    title: tr.monthLong(mois),
                   ),
                 ],
               );

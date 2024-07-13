@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:perf_rse/views/pilotage/controllers/performs_data_controller.dart';
 import 'package:perf_rse/views/pilotage/entite/performs/content_view.dart';
 import 'package:perf_rse/views/pilotage/entite/performs/custom_tab.dart';
@@ -29,7 +29,7 @@ class _PerformPilotageState extends State<PerformPilotage>
 
   List<ContentView> contentViews = [
     ContentView(
-        tab: const CustomTab(title: "Vue Globale"),
+        tab:  CustomTab(title: tr.globalView),
         content: Container(
           padding: const EdgeInsets.only(
               right: defaultPadding, bottom: defaultPadding, top: 5),

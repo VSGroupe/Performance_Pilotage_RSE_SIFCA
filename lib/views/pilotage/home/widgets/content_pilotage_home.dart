@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../helper/helper_methods.dart';
 import '/modules/styled_scrollview.dart';
@@ -51,8 +52,8 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
                 // Gérer la logique lorsque l'utilisateur appuie sur ce bouton
                 Navigator.of(context).pop(); // Fermez la boîte de dialogue
               },
-              child: const Text("Fermer",
-                  style: TextStyle(
+              child:  Text(tr.close,
+                  style: const TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
                       fontSize: 22)),
@@ -74,14 +75,14 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
             runSpacing: 4.0,
             children: [
               // Consolidation Groupe
-              const SizedBox(
+               SizedBox(
                 height: 200,
                 width: 300,
                 child: OverviewCard(
-                  title: "Consolidation Groupe",
+                  title: tr.groupConsolidation,
                   titleColor: Color(0xffb66600),
-                  children: [
-                    EntityTextButton(
+                  children: const [
+                     EntityTextButton(
                       title: "COMEX",
                       color: Color(0xffb66600),
                       entiteID: "comex",
@@ -95,12 +96,12 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
                 ),
               ),
               // Oléagineux
-              const SizedBox(
+               SizedBox(
                 width: 300,
                 child: OverviewCard(
-                  title: "Oléagineux",
+                  title: tr.oilseeds,
                   titleColor: Colors.red,
-                  children: [
+                  children:const [
                     EntityTextButton(
                       title: "GOLDEN SIFCA",
                       color: Colors.red,
@@ -177,12 +178,12 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
                 ),
               ),
               // Catouchou Naturel
-              const SizedBox(
+               SizedBox(
                 width: 300,
                 child: OverviewCard(
-                  title: "Catouchou Naturel",
+                  title:tr.naturalRubber,
                   titleColor: Colors.green,
-                  children: [
+                  children: const [
                     EntityTextButton(
                       title: "CRC",
                       color: Colors.green,
@@ -267,13 +268,13 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
                 ),
               ),
               // Sucre
-              const SizedBox(
+               SizedBox(
                 height: 200,
                 width: 300,
                 child: OverviewCard(
-                  title: "Sucre",
+                  title:tr.sugar,
                   titleColor: Colors.blue,
-                  children: [
+                  children:const [
                     OverviewExpansionItem(
                       title: "SUCRIVOIRE",
                       titleColor: Colors.blue,
@@ -303,22 +304,22 @@ class _ContentPilotageHomeState extends State<ContentPilotageHome> {
               SizedBox(
                 height: mheight,
                 width: 300,
-                child: const OverviewCard(
-                  title: "Consolidaltion Filières",
+                child:  OverviewCard(
+                  title:tr.consolidationSectors,
                   titleColor: Color(0xffb66600),
                   children: [
                     EntityTextButton(
-                      title: "Oléagineux",
+                      title: tr.oilseeds,
                       entiteID: 'oleagineux',
                       color: Colors.red,
                     ),
                     EntityTextButton(
-                      title: "Sucre",
+                      title:tr.sugar,
                       entiteID: 'sucre',
                       color: Colors.blue,
                     ),
                     EntityTextButton(
-                      title: "Catouchou Naturel",
+                      title:tr.naturalRubber,
                       entiteID: 'caoutchouc-naturel',
                       color: Colors.green,
                     ),
@@ -501,7 +502,7 @@ class _EntityTextButtonState extends State<EntityTextButton> {
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Accès refusé"),
+          title: Text(tr.accesDenied),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -523,7 +524,7 @@ class _EntityTextButtonState extends State<EntityTextButton> {
   }
 
   Future<bool> goToEspaceEntitePilotage(String idEntite) async {
-    EasyLoading.show(status: "Chargement ...");
+    EasyLoading.show(status: tr.loading);
     await Future.delayed(const Duration(seconds: 2));
     String? email = await storage.read(key: 'email');
     if (email == null) {

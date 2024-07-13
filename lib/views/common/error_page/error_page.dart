@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import '/widgets/copyright.dart';
 import '../../../constants/constant_colors.dart';
 import '../../../widgets/custom_text.dart';
@@ -55,7 +56,7 @@ class _PageNotFoundState extends State<PageNotFound> {
                             }
                           },
                           child: CustomText(
-                            text: "Se Connecter",
+                            text:tr.logIn,
                             color: onHoverLogin ? Colors.white : Colors.black,
                           )),
                       const SizedBox(
@@ -68,8 +69,8 @@ class _PageNotFoundState extends State<PageNotFound> {
                       const SizedBox(
                         width: 10,
                       ),
-                      const CustomText(
-                        text: "FR",
+                       CustomText(
+                        text:tr.abrLange,
                         color: Colors.white,
                       )
                     ],
@@ -92,10 +93,10 @@ class _PageNotFoundState extends State<PageNotFound> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  OutlinedButton(onPressed: (){context.go('/');}, child: const Padding(
-                    padding: EdgeInsets.all(10.0),
+                  OutlinedButton(onPressed: (){context.go('/');}, child:  Padding(
+                    padding: const EdgeInsets.all(10.0),
                     child: CustomText(
-                      text: "Retournez à l'accueil principal de Perf RSE",
+                      text: tr.goToHomeRse,
                       size: 24,
                       weight: FontWeight.bold,
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../../../api/supabse_db.dart';
 import '../../../../../../constants/constant_double.dart';
@@ -91,7 +92,7 @@ class _CollecteGlobaleEntitesState extends State<CollecteGlobaleEntites> {
                     width: 50,
                     height: 50,
                     child: status == -1
-                        ? const Text("Aucune Donnée")
+                        ?  Text(tr.noData)
                         : const CircularProgressIndicator(),
                   ),
                 ),
@@ -103,8 +104,8 @@ class _CollecteGlobaleEntitesState extends State<CollecteGlobaleEntites> {
                       columnSpacing: 12,
                       horizontalMargin: 12,
                       columns: [
-                        const DataColumn(
-                          label: Text("Filiale/Entités"),
+                         DataColumn(
+                          label: Text("${tr.subsidiaries}/ ${tr.entities}"),
                         ),
                         DataColumn(
                           label: Text("${year - 1}"),

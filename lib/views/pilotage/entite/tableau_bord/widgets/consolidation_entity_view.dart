@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:perf_rse/helper/helper_methods.dart';
 import 'package:perf_rse/models/pilotage/data_indicateur_row_model.dart';
 import 'package:perf_rse/models/pilotage/indicateur_model.dart';
+import 'package:perf_rse/utils/i18n.dart';
+import 'package:perf_rse/utils/operation_liste.dart';
 import 'package:perf_rse/views/pilotage/controllers/entite_pilotage_controler.dart';
 import 'package:perf_rse/views/pilotage/controllers/tableau_controller.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -61,7 +63,7 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
 
   void refreshData() async {
     var response;
-    if (entitePilotageController.langue == "en") {
+    if (tr.abrLange.toLowerCase() == "en") {
       response = await getListIndicateursEN();
     } else {
       response = await getListIndicateurs();
@@ -74,18 +76,18 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
 
   String moisEquivalent(int mois) {
     List moisNoms = [
-      "Janvier",
-      "Fevrier",
-      "Mars",
-      "Avril",
-      "Mai",
-      "Juin",
-      "Juillet",
-      "Aout",
-      "Septembre",
-      "Octobre",
-      "Novembre",
-      "Décembre"
+      tr.monthLong("january"),
+      tr.monthLong("february"),
+      tr.monthLong("march"),
+      tr.monthLong("april"),
+      tr.monthLong("may"),
+      tr.monthLong("june"),
+      tr.monthLong("july"),
+      tr.monthLong("august"),
+      tr.monthLong("september"),
+      tr.monthLong("october"),
+      tr.monthLong("november"),
+      tr.monthLong("december")
     ];
 
     return moisNoms[mois - 1];
@@ -101,6 +103,7 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
 
   SfDataGridTheme _buildDataGridForWeb() {
     List sousEntites = entitePilotageController.sousEntite;
+    List sousEntitesNames = entitePilotageController.sousEntiteName;
     var annee = tableauBordController.currentYear.value;
     List<GridColumn> columns = [
       GridColumn(
@@ -109,10 +112,10 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
         label: Container(
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.all(8.0),
-          child: const Text(
-            "Réf",
+          child: Text(
+            tr.reference,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -122,10 +125,10 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
         label: Container(
           padding: const EdgeInsets.all(8.0),
           alignment: Alignment.centerLeft,
-          child: const Text(
-            "Intitulé",
+          child: Text(
+            tr.title,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -135,10 +138,10 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
         label: Container(
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.all(8.0),
-          child: const Text(
-            "Unité",
+          child: Text(
+            tr.unit,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -161,10 +164,10 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
         label: Container(
           padding: const EdgeInsets.all(8.0),
           alignment: Alignment.centerLeft,
-          child: const Text(
-            "Formule",
+          child: Text(
+            tr.formulas,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -174,10 +177,10 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
         label: Container(
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.all(8.0),
-          child: const Text(
-            "Processus",
+          child: Text(
+            tr.process,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -188,7 +191,7 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            "Réalisé $annee",
+            "${tr.completed} $annee",
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
@@ -225,26 +228,24 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
 
     // Adding dynamic columns based on sousEntites
     if (sousEntites.isNotEmpty) {
-      for (String? sousEntite in sousEntites) {
-        if (sousEntite != null) {
-          columns.add(
-            GridColumn(
-              columnName: sousEntite,
-              width: 200,
-              label: Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.all(3.0),
-                child: Text(
-                  "$sousEntite\nRéalisé $annee",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
+      for (String sousEntite in sousEntitesNames) {
+        columns.add(
+          GridColumn(
+            columnName: sousEntite,
+            width: 200,
+            label: Container(
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.all(3.0),
+              child: Text(
+                "$sousEntite\n${tr.completed} $annee",
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
-          );
-        }
-      }
+          ),
+        );
+            }
     }
 
     return SfDataGridTheme(
@@ -301,19 +302,19 @@ class EntityConsoDataGridSource extends DataGridSource {
   }
 
   String moisEquivalent(int mois) {
-    const moisNoms = [
-      'Janvier',
-      'Février',
-      'Mars',
-      'Avril',
-      'Mai',
-      'Juin',
-      'Juillet',
-      'Août',
-      'Septembre',
-      'Octobre',
-      'Novembre',
-      'Décembre'
+    List moisNoms = [
+      tr.monthLong("january"),
+      tr.monthLong("february"),
+      tr.monthLong("march"),
+      tr.monthLong("april"),
+      tr.monthLong("may"),
+      tr.monthLong("june"),
+      tr.monthLong("july"),
+      tr.monthLong("august"),
+      tr.monthLong("september"),
+      tr.monthLong("october"),
+      tr.monthLong("november"),
+      tr.monthLong("december")
     ];
 
     return moisNoms[mois - 1];
@@ -344,13 +345,15 @@ class EntityConsoDataGridSource extends DataGridSource {
           "reference": indicateur.reference
         }),
         DataGridCell<Map<String, dynamic>>(columnName: 'type', value: {
-          "valeur": indicateur.type,
+          "valeur": OperationList().transTypeOperation(indicateur.type),
           "type": indicateur.type,
           "numero": indicateur.numero,
           "reference": indicateur.reference
         }),
         DataGridCell<Map<String, dynamic>>(columnName: 'formule', value: {
-          "valeur": indicateur.formule ?? '----',
+          "valeur": indicateur.formule != null
+              ? OperationList().transTypeFormule(indicateur.formule!)
+              : '----',
           "type": indicateur.type,
           "numero": indicateur.numero,
           "reference": indicateur.reference

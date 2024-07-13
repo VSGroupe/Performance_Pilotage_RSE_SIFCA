@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:perf_rse/views/pilotage/controllers/entite_pilotage_controler.dart';
 import 'package:perf_rse/views/pilotage/controllers/profil_pilotage_controller.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -151,8 +152,8 @@ class _RowIndicateurState extends State<RowIndicateur> {
               color: Colors.transparent,
               alignment: Alignment.centerLeft,
               child: estContributeur
-                  ? const Text("verrouillé",
-                      style: TextStyle(color: Colors.black))
+                  ?  Text(tr.locked,
+                      style: const TextStyle(color: Colors.black))
                   : buildRealiseMoisColumn(context),
             ),
             //cible
@@ -213,25 +214,23 @@ class _RowIndicateurState extends State<RowIndicateur> {
       },
       cancelToggle: (index) async {
         String selection =
-            index == 0 ? "Desactiver" : "Activer";
+            index == 0 ? tr.deactivate : tr.activate;
         return await showDialog(
           context: context,
           builder: (dialogContext) => AlertDialog(
-            content: Text("$selection l'indicateur ?"),
+            content: Text("$selection  ${tr.indicator}?"),
             actions: [
               TextButton(
-                child: const Text(
-                  "Non",
-                  style: TextStyle(color: Color.fromARGB(255, 114, 244, 54)),
+                child:  Text(tr.no,
+                  style: const TextStyle(color: Color.fromARGB(255, 114, 244, 54)),
                 ),
                 onPressed: () {
                   Navigator.pop(dialogContext, true);
                 },
               ),
               TextButton(
-                child: const Text(
-                  "Oui",
-                  style: TextStyle(color: Color.fromARGB(255, 232, 142, 31)),
+                child:  Text(tr.yes,
+                  style: const TextStyle(color: Color.fromARGB(255, 232, 142, 31)),
                 ),
                 onPressed: () async {
                   var result = await changeStatusEntityIndic(
@@ -239,13 +238,13 @@ class _RowIndicateurState extends State<RowIndicateur> {
                   if (result == true) {
                     await tableauBordController.updateDataIndicateur();
                     await Future.delayed(const Duration(seconds: 1));
-                    var message = "Action effectuée";
+                    var message = tr.actionCompleted;
                     ScaffoldMessenger.of(context).showSnackBar(showSnackBar(
-                        "Succès", message, Colors.green));
+                       tr.success, message, Colors.green));
                   } else {
-                    var message = "Traitement non effectué";
+                    var message = tr.actionNotCompleted;
                     ScaffoldMessenger.of(context).showSnackBar(
-                        showSnackBar("Echec", message, Colors.red));
+                        showSnackBar(tr.fail, message, Colors.red));
                   }
                   await Future.delayed(const Duration(milliseconds: 500));
                   Navigator.pop(dialogContext, false);
@@ -280,7 +279,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                   child: Row(
                     children: [
                       Text(
-                        "${valeur == 0 ? "Faux": valeur == 1 ? "Vrai": "---"} ",
+                        "${valeur == 0 ? tr.falseV : valeur == 1 ? tr.trueV : "---"} ",
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -375,8 +374,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                                     });
                                   }
                                 } else {
-                                  _showMyDialog(
-                                      "Vous n'avez pas dorit a cette action");
+                                  _showMyDialog(tr.seepActionMessage);
                                 }
                                 await Future.delayed(
                                     const Duration(seconds: 1));
@@ -417,7 +415,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                   child: Row(
                     children: [
                       Text(
-                        "${valeur == 0 ? "Faux": valeur == 1 ? "Vrai": "---"} ",
+                        "${valeur == 0 ? tr.falseV : valeur == 1 ? tr.trueV : "---"} ",
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -573,7 +571,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Accès refusé'),
+          title:  Text(tr.accesDenied),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -633,7 +631,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                   child: Row(
                     children: [
                       Text(
-                        "${valeur == 0 ? "Faux": valeur == 1 ? "Vrai": "---"} ",
+                        "${valeur == 0 ? tr.falseV : valeur == 1 ? tr.trueV : "---"} ",
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -674,8 +672,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                                         currentMonth,
                                         numeroLigne);
                                   } else {
-                                    _showMyDialog(
-                                        "Vous n'avez pas droit à cette action");
+                                    _showMyDialog(tr.seepActionMessage);
                                   }
                                 },
                                 icon: const Icon(
@@ -754,8 +751,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                                           });
                                         }
                                       } else {
-                                        _showMyDialog(
-                                            "Vous n'avez pas droit à cette action");
+                                        _showMyDialog(tr.seepActionMessage);
                                       }
                                       if (entitePilotageController
                                               .entityAppartenance.value !=
@@ -842,7 +838,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                 child: Row(
                   children: [
                     Text(
-                      "${valeur == 0 ? "Faux" : valeur == 1 ? "Vrai": "---"} ",
+                      "${valeur == 0 ? tr.falseV : valeur == 1 ? tr.trueV : "---"} ",
                       textAlign: TextAlign.left,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
@@ -879,8 +875,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                                   renseignerLaDonnee(context, widget.indicateur,
                                       valeur, currentMonth, numeroLigne);
                                 } else {
-                                  _showMyDialog(
-                                      "Vous n'avez pas l'accès à éditeur.");
+                                  _showMyDialog(tr.seepActionMessage);
                                 }
                               },
                               icon: const Icon(
@@ -958,8 +953,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                                         });
                                       }
                                     } else {
-                                      _showMyDialog(
-                                          "Vous n'avez pas l'accès à validateur.");
+                                      _showMyDialog(tr.seepActionMessage);
                                     }
                                     if (entitePilotageController
                                             .entityAppartenance.value !=
@@ -1035,7 +1029,7 @@ class _RowIndicateurState extends State<RowIndicateur> {
                   renseignerDonneeCible(context, widget.indicateur, dataCible,
                       numeroLigne, currentMonth);
                 } else {
-                  _showMyDialog("Vous n'avez pas droit a cette action");
+                  _showMyDialog(tr.seepActionMessage);
                 }
               },
               icon: const Icon(
@@ -1057,9 +1051,9 @@ class _RowIndicateurState extends State<RowIndicateur> {
   Future validerIndicateur(
       bool valide, num? valeur, int numero, int colonne, String idLigne) async {
     if (valeur == null) {
-      var message = "La donnée n'est pas encore renseignée";
+      var message =tr.failValidationMessageA;
       ScaffoldMessenger.of(context)
-          .showSnackBar(showSnackBar("Echec", message, Colors.red));
+          .showSnackBar(showSnackBar(tr.fail, message, Colors.red));
     } else {
       var result = await tableauBordController.validerIndicateurMois(
         valide: valide,
@@ -1068,13 +1062,13 @@ class _RowIndicateurState extends State<RowIndicateur> {
       );
       if (result == true) {
         tableauBordController.updateDataIndicateur();
-        var message = "La donnée a été validée avec succès";
+        var message = tr.succesValidationMessage;
         ScaffoldMessenger.of(context).showSnackBar(
-            showSnackBar("Succès", message, Colors.green));
+            showSnackBar(tr.success, message, Colors.green));
       } else {
-        var message = "La donnée n'a pas été validée";
+        var message = tr.failValidationMessageB;
         ScaffoldMessenger.of(context)
-            .showSnackBar(showSnackBar("Echec", message, Colors.red));
+            .showSnackBar(showSnackBar(tr.fail, message, Colors.red));
       }
     }
   }
@@ -1083,14 +1077,14 @@ class _RowIndicateurState extends State<RowIndicateur> {
       bool valide, int numero, int colonne, String idLigne) async {
     var result = await tableauBordController.annulerValidationMois(
         valide: valide, numeroLigne: numero, colonne: colonne);
-    var message = "Validation annulée avec succès";
+    var message =tr.canceledValidationMessage;
     if (result == true) {
       ScaffoldMessenger.of(context).showSnackBar(
-          showSnackBar("Succès", message, Colors.green));
+          showSnackBar(tr.success, message, Colors.green));
     } else {
-      var message = "Validation non annulée";
+      var message =tr.failCanceledValidationMessage;
       ScaffoldMessenger.of(context)
-          .showSnackBar(showSnackBar("Echec", message, Colors.red));
+          .showSnackBar(showSnackBar(tr.fail, message, Colors.red));
     }
   }
 

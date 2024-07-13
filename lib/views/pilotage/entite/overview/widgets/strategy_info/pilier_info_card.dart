@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../../../constants/constant_colors.dart';
 import '../../../../../../constants/constant_double.dart';
@@ -91,9 +92,9 @@ class _PilierInfoCardState extends State<PilierInfoCard> {
             child: SizedBox(
               width: 50,height: 50, child: CircularProgressIndicator(),
             ),
-          ) : (status == -1 ) ? const Center(
+          ) : (status == -1 ) ?  Center(
             child: SizedBox(
-              width: 50,height: 50, child: Text("Aucune Donnée"),
+              width: 50,height: 50, child: Text(tr.noData),
             ),
           ) : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +135,7 @@ class _PilierInfoCardState extends State<PilierInfoCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "${entiteSuivi["indicateur_collectes"]} indicateurs${ entiteSuivi["indicateur_collectes"] > 1 ? "s" : "" } sur",
+                    "${entiteSuivi["indicateur_collectes"]} ${tr.indicators}${ entiteSuivi["indicateur_collectes"] > 1 ? "s" : "" } ${tr.on}",
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall!

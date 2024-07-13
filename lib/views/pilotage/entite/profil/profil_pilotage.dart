@@ -1,6 +1,7 @@
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
 import '../../../../constants/constant_double.dart';
@@ -15,10 +16,10 @@ class ProfilPilotage extends StatefulWidget {
 }
 
 class _ProfilPilotageState extends State<ProfilPilotage> with SingleTickerProviderStateMixin {
-  static const List<Tab> myTabs = <Tab>[
-    Tab(text: 'Informations Personnelles'),
-    Tab(text: 'Informations du Compte'),
-    Tab(text: 'Modifier mon mot de passe'),
+  static  List<Tab> myTabs = <Tab>[
+    Tab(text:tr.personalInformations),
+    Tab(text:tr.accountInformation),
+    Tab(text:tr.editPassword),
   ];
 
   late TabController _tabController;
@@ -61,17 +62,17 @@ class _ProfilPilotageState extends State<ProfilPilotage> with SingleTickerProvid
                       color: Colors.amber,
                       paintingStyle: PaintingStyle.fill,
                     )),
-                tabs:  const [
+                tabs:   [
                   CustomText(
-                    text: "Informations Personnelles",
+                    text:tr.personalInformations,
                     size: 15,
                   ),
                   CustomText(
-                    text: "Informations du Compte",
+                    text: tr.accountInformation,
                     size: 15,
                   ),
                   CustomText(
-                    text: "Modifier mon mot de passe",
+                    text:tr.editPassword,
                     size: 15,
                   ),
                 ],

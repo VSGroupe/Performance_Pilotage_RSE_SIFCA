@@ -33,7 +33,7 @@ class _ScreenPilotagePerformState extends State<ScreenPilotagePerform> {
 
   @override
   Widget build(BuildContext context) {
-    int width = MediaQuery.of(context).size.width.round();
+
     return Scaffold(
       body: Obx(() {
         bool isLoading = performsDataController.isLoading.value;

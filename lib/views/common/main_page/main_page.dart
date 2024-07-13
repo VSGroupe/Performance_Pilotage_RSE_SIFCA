@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../utils/utils.dart';
 import '../../../widgets/export_widget.dart';
@@ -46,11 +47,11 @@ class _MainPageState extends State<MainPage> {
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Accès refusé"),
+          title:  Text(tr.accesDenied),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                const Text("Vous n'avez pas accès à cet espace."),
+                 Text(tr.accesRefusedToSpace),
                 const SizedBox(
                   height: 20,
                 ),
@@ -125,7 +126,7 @@ class _MainPageState extends State<MainPage> {
           body: Column(
             children: [
               HeaderMainPage(
-                title: "Général",
+                title: tr.general,
                 mainPageData: data,
               ),
               Expanded(
@@ -149,9 +150,9 @@ class _MainPageState extends State<MainPage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   RichText(
-                                    text: const TextSpan(
-                                      text: "Bienvenue dans ",
-                                      style: TextStyle(
+                                    text:  TextSpan(
+                                      text: tr.greeting,
+                                      style: const TextStyle(
                                           fontSize: 35,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black),
@@ -186,28 +187,28 @@ class _MainPageState extends State<MainPage> {
                                       context.go("/gestion/home");
                                     },
                                     imagePath: "assets/images/image_gouv.jpg",
-                                    titreCadre: "Gestion",
+                                    titreCadre: tr.managementFrameTitle,
                                   ),
                                   CustomCadre(
                                     onTap: () async {
-                                      if (notAcces) {
-                                        _showMyDialog();
-                                        return false;
-                                      }
-                                      //context.go("/audit/accueil");
+                                      // if (notAcces) {
+                                      //   _showMyDialog();
+                                      //   return false;
+                                      // }
+                                      context.go("/audit/accueil");
                                     },
                                     imagePath: "assets/images/audit_rse.png",
-                                    titreCadre: "Evaluation",
+                                    titreCadre:tr.auditFrameTitle,
                                   ),
                                   CustomCadre(
                                     onTap: () {
-                                      EasyLoading.show(status: "Chargement ...");
+                                      EasyLoading.show(status: tr.loading);
                                       checkAccesPilotage(
                                           "${data["user"]["email"]}");
                                       EasyLoading.dismiss();
                                     },
                                     imagePath: "assets/images/pilotage_rse.jpg",
-                                    titreCadre: "Pilotage",
+                                    titreCadre: tr.controlFrameTitle,
                                   ),
                                   CustomCadre(
                                     onTap: () {
@@ -230,7 +231,7 @@ class _MainPageState extends State<MainPage> {
                               height: 50,
                               width: 50,
                               child: IconButton(
-                                tooltip: "Se déconnecter",
+                                tooltip: tr.logIn,
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.zero,
                                 style: IconButton.styleFrom(iconSize: 50),
@@ -244,10 +245,10 @@ class _MainPageState extends State<MainPage> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text("Voulez-vous quitter l'application ?"),
-                                        content: const SizedBox(
+                                        title:  Text(tr.logOutMessageTitle),
+                                        content:  SizedBox(
                                             width: 200,
-                                            child: Text("Cliquez sur Oui pour vous déconnecter.")),
+                                            child: Text(tr.logOutMessage)),
                                         actionsAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         actions: <Widget>[
@@ -255,7 +256,7 @@ class _MainPageState extends State<MainPage> {
                                             onPressed: () {
                                               Navigator.pop(context);
                                             },
-                                            child: const Text("Non"),
+                                            child:  Text(tr.no),
                                           ),
                                           OutlinedButton(
                                             onPressed: isDisconnecting
@@ -286,7 +287,7 @@ class _MainPageState extends State<MainPage> {
                                                       isDisconnecting = false;
                                                     });
                                                   },
-                                            child: const Text("Oui"),
+                                            child:  Text(tr.yes),
                                           ),
                                         ],
                                       );

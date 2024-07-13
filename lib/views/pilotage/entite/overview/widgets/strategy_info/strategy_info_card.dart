@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import '../../../../../../constants/constant_double.dart';
 import '../../../../../../helper/responsive.dart';
 import 'pilier_model.dart';
@@ -17,8 +18,7 @@ class StrategyInfoCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "Les Axes Stratégiques",
+            Text(tr.strategicAxes,
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ],
@@ -59,14 +59,14 @@ class _PilierInfoCardGridViewState extends State<PilierInfoCardGridView> {
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: demoPiliers.length,
+      itemCount: tr.abrLange.toLowerCase()=='en'  ?  enDemoPiliers.length : demoPiliers.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: widget.crossAxisCount,
         crossAxisSpacing: defaultPadding,
         mainAxisSpacing: defaultPadding,
         childAspectRatio: widget.childAspectRatio,
       ),
-      itemBuilder: (context, index) => PilierInfoCard(info: demoPiliers[index],annee: DateTime.now().year,),
+      itemBuilder: (context, index) => PilierInfoCard(info:  tr.abrLange.toLowerCase()=='en' ? enDemoPiliers[index] :demoPiliers[index] ,annee: DateTime.now().year,),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:get/get_utils/src/get_utils/get_utils.dart';
 
 class DestinataireWidget extends StatefulWidget {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import '../../../../../../models/pilotage/indicateur_model.dart';
 import '../../../../controllers/drop_down_controller.dart';
 import '/views/pilotage/controllers/tableau_controller.dart';
@@ -129,7 +130,7 @@ class _RowAxeState extends State<RowAxe> {
               numero: "1a",
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_1a",
-              enjeuTitle: "Gouvernance DD et stratégie",
+              enjeuTitle:tr.issue1,
               color: widget.color,
               indicateurs: indicateursList),
           const SizedBox(
@@ -139,7 +140,7 @@ class _RowAxeState extends State<RowAxe> {
               numero: "1b",
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_1b",
-              enjeuTitle: "Pilotage DD",
+              enjeuTitle:tr.issue1b,
               color: widget.color,
               indicateurs: indicateursList),
           const SizedBox(
@@ -149,7 +150,7 @@ class _RowAxeState extends State<RowAxe> {
               numero: "2",
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_2",
-              enjeuTitle: "Éthique des affaires et achats responsables",
+              enjeuTitle: tr.issue2,
               color: widget.color,
               indicateurs: indicateursList),
           const SizedBox(
@@ -159,8 +160,7 @@ class _RowAxeState extends State<RowAxe> {
               numero: "3",
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_3",
-              enjeuTitle:
-                  "Intégration des attentes DD des clients et consommateurs",
+              enjeuTitle:tr.issue3,
               color: widget.color,
               indicateurs: indicateursList),
           const SizedBox(
@@ -176,7 +176,7 @@ class _RowAxeState extends State<RowAxe> {
               numero: "4",
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_4",
-              enjeuTitle: "Égalité de traitement",
+              enjeuTitle: tr.issue4,
               color: widget.color,
               indicateurs: indicateursList),
           const SizedBox(
@@ -186,7 +186,7 @@ class _RowAxeState extends State<RowAxe> {
               numero: "5",
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_5",
-              enjeuTitle: "Conditions de travail",
+              enjeuTitle: tr.issue5,
               color: widget.color,
               indicateurs: indicateursList),
           const SizedBox(
@@ -196,7 +196,7 @@ class _RowAxeState extends State<RowAxe> {
               numero: "6",
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_6",
-              enjeuTitle: "Amélioration du cadre de vie",
+              enjeuTitle: tr.issue6,
               color: widget.color,
               indicateurs: indicateursList),
           const SizedBox(
@@ -212,7 +212,7 @@ class _RowAxeState extends State<RowAxe> {
               numero: "7",
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_7",
-              enjeuTitle: "Inclusion sociale ét dévéloppement des communautés",
+              enjeuTitle: tr.issue7,
               color: widget.color,
               indicateurs: indicateursList),
           const SizedBox(
@@ -228,7 +228,7 @@ class _RowAxeState extends State<RowAxe> {
               numero: "8",
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_8",
-              enjeuTitle: "Changement climatique et déforestation",
+              enjeuTitle: tr.issue8,
               color: widget.color,
               indicateurs: indicateursList),
           const SizedBox(
@@ -238,7 +238,7 @@ class _RowAxeState extends State<RowAxe> {
               numero: "9",
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_9",
-              enjeuTitle: "Gestion et traitement de l’eau",
+              enjeuTitle:tr.issue9,
               color: widget.color,
               indicateurs: indicateursList),
           const SizedBox(
@@ -248,7 +248,7 @@ class _RowAxeState extends State<RowAxe> {
               numero: "10",
               idPilier: widget.idAxe,
               idEnjeu: "enjeu_10",
-              enjeuTitle: "Gestion des ressources et déchets",
+              enjeuTitle: tr.issue10b,
 
               color: widget.color,
               indicateurs: indicateursList),

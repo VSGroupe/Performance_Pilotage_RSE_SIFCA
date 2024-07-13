@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import '../../../../../models/pilotage/data_indicateur_model.dart';
 import '../../../../../models/pilotage/indicateur_model.dart';
 import '/views/pilotage/controllers/tableau_controller.dart';
@@ -62,34 +63,34 @@ class _DashBoardListViewAdminState extends State<DashBoardListViewAdmin> {
     return Column(
       children: [
         RowAxeGeneral(
-          title: "GÉNÉRAL",
+          title:tr.axe0,
           color: Colors.brown,
           idAxe: "axe_0",
           indicateurs: listIndicateurs,
         ),
         RowAxe(
-          title: "Gouvernance et éthique",
+          title: tr.axe1,
           color: const Color(0xFF3F93D0),
           idAxe: "axe_1",
           imagePath: "assets/icons/gouvernance.png",
           indicateurs: listIndicateurs,
         ),
         RowAxe(
-          title: "Emploi et conditions de travail",
+          title: tr.axe2,
           color: const Color(0xFFEABF64),
           idAxe: "axe_2",
           imagePath: "assets/icons/economie.png",
           indicateurs: listIndicateurs,
         ),
         RowAxe(
-          title: "Communauté et innovation sociétale",
+          title:tr.axe3,
           color: const Color(0xFFFAAF7B),
           idAxe: "axe_3",
           imagePath: "assets/icons/social.png",
           indicateurs: listIndicateurs,
         ),
         RowAxe(
-          title: "Préservation de l’Environnement",
+          title:tr.axe4,
           color: const Color(0xFF97C3A8),
           idAxe: "axe_4",
           imagePath: "assets/icons/environnement.png",

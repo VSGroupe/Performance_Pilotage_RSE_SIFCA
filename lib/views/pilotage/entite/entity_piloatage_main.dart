@@ -63,6 +63,23 @@ class _EntityPilotageMainState extends State<EntityPilotageMain> {
     return true;
   }
 
+  Future<List>getSousEntitesName(List sousEntites) async {
+    if (sousEntites.isNotEmpty) {
+      List<String> result = [];
+      for (String? entity in sousEntites) {
+        List<Map<String, dynamic>> response = await supabase
+            .from('Entites')
+            .select('nom_entite')
+            .eq('id_entite', entity!);
+        String entityName = response[0]['nom_entite'];
+        result.add(entityName);
+      }
+      return result;
+    } else {
+      return [];
+    }
+  }
+
   Future<Map> chekUserAccesPilotage() async {
     var data = {};
 
@@ -119,7 +136,7 @@ class _EntityPilotageMainState extends State<EntityPilotageMain> {
     //print(checkEntite);
     data["user"] = user[0];
     data["accesPilotage"] = accesPilotage[0];
-    final currentEntite = GoRouter.of(context).location.split("/")[3];
+    final currentEntite = GoRouter.of(context)!.location.split("/")[3];
     final responseAppartenance = await supabase
         .from('Entites')
         .select('groupe')
@@ -144,8 +161,9 @@ class _EntityPilotageMainState extends State<EntityPilotageMain> {
         responseFiliereAndFialiale.first["filiere"];
     entitePilotageController.langue = responseLanguage.first["langue"];
     try {
-      entitePilotageController.sousEntite.value =
-          responseSousEntite[0]["sous_entites"];
+      entitePilotageController.sousEntite.value = responseSousEntite[0]["sous_entites"];
+      entitePilotageController.sousEntiteName.value =
+          await getSousEntitesName(responseSousEntite[0]["sous_entites"]);
     } catch (e) {
       print(e);
     }

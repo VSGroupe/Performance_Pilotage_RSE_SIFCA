@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'admin_controller.dart';
 import 'widgets/contributeurs_screen.dart';
 import 'widgets/indicateurs_screen.dart';
@@ -18,16 +19,16 @@ class _AdministrationPilotageState extends State<AdministrationPilotage> {
       final adminCard = adminPilotageController.titleCard.value;
       return  Column(
         children: [
-          const Row(
+           Row(
             children: [
-              ButtonCard(title: "Contributeurs",),
-              SizedBox(width: 10,),
-              ButtonCard(title: "Indicateurs",),
-              SizedBox(width: 10,),
+              ButtonCard(title: tr.contributeurs,),
+             const SizedBox(width: 10,),
+              ButtonCard(title: tr.indicators),
+              const  SizedBox(width: 10,),
             ],
           ),
           const SizedBox(height: 10,),
-          Expanded(child: adminCard == "Contributeurs" ?  const ContributeurScreen() : const IndicateursScreen() )
+          Expanded(child: adminCard == tr.contributeurs ?  const ContributeurScreen() : const IndicateursScreen() )
         ],
       );
     });

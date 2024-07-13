@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../api/supabse_db.dart';
 import '../../../controller/time_system_controller.dart';
@@ -67,18 +68,18 @@ class TableauBordController extends GetxController {
   ];
 
   var listMonth = [
-    "Janvier",
-    "Février",
-    "Mars",
-    "Avril",
-    "Mai",
-    "Juin",
-    "Juillet",
-    "Août",
-    "Septembre",
-    "Octobre",
-    "Novembre",
-    "Décembre"
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december"
   ];
       static const Map<String, String> translations = {
       "Agricole": "Agricultural",
@@ -124,7 +125,7 @@ class TableauBordController extends GetxController {
       if (processListUser!.isNotEmpty) {
         for (var process in processListUser) {
           for (var instance in indicateursList) {
-            if (entitePilotageController.langue == "fr"){
+            if (tr.abrLange.toLowerCase() == "fr"){
                 if (process == instance.processus) {
               userIncateurList.add(instance);
             }
@@ -202,7 +203,7 @@ class TableauBordController extends GetxController {
   }
 
   void initialisation(BuildContext context) async {
-    langue = entitePilotageController.langue;
+    langue = tr.abrLange.toLowerCase();
     allYearsList.value = TimeSystemController.years;
     //dataCibleList.value = await dataBaseController.getValeurCibleIndicateur();
     isLoading.value = true;
