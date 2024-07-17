@@ -72,7 +72,7 @@ class _CollecteStatusState extends State<CollecteStatus> {
                   ),
                   CustomText(
                     text:
-                        " (${json["collecte"]} indicateurs${json["collecte"] > 1 ? "s" : ""} renseigné${json["collecte"] > 1 ? "s" : ""}/ ${json["total"]})",
+                        " (${json["collecte"]} indicateur${json["collecte"] > 1 ? "s" : ""} renseigné${json["collecte"] > 1 ? "s" : ""}/ ${json["total"]})",
                     size: 15,
                     weight: FontWeight.bold,
                   ),

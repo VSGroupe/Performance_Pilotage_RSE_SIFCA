@@ -34,7 +34,7 @@ dependencies:
   syncfusion_flutter_xlsio: ^25.1.42
   path_provider: ^2.0.1
   open_file: ^3.2.1
-  universal_html: ^2.0.8
+  universal_html: ^2.2.4
   toggle_switch: ^2.1.0
   dynamic_table: ^0.0.1-beta.2
 

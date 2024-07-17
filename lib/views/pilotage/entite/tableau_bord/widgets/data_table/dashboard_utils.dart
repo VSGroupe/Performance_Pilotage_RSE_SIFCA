@@ -276,18 +276,24 @@ class _ContentEditionState extends State<ContentEdition> {
         // cas numerateur L137
         List<int> listTemp = purcentIndicatorsKeys[ligne]!;
         num? numerateur = dataListIndicator[listTemp[1] - 1][month];
-        num? denominateurItem = dataListIndicator[listTemp[0]][month];
+        num? denominateurItem = dataListIndicator[listTemp[0] - 1][month];
         num? denominateur = AplusB(value, denominateurItem);
+        // print("denominateurItem = $denominateurItem");
+        // print("denominateur = $denominateur");
         // cas numerateurs L63 + L64
         num? numerateurA = dataListIndicator[listTemp[2] - 1][month];
         num? numerateurB = dataListIndicator[listTemp[3] - 1][month];
         num? numerateurAB = AplusB(numerateurA, numerateurB);
+        // print("L137 = $numerateur");
+        // print("L64 + L63 = $numerateurAB");
         if (numerateur != null && denominateur != null) {
           if (numerateur > denominateur) {
+            //print("numerateur > denominateur : ${numerateur > denominateur}");
             return false;
           }
         } else if (numerateurAB != null && denominateur != null) {
           if (numerateurAB > denominateur) {
+            //print("numerateurAB > denominateur : ${numerateurAB > denominateur}");
             return false;
           }
         }
