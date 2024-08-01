@@ -448,7 +448,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get developpementDurable => 'SD';
 
   @override
-  String get finances => 'finance';
+  String get finances => 'Finance';
 
   @override
   String get achats => 'Purchases';
@@ -958,4 +958,19 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get searchBarManageUser => 'Search by email, name or first name';
+
+  @override
+  String get validatorEditAccesTooltip => 'Validator capable of collecting';
+
+  @override
+  String get validatorNoEditAccesTooltip => 'Validator unable to collect';
+
+  @override
+  String get alert => 'Warning';
+
+  @override
+  String get checkboxListAlertMessage => 'Please select at least one item.';
 }

@@ -1,0 +1,50 @@
+const Map<String, String> processTransFR = {
+  "Agricultural": "Agricole",
+  "SD": "Développement Durable",
+  "Finance": "Finances",
+  "Purchases": "Achats",
+  "Legal": "Juridique",
+  "HR": "Ressources Humaines",
+  "Doctor": "Médecin",
+  "Infrastructure": "Infrastructures",
+  "HR / Legal": "Ressources Humaines / Juridique",
+  "SM / Logistics": "Gestion des Stocks / Logistique",
+  "Emissions": "Emissions",
+  "Factory": "Usine",
+  "Agricole": "Agricole",
+  "Finances": "Finances",
+  "Juridique": "Juridique",
+  "Achats": "Achats",
+  "Usine": "Usine",
+  "Infrastructures": "Infrastructures",
+  "Médecin": "Médecin",
+  "Ressources Humaines": "Ressources Humaines",
+  "Ressources Humaines / Juridique": "Ressources Humaines / Juridique",
+  "Développement Durable": "Développement Durable",
+  "Gestion des Stocks / Logistique": "Gestion des Stocks / Logistique",
+};
+
+const Map<String, String> processTransEN = {
+  "Emissions": "Emissions",
+  "Agricole": "Agricultural",
+  "Finances": "Finance",
+  "Juridique": "Legal",
+  "Achats": "Purchases",
+  "Usine": "Factory",
+  "Infrastructures": "Infrastructure",
+  "Médecin": "Doctor",
+  "Ressources Humaines": "HR",
+  "Ressources Humaines / Juridique": "HR / Legal",
+  "Développement Durable": "SD",
+  "Gestion des Stocks / Logistique": "SM / Logistics",
+};
+
+  const Map<String, String> accesToDoc = {
+    "Spectateur": "est_spectateur",
+    "Editeur": "est_editeur",
+    "Validateur": "est_validateur",
+    "Admin": "est_admin",
+    "Validator": "est_validateur",
+    "Editor": "est_editeur",
+    "Spectator": "est_spectateur"
+  };

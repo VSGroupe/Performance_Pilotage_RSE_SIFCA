@@ -62,20 +62,20 @@ class _InfosCompteState extends State<InfosCompte> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomText(
+                            const CustomText(
                               text: "Email utilisateur",
                               size: 15,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             textNonModifiable("${widget.accesPilotageModel.email}"),
                           ],
                         )),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
-                    Expanded(
+                    const Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -90,18 +90,18 @@ class _InfosCompteState extends State<InfosCompte> {
                             //     getAccesType(widget.accesPilotageModel)),
                           ],
                         )),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomText(
+                            const CustomText(
                               text: "Langue",
                               size: 15,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             MenuDeroulant(
@@ -124,7 +124,7 @@ class _InfosCompteState extends State<InfosCompte> {
                 ),
               )),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Center(
@@ -140,8 +140,8 @@ class _InfosCompteState extends State<InfosCompte> {
                   border: Border.all(
                     color: Colors.amber,
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(40))),
-              child: Center(
+                  borderRadius: const BorderRadius.all(Radius.circular(40))),
+              child: const Center(
                   child: CustomText(
                     text: "Enregistrer",
                     size: 20,

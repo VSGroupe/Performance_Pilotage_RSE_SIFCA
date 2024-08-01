@@ -978,7 +978,7 @@ abstract class AppLocalizations {
   /// No description provided for @finances.
   ///
   /// In en, this message translates to:
-  /// **'finance'**
+  /// **'Finance'**
   String get finances;
 
   /// No description provided for @achats.
@@ -1838,6 +1838,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{calcul, select ,  average{Average} sum{Sum} lastmonth{Last month entered} other{__}}'**
   String typecalcul(String calcul);
+
+  /// No description provided for @searchBarManageUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by email, name or first name'**
+  String get searchBarManageUser;
+
+  /// No description provided for @validatorEditAccesTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Validator capable of collecting'**
+  String get validatorEditAccesTooltip;
+
+  /// No description provided for @validatorNoEditAccesTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Validator unable to collect'**
+  String get validatorNoEditAccesTooltip;
+
+  /// No description provided for @alert.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get alert;
+
+  /// No description provided for @checkboxListAlertMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select at least one item.'**
+  String get checkboxListAlertMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

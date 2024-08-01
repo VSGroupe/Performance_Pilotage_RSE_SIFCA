@@ -290,6 +290,11 @@
     "submit":"Soumettre",
     "field":"Champ",
     "typeoperation":"{operation, select ,  calculed{Calculé} primary{Primaire} test{Test} other{__}}",
-    "typecalcul":"{calcul, select ,  average{Moyenne} sum{Somme} lastmonth{Dernier mois renseigné} other{__}}"
+    "typecalcul":"{calcul, select ,  average{Moyenne} sum{Somme} lastmonth{Dernier mois renseigné} other{__}}",
+    "searchBarManageUser": "Recherche par email, nom ou prénom",
+    "validatorEditAccesTooltip": "Validateur pouvant collecter",
+    "validatorNoEditAccesTooltip": "Validateur ne pouvant pas collecter",
+    "alert": "Avertissement",
+    "checkboxListAlertMessage": "Veuillez sélectionner au moins un élément."
     
 }

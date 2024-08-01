@@ -35,11 +35,21 @@ class ExportDataController {
     for (int col = 1; col <= headers.length; col++) {
       sheet.getRangeByIndex(1, col).setText(headers[col - 1]);
     }
-    sheet.getRangeByIndex(1, 1).columnWidth = 10;
-    sheet.getRangeByIndex(1, 2).columnWidth = 15;
-    sheet.getRangeByIndex(1, 3).columnWidth = 100;
-    sheet.getRangeByIndex(1, 4).columnWidth = 15;
-    sheet.getRangeByIndex(1, 5).columnWidth = 15;
+    sheet
+        .getRangeByIndex(1, 1)
+        .columnWidth = 10;
+    sheet
+        .getRangeByIndex(1, 2)
+        .columnWidth = 15;
+    sheet
+        .getRangeByIndex(1, 3)
+        .columnWidth = 100;
+    sheet
+        .getRangeByIndex(1, 4)
+        .columnWidth = 15;
+    sheet
+        .getRangeByIndex(1, 5)
+        .columnWidth = 15;
 
     final List<dynamic> listData = mapData["data"];
     for (var row = 0; row < listData.length; row++) {
@@ -104,8 +114,8 @@ class ExportDataController {
 
     // Créer un élément <a> pour télécharger le fichier PDF
     html.AnchorElement(href: url)
-      ..setAttribute("download",
-          "indicateurs_performance_${entite}_${annne}_$version.pdf")
+      ..setAttribute(
+          "download", "indicateurs_performance_${entite}_${annne}_$version.pdf")
       ..click(); // Simuler le clic sur le lien pour démarrer le téléchargement
 
     // Libérer l'URL de l'objet blob après le téléchargement
@@ -113,25 +123,66 @@ class ExportDataController {
   }
 
   List<List<String>> getRows(List<dynamic> datas, dynamic annee) {
+    List sousEntites = entitePilotageController.sousEntite;
+    List sousEntitesNames = entitePilotageController.sousEntiteName;
+
     List<String> initialRow = [
-      '#',
       "Référence",
       'Indicateurs',
       'Unité',
-      'Réalisé $annee'
+      'Réalisé $annee',
+      'Janvier $annee',
+      'Fevrier $annee',
+      'Mars $annee',
+      'Avril $annee',
+      'Mai $annee',
+      'Juin $annee',
+      'Juillet $annee',
+      'Aout $annee',
+      'Septembre $annee',
+      'Octobre $annee',
+      'Novembre $annee',
+      'Decembre $annee',
     ];
+
+    if (sousEntites.isNotEmpty) {
+      for (String sousEntiteName in sousEntitesNames) {
+        initialRow.add("$sousEntiteName\n Realise $annee");
+      }
+    }
     final List<List<String>> result = [initialRow];
 
     for (var data in datas) {
       var a = "${data["intitule"]}".replaceAll('’', "'");
       var intutle = a.replaceAll("…", "...");
       result.add([
-        "${data["numero"]}",
         "${data["reference"]}",
         intutle,
         "${data["unite"]}",
         "${data["realise"] ?? "---"}",
+        "${data["dataJan"] ?? "---"}",
+        "${data["dataFeb"] ?? "---"}",
+        "${data["dataMar"] ?? "---"}",
+        "${data["dataApr"] ?? "---"}",
+        "${data["dataMay"] ?? "---"}",
+        "${data["dataJun"] ?? "---"}",
+        "${data["dataJul"] ?? "---"}",
+        "${data["dataAug"] ?? "---"}",
+        "${data["dataSep"] ?? "---"}",
+        "${data["dataOct"] ?? "---"}",
+        "${data["dataNov"] ?? "---"}",
+        "${data["dataDec"] ?? "---"}",
+        "${data["###"]}"
       ]);
+
+      List<String> lastElement = result[result.length - 1];
+
+      if (sousEntites.isNotEmpty) {
+        for (int i = 0; i < sousEntites.length; i++) {
+          lastElement.add("${data["sousEntite$i"] ?? "---"}");
+        }
+        result[result.length - 1] = lastElement;
+      }
     }
 
     return result;
@@ -149,108 +200,161 @@ class ExportDataController {
   }
 
   Future<Uint8List> generatePDF(Map<String, dynamic> mapData) async {
-    final logoSFICA = await rootBundle.load('assets/logos/logo_sifca_bon.png');
-    final Uint8List bytesLogoSFICA = logoSFICA.buffer.asUint8List();
-    final Uint8List? bytesLogoFiliale = entitePilotageController.bytesLogo;
+    try {
+      final logoSFICA = await rootBundle.load(
+          'assets/logos/logo_sifca_bon.png');
+      final Uint8List bytesLogoSFICA = logoSFICA.buffer.asUint8List();
+      final Uint8List? bytesLogoFiliale = entitePilotageController.bytesLogo;
 
-    final List<dynamic> allData = mapData["data"];
+      final List<dynamic> allData = mapData["data"];
 
-    // Create a PDF document
-    final pdf = pw.Document();
+      // Load the fonts
+      final fontRegular =
+      pw.Font.ttf(await rootBundle.load('assets/fonts/Roboto-Regular.ttf'));
+      final fontBold =
+      pw.Font.ttf(await rootBundle.load('assets/fonts/Roboto-Bold.ttf'));
 
-    // Add the table to the PDF
-    pdf.addPage(
-      pw.MultiPage(
-        margin: const pw.EdgeInsets.only(
-            left: 10, right: 10, top: 20, bottom: 20), // Ajuster les marges ici
-        build: (pw.Context context) {
-          return [
-            pw.Header(
-              level: 0,
-              child: pw.Container(
-                  height: 50,
-                  child: pw.Row(
-                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                      children: [
-                        pw.Image(
-                          pw.MemoryImage(
-                            bytesLogoSFICA,
+      // Create a PDF document
+      final pdf = pw.Document();
+
+      const columnsPerPage = 16; // Adjust this number based on your needs
+
+      // Generate the header
+      final header = [
+        "Référence",
+        'Indicateurs',
+        'Unité',
+        'Réalisé ${mapData["annee"]}',
+        'Janvier ${mapData["annee"]}',
+        'Fevrier ${mapData["annee"]}',
+        'Mars ${mapData["annee"]}',
+        'Avril ${mapData["annee"]}',
+        'Mai ${mapData["annee"]}',
+        'Juin ${mapData["annee"]}',
+        'Juillet ${mapData["annee"]}',
+        'Aout ${mapData["annee"]}',
+        'Septembre ${mapData["annee"]}',
+        'Octobre ${mapData["annee"]}',
+        'Novembre ${mapData["annee"]}',
+        'Decembre ${mapData["annee"]}',
+      ];
+
+      final rows = getRows(allData, mapData["annee"]);
+
+      // Split columns into multiple pages if necessary
+      for (var i = 0; i < header.length; i += columnsPerPage) {
+        final chunkHeader = header.sublist(
+          i,
+          i + columnsPerPage > header.length ? header.length : i +
+              columnsPerPage,
+        );
+
+        final chunkRows = rows.map((row) {
+          return row.sublist(
+            i,
+            i + columnsPerPage > row.length ? row.length : i + columnsPerPage,
+          );
+        }).toList();
+
+        pdf.addPage(
+          pw.MultiPage(
+            pageFormat: PdfPageFormat.a4.landscape,
+            // margin: const pw.EdgeInsets.only(
+            //     left: 10, right: 10, top: 20, bottom: 20),
+            build: (pw.Context context) =>
+            [
+              pw.Header(
+                level: 0,
+                child: pw.Container(
+                    height: 50,
+                    child: pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Image(
+                            pw.MemoryImage(
+                              bytesLogoSFICA,
+                            ),
+                            width: 80,
+                            height: 40,
                           ),
-                          width: 80, // Adjust width as needed
-                          height: 40, // Adjust height as needed
-                        ),
-                        pw.Text('Indicateurs de Performance RSE',
-                            style: pw.TextStyle(
-                                color: getColor(mapData["color"]),
-                                fontSize: 20,
-                                fontWeight: pw.FontWeight.bold)),
-                        bytesLogoFiliale != null
-                            ? pw.Image(
-                                pw.MemoryImage(
-                                  bytesLogoFiliale,
-                                ),
-                                width: 80, // Adjust width as needed
-                                height: 40, // Adjust height as needed
-                              )
-                            : pw.Container(),
-                      ])),
-            ),
-            pw.SizedBox(height: 5),
-            pw.Row(children: [
-              pw.Text("Entreprise : "),
-              pw.Text("${mapData["entreprise"]}",
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
-            ]),
-            pw.SizedBox(height: 5),
-            pw.Row(children: [
-              pw.Text("Filiale : "),
-              pw.Text("${mapData["filiale"]}",
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
-            ]),
-            pw.SizedBox(height: 5),
-            pw.Row(children: [
-              pw.Text("Entité : "),
-              pw.Text("${mapData["entite"]}",
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
-            ]),
-            pw.SizedBox(height: 5),
-            pw.Row(children: [
-              pw.Text("Année : "),
-              pw.Text("${mapData["annee"]}",
-                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
-            ]),
-            pw.SizedBox(height: 10),
-            pw.TableHelper.fromTextArray(
-              columnWidths: {
-                0: const pw.FixedColumnWidth(50),
-                1: const pw.FixedColumnWidth(100),
-                3: const pw.FixedColumnWidth(85),
-                4: const pw.FixedColumnWidth(140),
-              },
-              context: context,
-              border: pw.TableBorder.all(),
-              headerStyle: pw.TextStyle(
-                fontSize: 10,
-                fontWeight: pw.FontWeight.bold,
-                color: PdfColors.white,
+                          pw.Text('Indicateurs de Performance RSE',
+                              style: pw.TextStyle(
+                                  font: fontBold,
+                                  color: getColor(mapData["color"]),
+                                  fontSize: 20,
+                                  fontWeight: pw.FontWeight.bold)),
+                          bytesLogoFiliale != null
+                              ? pw.Image(
+                            pw.MemoryImage(
+                              bytesLogoFiliale,
+                            ),
+                            width: 80,
+                            height: 40,
+                          )
+                              : pw.Container(),
+                        ])),
               ),
-              cellStyle: const pw.TextStyle(fontSize: 10),
-              oddRowDecoration:
-                  const pw.BoxDecoration(color: PdfColor.fromInt(0xFFE5E5E5)),
-              headerDecoration:
-                  pw.BoxDecoration(color: getColor(mapData["color"])),
-              rowDecoration: const pw.BoxDecoration(
-                border: pw.Border(
-                    bottom: pw.BorderSide(color: PdfColors.grey, width: .5)),
+              pw.SizedBox(height: 5),
+              pw.Row(children: [
+                pw.Text(
+                    "Entreprise : ", style: pw.TextStyle(font: fontRegular)),
+                pw.Text("${mapData["entreprise"]}",
+                    style: pw.TextStyle(
+                        font: fontBold, fontWeight: pw.FontWeight.bold))
+              ]),
+              pw.SizedBox(height: 5),
+              pw.Row(children: [
+                pw.Text("Filiale : ", style: pw.TextStyle(font: fontRegular)),
+                pw.Text("${mapData["filiale"]}",
+                    style: pw.TextStyle(
+                        font: fontBold, fontWeight: pw.FontWeight.bold))
+              ]),
+              pw.SizedBox(height: 5),
+              pw.Row(children: [
+                pw.Text("Entité : ", style: pw.TextStyle(font: fontRegular)),
+                pw.Text("${mapData["entite"]}",
+                    style: pw.TextStyle(
+                        font: fontBold, fontWeight: pw.FontWeight.bold))
+              ]),
+              pw.SizedBox(height: 5),
+              pw.Row(children: [
+                pw.Text("Année : ", style: pw.TextStyle(font: fontRegular)),
+                pw.Text("${mapData["annee"]}",
+                    style: pw.TextStyle(
+                        font: fontBold, fontWeight: pw.FontWeight.bold))
+              ]),
+              pw.SizedBox(height: 10),
+              pw.TableHelper.fromTextArray(
+                context: context,
+                border: pw.TableBorder.all(),
+                headerStyle: pw.TextStyle(
+                  font: fontBold,
+                  fontSize: 10,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
+                ),
+                cellStyle: pw.TextStyle(font: fontRegular, fontSize: 10),
+                oddRowDecoration:
+                const pw.BoxDecoration(color: PdfColor.fromInt(0xFFE5E5E5)),
+                headerDecoration:
+                pw.BoxDecoration(color: getColor(mapData["color"])),
+                rowDecoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                      bottom: pw.BorderSide(color: PdfColors.grey, width: .5)),
+                ),
+                headers: chunkHeader,
+                data: chunkRows,
               ),
-              data: getRows(allData, mapData["annee"]),
-            ),
-          ];
-        },
-      ),
-    );
+            ],
+          ),
+        );
+      }
 
-    // Save the PDF as a Uint8List
-    return await pdf.save();
+      // Save the PDF as a Uint8List
+      return await pdf.save();
+    } catch (e) {
+      print("Error generating PDF: $e");
+      rethrow;
+    }
   }
 }

@@ -147,7 +147,7 @@
     "passwordForgetten": "I've forgotten my password",
     "agricole": "Agricultural",
     "developpementDurable": "SD",
-    "finances": "finance",
+    "finances": "Finance",
     "achats": "Purchases",
     "juridique": "Legal",
     "ressourcesHumaines": "HR",
@@ -290,6 +290,11 @@
        "submit":"Submit",
        "field":"Field",
        "typeoperation":"{operation, select ,  calculed{Calculed} primary{Primary} test{Test} other{__}}",
-        "typecalcul":"{calcul, select ,  average{Average} sum{Sum} lastmonth{Last month entered} other{__}}"
+        "typecalcul":"{calcul, select ,  average{Average} sum{Sum} lastmonth{Last month entered} other{__}}",
+        "searchBarManageUser": "Search by email, name or first name",
+        "validatorEditAccesTooltip": "Validator capable of collecting",
+        "validatorNoEditAccesTooltip": "Validator unable to collect",
+        "alert": "Warning",
+        "checkboxListAlertMessage": "Please select at least one item."
 
 }

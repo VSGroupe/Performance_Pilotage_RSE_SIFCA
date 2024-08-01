@@ -25,7 +25,7 @@ class _CollecteStatusState extends State<CollecteStatus> {
         list.add(data[month]);
       }
     }
-    num? ratio = (list.length / dataValeursTableau.length).toDouble();
+    num? ratio = ((list.length / dataValeursTableau.length) * 100).toDouble();
 
     return {
       "total": dataValeursTableau.length,

@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:perf_rse/api/send_mail.dart';
+import 'package:perf_rse/constants/constant_translation_maps.dart';
+import 'package:perf_rse/helper/helper_methods.dart';
 import 'package:perf_rse/models/pilotage/acces_pilotage_model.dart';
 import 'package:perf_rse/utils/i18n.dart';
-import 'package:perf_rse/utils/operation_liste.dart';
 import 'package:perf_rse/views/pilotage/controllers/entite_pilotage_controler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -20,13 +22,18 @@ class ContributeurScreen extends StatefulWidget {
 }
 
 class _ContributeurScreenState extends State<ContributeurScreen> {
-  ContributeurDataGridSource contributeurDataGridSource =
-      ContributeurDataGridSource(contributeurs: []);
+  late ContributeurDataGridSource contributeurDataGridSource;
   final ProfilPilotageController profilcontroller = Get.find();
   final EntitePilotageController entitePilotageController = Get.find();
+  final TextEditingController _textEditingController = TextEditingController();
 
   final supabase = Supabase.instance.client;
+  List<ContributeurModel> filteredContributorsList = [];
+  List<ContributeurModel> contributorsList = [];
+
   bool isLoading = false;
+
+  bool edition = false;
 
   List<String> entitesName = [];
   List<String> userEntitesName = [];
@@ -97,15 +104,10 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
   Future<List<ContributeurModel>> translateEnProcessContributeurs(
       List<ContributeurModel> contributeurs) async {
     final List<ContributeurModel> currentContributeur = [];
-    Set<String> result = {};
     for (var contrib in contributeurs) {
-      for (var element in processAll) {
-        if (element.containsKey("nom_processus_en") &&
-            element["nom_processus_en"] != null) {
-          result.add(element["nom_processus_en"]);
-        }
-      }
-      contrib.accesPilotageModel!.processus = result.toList();
+      List<String>? userProcess = contrib.accesPilotageModel!.processus;
+      contrib.accesPilotageModel!.processus =
+          getTranslationCheckListProcess(userProcess);
       currentContributeur.add(contrib);
     }
 
@@ -165,24 +167,63 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
   }
 
   void refreshData() async {
-    final response = await getListContributeurs();
-    final definiivereponse = tr.abrLange.toLowerCase() == 'en'
-        ? await translateEnProcessContributeurs(response)
-        : response;
-
-    setState(() {
-      contributeurDataGridSource =
-          ContributeurDataGridSource(contributeurs: definiivereponse);
-    });
+    try {
+      final response = await getListContributeurs();
+      contributorsList = tr.abrLange.toLowerCase() == 'en'
+          ? await translateEnProcessContributeurs(response)
+          : response;
+      filteredContributorsList = contributorsList;
+      setState(() {
+        contributeurDataGridSource = ContributeurDataGridSource(
+            contributeurs: filteredContributorsList,
+            edition: edition,
+            adminEntitiesNamesList: userEntitesName,
+            entitiesNamesList: entitesName,
+            entitiesIdList: entitesId,
+            processusList: processList);
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   late bool isWebOrDesktop;
 
   @override
   void initState() {
-    refreshData();
-    loadEntite();
     super.initState();
+    loadEntite();
+    refreshData();
+    _textEditingController.addListener(() {
+      _onSearchTextChanged(_textEditingController.text);
+    });
+  }
+
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchTextChanged(String text) {
+    try {
+      setState(() {
+        filteredContributorsList = contributorsList
+            .where((item) =>
+                item.email!.toLowerCase().contains(text.toLowerCase()) ||
+                item.nom!.toLowerCase().contains(text.toLowerCase()) ||
+                item.prenom!.toLowerCase().contains(text.toLowerCase()))
+            .toList();
+        contributeurDataGridSource = ContributeurDataGridSource(
+            contributeurs: filteredContributorsList,
+            edition: edition,
+            adminEntitiesNamesList: userEntitesName,
+            entitiesNamesList: entitesName,
+            entitiesIdList: entitesId,
+            processusList: processList);
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   SfDataGridTheme _buildDataGridForWeb() {
@@ -329,6 +370,68 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
             ),
           ),
         ),
+        const SizedBox(width: 10),
+        Text(tr.edition),
+        const SizedBox(width: 5),
+        Switch(
+          value: edition,
+          onChanged: (value) async {
+            setState(() {
+              edition = value;
+            });
+            refreshData();
+          },
+          activeColor: Colors.blue,
+        ),
+        const SizedBox(width: 10),
+        SizedBox(
+          width: 300,
+          child: TextField(
+            controller: _textEditingController,
+            decoration: InputDecoration(
+              hintText: tr.searchBarManageUser,
+              border: const OutlineInputBorder(),
+            ),
+            onChanged: _onSearchTextChanged,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Tooltip(
+          message:
+              tr.validatorEditAccesTooltip, // Validator capable of collecting
+          child: Row(
+            children: [
+              Text(
+                tr.typeacccesList("validator"),
+                style: const TextStyle(color: Color.fromARGB(255, 33, 33, 243)),
+              ),
+              const Icon(
+                Icons.info_outline,
+                color: Color.fromARGB(255, 0, 0, 0),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Tooltip(
+          message:
+              tr.validatorNoEditAccesTooltip, // Validator unable to collect
+          child: Row(
+            children: [
+              Text(
+                tr.typeacccesList("validator"),
+                style:
+                    const TextStyle(color: Color.fromARGB(255, 12, 150, 157)),
+              ),
+              const Icon(
+                Icons.info_outline,
+                color: Color.fromARGB(255, 0, 0, 0),
+              ),
+            ],
+          ),
+        ),
         Expanded(child: Container()),
         ElevatedButton(
             onPressed: () {
@@ -339,7 +442,7 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
                     return AlertDialog(
                       title: Text(
                         tr.addContributeur,
-                        style: TextStyle(color: Colors.blue),
+                        style: const TextStyle(color: Colors.blue),
                       ),
                       contentPadding: const EdgeInsets.all(30),
                       shape: RoundedRectangleBorder(
@@ -399,13 +502,31 @@ class _ContributeurScreenState extends State<ContributeurScreen> {
 }
 
 class ContributeurDataGridSource extends DataGridSource {
-  ContributeurDataGridSource({required List<ContributeurModel> contributeurs}) {
+  ContributeurDataGridSource(
+      {required List<ContributeurModel> contributeurs,
+      required bool edition,
+      required List<String> adminEntitiesNamesList,
+      required List<String> entitiesNamesList,
+      required List<String> entitiesIdList,
+      required List<String> processusList}) {
     _contributeurs = contributeurs;
+    _edition = edition;
+    _adminEntitiesNamesList = adminEntitiesNamesList;
+    _entitiesNamesList = entitiesNamesList;
+    _entitiesIdList = entitiesIdList;
+    _processusList = processusList;
     buildDataGridRow();
   }
 
   final EntitePilotageController entitePilotageController = Get.find();
   List<ContributeurModel> _contributeurs = <ContributeurModel>[];
+  bool _edition = false;
+  List<String> _adminEntitiesNamesList = [];
+  List<String> _entitiesNamesList = [];
+  List<String> _entitiesIdList = [];
+  List<String> _processusList = [];
+
+  final supabase = Supabase.instance.client;
 
   List<DataGridRow> dataGridRows = <DataGridRow>[];
 
@@ -417,21 +538,66 @@ class ContributeurDataGridSource extends DataGridSource {
       var nomEntites =
           concatenationListe(contributeur.accesPilotageModel?.nomEntite);
       var processus =
-          concatenationListe(contributeur.accesPilotageModel?.processus);
+          concatenationListe(contributeur.accesPilotageModel?.processus!);
       return DataGridRow(cells: <DataGridCell>[
-        DataGridCell<String>(columnName: 'nom', value: contributeur.nom),
-        DataGridCell<String>(columnName: 'prenom', value: contributeur.prenom),
-        DataGridCell<String>(columnName: 'mail', value: contributeur.email),
-        DataGridCell<String>(columnName: 'entite', value: nomEntites),
-        DataGridCell<AccesPilotageModel>(
-            columnName: 'acces', value: contributeur.accesPilotageModel),
-        DataGridCell<String>(columnName: 'filiale', value: filiale),
-        DataGridCell<String>(columnName: 'filiere', value: filiere),
-        DataGridCell<String>(columnName: 'processus', value: processus),
-        DataGridCell<String>(
-            columnName: 'fonction', value: contributeur.fonction),
+        DataGridCell<Map<String, dynamic>>(columnName: 'nom', value: {
+          "valeur": contributeur.nom,
+          "mail": contributeur.email,
+          "entitesList": contributeur.accesPilotageModel?.nomEntite!,
+          "processus": contributeur.accesPilotageModel?.processus!
+        }),
+        DataGridCell<Map<String, dynamic>>(columnName: 'prenom', value: {
+          "valeur": contributeur.prenom,
+          "mail": contributeur.email,
+          "entitesList": contributeur.accesPilotageModel?.nomEntite!,
+          "processus": contributeur.accesPilotageModel?.processus!
+        }),
+        DataGridCell<Map<String, dynamic>>(columnName: 'mail', value: {
+          "valeur": contributeur.email,
+          "mail": contributeur.email,
+          "entitesList": contributeur.accesPilotageModel?.nomEntite!,
+          "processus": contributeur.accesPilotageModel?.processus!
+        }),
+        DataGridCell<Map<String, dynamic>>(columnName: 'entite', value: {
+          "valeur": nomEntites,
+          "mail": contributeur.email,
+          "entitesList": contributeur.accesPilotageModel?.nomEntite!,
+          "processus": contributeur.accesPilotageModel?.processus!
+        }),
+        DataGridCell<Map<String, dynamic>>(columnName: 'acces', value: {
+          "valeur": contributeur.accesPilotageModel!,
+          "mail": contributeur.email,
+          "entitesList": contributeur.accesPilotageModel?.nomEntite!,
+          "processus": contributeur.accesPilotageModel?.processus!
+        }),
+        DataGridCell<Map<String, dynamic>>(columnName: 'filiale', value: {
+          "valeur": filiale,
+          "mail": contributeur.email,
+          "entitesList": contributeur.accesPilotageModel?.nomEntite!,
+          "processus": contributeur.accesPilotageModel?.processus!
+        }),
+        DataGridCell<Map<String, dynamic>>(columnName: 'filiere', value: {
+          "valeur": filiere,
+          "mail": contributeur.email,
+          "entitesList": contributeur.accesPilotageModel?.nomEntite!,
+          "processus": contributeur.accesPilotageModel?.processus!
+        }),
+        DataGridCell<Map<String, dynamic>>(columnName: 'processus', value: {
+          "valeur": processus,
+          "mail": contributeur.email,
+          "entitesList": contributeur.accesPilotageModel?.nomEntite!,
+          "processus": contributeur.accesPilotageModel?.processus!
+        }),
+        DataGridCell<Map<String, dynamic>>(columnName: 'fonction', value: {
+          "valeur": contributeur.fonction,
+          "mail": contributeur.email,
+          "entitesList": contributeur.accesPilotageModel?.nomEntite!,
+          "processus": contributeur.accesPilotageModel?.processus!
+        }),
       ]);
     }).toList();
+
+    //print("data build row ok");
   }
 
   // Overrides
@@ -443,17 +609,76 @@ class ContributeurDataGridSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((DataGridCell dataCell) {
       switch (dataCell.columnName) {
+        case "entite":
+          return Container(
+            padding: const EdgeInsets.only(left: 8.0),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Flexible(
+                    child: SelectableText(dataCell.value["valeur"].toString())),
+                if (_edition)
+                  EditContributeur(
+                    mail: dataCell.value["mail"],
+                    champ: "entite",
+                    accesUser: null,
+                    adminEntites: _adminEntitiesNamesList,
+                    processus: [],
+                    entitiesNamesList: _entitiesNamesList,
+                    entitesIdList: _entitiesIdList,
+                    selectedItems: dataCell.value["entitesList"],
+                  )
+              ],
+            ),
+          );
         case "acces":
           return Container(
             padding: const EdgeInsets.only(left: 8.0),
             alignment: Alignment.centerLeft,
-            child: getAcces(dataCell.value),
+            child: Row(
+              children: [
+                getAcces(dataCell.value["valeur"]),
+                if (_edition)
+                  EditContributeur(
+                    mail: dataCell.value["mail"],
+                    champ: "acces",
+                    accesUser: dataCell.value["valeur"],
+                    entitiesNamesList: [],
+                    entitesIdList: [],
+                    adminEntites: [],
+                    processus: [],
+                    selectedItems: [],
+                  )
+              ],
+            ),
+          );
+        case "processus":
+          return Container(
+            padding: const EdgeInsets.only(left: 8.0),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Flexible(
+                    child: SelectableText(dataCell.value["valeur"].toString())),
+                if (_edition)
+                  EditContributeur(
+                    mail: dataCell.value["mail"],
+                    champ: "processus",
+                    processus: _processusList,
+                    accesUser: null,
+                    adminEntites: [],
+                    entitiesNamesList: [],
+                    entitesIdList: [],
+                    selectedItems: dataCell.value["processus"],
+                  )
+              ],
+            ),
           );
         default:
           return Container(
             padding: const EdgeInsets.only(left: 8.0),
             alignment: Alignment.centerLeft,
-            child: Text(dataCell.value.toString()),
+            child: Text("${dataCell.value["valeur"] ?? "---"}"),
           );
       }
     }).toList());
@@ -469,7 +694,13 @@ class ContributeurDataGridSource extends DataGridSource {
     if (acces.estValidateur == true) {
       return Text(
         tr.typeacccesList("validator"),
-        style: const TextStyle(color: Colors.blue),
+        style: const TextStyle(color: Color.fromARGB(255, 12, 150, 157)),
+      );
+    }
+    if (acces.estValidateur == true && acces.estEditeur == true) {
+      return Text(
+        tr.typeacccesList("validator"),
+        style: const TextStyle(color: Color.fromARGB(255, 33, 33, 243)),
       );
     }
     if (acces.estEditeur == true) {
@@ -490,6 +721,285 @@ class ContributeurDataGridSource extends DataGridSource {
   String concatenationListe(List? liste) {
     List<String> strings = liste!.map((e) => e.toString()).toList();
     return strings.join(", ");
+  }
+}
+
+class EditContributeur extends StatefulWidget {
+  final String mail;
+  final String champ;
+  final AccesPilotageModel? accesUser;
+  final List<String> adminEntites;
+  final List<String> entitiesNamesList;
+  final List<String> entitesIdList;
+  final List<String> processus;
+  final List<String> selectedItems;
+
+  const EditContributeur(
+      {super.key,
+      required this.mail,
+      required this.champ,
+      required this.accesUser,
+      required this.adminEntites,
+      required this.entitiesNamesList,
+      required this.entitesIdList,
+      required this.processus,
+      required this.selectedItems});
+
+  @override
+  State<EditContributeur> createState() => _EditContributeurState();
+}
+
+class _EditContributeurState extends State<EditContributeur> {
+  final TextEditingController emailValueController = TextEditingController();
+
+  List<String> itemsSelected = [];
+  List<String> selectedEntites = [];
+  List<String> selectedProcess = [];
+  List<String> selectedAccess = [];
+  List restrictedEntities = [];
+
+  void _selectProcessus() async {
+    List<String> dropDownMenuItems = widget.processus;
+    itemsSelected = widget.selectedItems;
+
+    final List<String>? results = await showDialog<List<String>>(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return MultiSelect(
+              items: dropDownMenuItems, selectedItems: itemsSelected);
+        });
+
+    if (results == null) {
+      return;
+    }
+
+    EasyLoading.show(status: tr.loadingUpdating);
+    try {
+      await Supabase.instance.client.from('AccesPilotage').update(
+          {"processus": getProcessUser(results)}).eq("email", widget.mail);
+      setState(() {
+        selectedProcess = results;
+        itemsSelected = results;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+          showSnackBar(tr.success, "changement effectue", Colors.green));
+    } on Exception {
+      ScaffoldMessenger.of(context).showSnackBar(showSnackBar(tr.fail,
+          "Une erreur est survenue", Colors.red, const Duration(seconds: 6)));
+    }
+    EasyLoading.dismiss();
+  }
+
+  void _selectEntites() async {
+    List<String> dropDownMenuItems = widget.adminEntites;
+    itemsSelected = widget.selectedItems;
+
+    final List<String>? results = await showDialog<List<String>>(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return MultiSelect(
+              items: dropDownMenuItems, selectedItems: itemsSelected);
+        });
+
+    if (results == null) {
+      return;
+    }
+
+    EasyLoading.show(status: tr.loadingUpdating);
+    try {
+      setState(() {
+        selectedEntites = getIdEntities(results);
+        itemsSelected = results;
+        restrictedEntities =
+            restrictElementFilter(widget.entitesIdList, selectedEntites);
+      });
+      await Supabase.instance.client
+          .from('AccesPilotage')
+          .update({"entite": selectedEntites}).eq("email", widget.mail);
+      await Supabase.instance.client
+          .from('AccesPilotage')
+          .update({"nom_entite": itemsSelected}).eq("email", widget.mail);
+      await Supabase.instance.client.from('AccesPilotage').update(
+          {"restrictions": restrictedEntities}).eq("email", widget.mail);
+      ScaffoldMessenger.of(context).showSnackBar(
+          showSnackBar(tr.success, "changement effectue", Colors.green));
+    } on Exception {
+      ScaffoldMessenger.of(context).showSnackBar(showSnackBar(tr.fail,
+          "Une erreur est survenue", Colors.red, const Duration(seconds: 6)));
+    }
+    EasyLoading.dismiss();
+  }
+
+  List<String> getIdEntities(List<String> entitiesNames) {
+    List<String> result = [];
+
+    for (var entity in entitiesNames) {
+      var index = widget.entitiesNamesList.indexOf(entity);
+      result.add(widget.entitesIdList[index]);
+    }
+
+    return result;
+  }
+
+  void _selectAcces() async {
+    List<String> dropDownMenuItems = [
+      tr.typeacccesList("admin"),
+      tr.typeacccesList("validator"),
+      tr.typeacccesList("editor"),
+      tr.typeacccesList("spectator")
+    ];
+    itemsSelected = getAccesList(widget.accesUser!);
+
+    final List<String>? results = await showDialog<List<String>>(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return MultiSelect(
+              items: dropDownMenuItems, selectedItems: itemsSelected);
+        });
+
+    if (results == null) {
+      return;
+    }
+
+    final List<String>? diffListResults =
+        restrictElementFilter(dropDownMenuItems, results);
+
+    EasyLoading.show(status: tr.loadingUpdating);
+    try {
+      for (String acces in results) {
+        String accesBD = accesToDoc[acces]!;
+        await Supabase.instance.client
+            .from('AccesPilotage')
+            .update({accesBD: true}).eq("email", widget.mail);
+      }
+      if (diffListResults != null && diffListResults.isNotEmpty) {
+        for (String acces in diffListResults) {
+          String accesBD = accesToDoc[acces]!;
+          await Supabase.instance.client
+              .from('AccesPilotage')
+              .update({accesBD: false}).eq("email", widget.mail);
+        }
+      }
+      setState(() {
+        itemsSelected = results;
+        selectedAccess = results;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+          showSnackBar(tr.success, "changement effectue", Colors.green));
+    } on Exception {
+      ScaffoldMessenger.of(context).showSnackBar(showSnackBar(tr.fail,
+          "Une erreur est survenue", Colors.red, const Duration(seconds: 6)));
+    }
+    EasyLoading.dismiss();
+  }
+
+  List<String> getAccesList(AccesPilotageModel acces) {
+    List<String> result = [];
+
+    if (acces.estAdmin == true) {
+      result.add(tr.typeacccesList("admin"));
+    }
+    if (acces.estEditeur == true) {
+      result.add(tr.typeacccesList("editor"));
+    }
+    if (acces.estValidateur == true) {
+      result.add(tr.typeacccesList("validator"));
+    }
+    if (acces.estSpectateur == true) {
+      result.add(tr.typeacccesList("spectator"));
+    }
+
+    return result;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    emailValueController.text = widget.mail;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(
+          width: 5,
+        ),
+        IconButton(
+            onPressed: () async {
+              if (widget.champ == "mail") {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Mise a jour ${widget.champ}"),
+                        contentPadding: const EdgeInsets.all(30),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        titlePadding:
+                            const EdgeInsets.only(top: 20, right: 20, left: 20),
+                        titleTextStyle: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis),
+                        content: SizedBox(
+                          width: 400,
+                          height: 200,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: emailValueController,
+                                maxLines: 5,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              Expanded(child: Container()),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton(
+                                    child: Text(tr.cancel),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(),
+                                  ),
+                                  ElevatedButton(
+                                      onPressed: () async {
+                                        // changement de mail : suppression du mail/compte puis creation d'un nouveau compte avec le mail renseignee
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(tr.confirm))
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    });
+              } else if (widget.champ == "entite") {
+                _selectEntites();
+              } else if (widget.champ == "acces") {
+                _selectAcces();
+              } else if (widget.champ == "processus") {
+                _selectProcessus();
+              }
+            },
+            splashRadius: 15,
+            icon: const Icon(
+              Icons.edit,
+              size: 20,
+              color: Colors.green,
+            ))
+      ],
+    );
   }
 }
 
@@ -554,32 +1064,6 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
 
   final SendMailController sendMailController = SendMailController();
 
-  static const Map<String, String> translations = {
-    "Agricultural": "Agricole",
-    "SD": "Développement Durable",
-    "Finance": "Finances",
-    "Purchases": "Achats",
-    "Legal": "Juridique",
-    "HR": "Ressources Humaines",
-    "Doctor": "Médecin",
-    "Infrastructure": "Infrastructures",
-    "HR / Legal": "Ressources Humaines / Juridique",
-    "SM / Logistics": "Gestion des Stocks / Logistique",
-    "Emissions": "Emissions",
-    "Factory": "Usine",
-    "Agricole": "Agricole",
-    "Finances": "Finances",
-    "Juridique": "Juridique",
-    "Achats": "Achats",
-    "Usine": "Usine",
-    "Infrastructures": "Infrastructures",
-    "Médecin": "Médecin",
-    "Ressources Humaines": "Ressources Humaines",
-    "Ressources Humaines / Juridique": "Ressources Humaines / Juridique",
-    "Développement Durable": "Développement Durable",
-    "Gestion des Stocks / Logistique": "Gestion des Stocks / Logistique",
-  };
-
   bool isSubmetted = false;
   List<String> entiteName = [];
   List<String> selectedProcess = [];
@@ -588,7 +1072,6 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
     // a list of selectable items
     // these items can be hard-coded or dynamically fetched from a database/API
     List<String> dropDownMenuItems = widget.userEntitesName;
-    //print(dropDownMenuItems);
 
     final List<String>? results = await showDialog(
       context: context,
@@ -603,18 +1086,6 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
         entiteName = results;
       });
     }
-  }
-
-  String getTranslation(String key) {
-    return translations[key]!;
-  }
-
-  List<String> getProcessUser(List<String> selectedProcess) {
-    List<String> result = [];
-      for (String process in selectedProcess) {
-        result.add(getTranslation(process));
-      }
-      return result;
   }
 
   void _selectProcess() async {
@@ -970,13 +1441,15 @@ class MultiSelect extends StatefulWidget {
 
 class _MultiSelectState extends State<MultiSelect> {
   // this variable holds the selected items
-  final List<String> _selectedItems = [];
+  List<String> _selectedItems = [];
+  late List<String> _tempSelectedItems;
   bool _selectAll = false;
 
   @override
   void initState() {
     super.initState();
-    _selectAll = widget.selectedItems.length == widget.items.length;
+    _tempSelectedItems = List.from(widget.selectedItems);
+    _selectAll = _tempSelectedItems.length == widget.items.length;
   }
 
   void _toggleSelectAll(bool? newValue) {
@@ -984,10 +1457,10 @@ class _MultiSelectState extends State<MultiSelect> {
       setState(() {
         _selectAll = newValue;
         if (_selectAll) {
-          widget.selectedItems.clear();
-          widget.selectedItems.addAll(widget.items);
+          _tempSelectedItems.clear();
+          _tempSelectedItems.addAll(widget.items);
         } else {
-          widget.selectedItems.clear();
+          _tempSelectedItems.clear();
         }
       });
     }
@@ -997,22 +1470,43 @@ class _MultiSelectState extends State<MultiSelect> {
   void _itemChange(String itemValue, bool isSelected) {
     setState(() {
       if (isSelected) {
-        widget.selectedItems.add(itemValue);
+        _tempSelectedItems.add(itemValue);
       } else {
-        widget.selectedItems.remove(itemValue);
+        _tempSelectedItems.remove(itemValue);
       }
-      _selectAll = widget.selectedItems.length == widget.items.length;
+      _selectAll = _tempSelectedItems.length == widget.items.length;
     });
   }
 
   // this function is called when the Cancel button is pressed
   void _cancel() {
-    Navigator.pop(context);
+    Navigator.of(context).pop();
   }
 
 // this function is called when the Submit button is tapped
   void _submit() {
-    Navigator.pop(context, widget.selectedItems);
+    if (_tempSelectedItems.isEmpty) {
+      // Show a dialog if no items are selected
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(tr.alert),
+            content: Text(tr.checkboxListAlertMessage),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      Navigator.pop(context, _tempSelectedItems);
+    }
   }
 
   @override
@@ -1054,7 +1548,7 @@ class _MultiSelectState extends State<MultiSelect> {
               ),
               ...filteredItems.map(
                 (item) => CheckboxListTile(
-                  value: widget.selectedItems.contains(item),
+                  value: _tempSelectedItems.contains(item),
                   title: Text(item),
                   controlAffinity: ListTileControlAffinity.leading,
                   onChanged: (isChecked) => _itemChange(item, isChecked!),
@@ -1077,4 +1571,42 @@ class _MultiSelectState extends State<MultiSelect> {
       );
     });
   }
+}
+
+String getTranslation(String key) {
+  return processTransFR[key]!;
+}
+
+List<String> getProcessUser(List<String> selectedProcess) {
+  List<String> result = [];
+  for (String process in selectedProcess) {
+    result.add(getTranslation(process));
+  }
+  return result;
+}
+
+List<String>? getTranslationCheckListProcess(List<String>? processList) {
+  List<String>? result = [];
+
+  if (processList!.isNotEmpty) {
+    for (String process in processList) {
+      result.add(processTransEN[process]!);
+    }
+  } else {
+    result = processList;
+  }
+
+  return result;
+}
+
+List<String> restrictElementFilter(List<String> listA, List<String> listB) {
+  Set<String> convertListA = listA.toSet();
+  Set<String> convertListB = listB.toSet();
+
+  final diffA = convertListA.difference(convertListB);
+  final diffB = convertListB.difference(convertListA);
+
+  final differenceinAtoB = diffA.union(diffB);
+
+  return differenceinAtoB.toList();
 }

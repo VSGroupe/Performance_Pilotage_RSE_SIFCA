@@ -958,4 +958,19 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get searchBarManageUser => 'Recherche par email, nom ou prénom';
+
+  @override
+  String get validatorEditAccesTooltip => 'Validateur pouvant collecter';
+
+  @override
+  String get validatorNoEditAccesTooltip => 'Validateur ne pouvant pas collecter';
+
+  @override
+  String get alert => 'Avertissement';
+
+  @override
+  String get checkboxListAlertMessage => 'Veuillez sélectionner au moins un élément.';
 }
