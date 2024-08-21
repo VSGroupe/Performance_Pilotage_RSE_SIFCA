@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:perf_rse/views/pilotage/controllers/entite_pilotage_controler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -15,7 +16,7 @@ class DataBaseController {
   final EntitePilotageController entitePilotageController = Get.find();
 
   static const baseUrl =
-      "http://127.0.0.1:5000"; //http://127.0.0.1:5000 // https://api-performance-rse-sifca-xrk2.onrender.com
+      "https://api-performance-rse-sifca-xrk2.onrender.com"; //http://127.0.0.1:5000 // https://api-performance-rse-sifca-xrk2.onrender.com
 
   Future<List<IndicateurModel>> getAllIndicateur() async {
     final List<dynamic> docs = await supabase
@@ -163,6 +164,7 @@ class DataBaseController {
 
   Future<Map<String, dynamic>?> getExportEntite(
       String entite, int annee) async {
+    String apiUrl = "";
 
     List sousEntites = entitePilotageController.sousEntite;
 
@@ -172,7 +174,11 @@ class DataBaseController {
       "sousEntites": sousEntites
     };
 
-    const String apiUrl = "$baseUrl/data-entite-indicateur/export-all-data";
+    if (tr.abrLange.toLowerCase() == "en") {
+      apiUrl = "$baseUrl/data-entite-indicateur/export-en-all-data";
+    } else {
+      apiUrl = "$baseUrl/data-entite-indicateur/export-all-data";
+    }
 
     final response = await http.post(
       Uri.parse(apiUrl),

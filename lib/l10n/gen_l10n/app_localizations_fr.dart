@@ -973,4 +973,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get checkboxListAlertMessage => 'Veuillez sélectionner au moins un élément.';
+
+  @override
+  String get excelFileTitle => 'Indicateurs de Performance RSE';
+
+  @override
+  String get company => 'Entreprise';
 }

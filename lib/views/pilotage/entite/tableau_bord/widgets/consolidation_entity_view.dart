@@ -34,7 +34,7 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
     final List responseIndicateurs = await supabase
         .from("Indicateurs")
         .select()
-        .order('axe, enjeu, reference', ascending: true);
+        .order('axe, enjeu, index_ordering', ascending: true);
     final listIndicateur = responseIndicateurs
         .map((json) => IndicateurModel.fromJson(json))
         .toList();
@@ -51,7 +51,7 @@ class _ConsolidationEntityTableState extends State<ConsolidationEntityTable> {
     final List responseIndicateurs = await supabase
         .from("Indicateurs_en")
         .select()
-        .order('reference', ascending: true);
+        .order('axe, enjeu, index_ordering', ascending: true);
     final listIndicateur = responseIndicateurs
         .map((json) => IndicateurModel.fromJson(json))
         .toList();

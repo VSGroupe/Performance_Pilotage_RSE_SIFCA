@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:perf_rse/utils/i18n.dart';
 import 'dart:html' as html;
 import 'dart:convert';
 
@@ -14,10 +15,21 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class ExportDataController {
   final DataBaseController dataBaseController = DataBaseController();
   final EntitePilotageController entitePilotageController = Get.find();
+  var processListExcel = <String>[].obs;
 
   Future<Map<String, dynamic>?> loadDataExport(String entite, int annee) async {
     final result = await dataBaseController.getExportEntite(entite, annee);
     return result;
+  }
+
+  void addRemoveProcessus(String processus, bool statusCheckBox) {
+    if (statusCheckBox) {
+      if (!processListExcel.contains(processus)) {
+        processListExcel.add(processus);
+      }
+    } else {
+      processListExcel.remove(processus);
+    }
   }
 
   Future<void> downloadExcel(Map<String, dynamic> mapData) async {
@@ -41,7 +53,7 @@ class ExportDataController {
       final xcel.Worksheet sheet = workbook.worksheets[0];
 
       // Adding the logos and details
-      sheet.getRangeByIndex(1, 1).setText('Indicateurs de Performance RSE');
+      sheet.getRangeByIndex(1, 1).setText(tr.excelFileTitle); // excelFileTitle
       final xcel.Style headerStyle = workbook.styles.add('headerStyle');
       headerStyle.fontName = 'Arial';
       headerStyle.fontSize = 20;
@@ -67,10 +79,10 @@ class ExportDataController {
 
       // Adding details
       final details = [
-        ['Entreprise :', mapData["entreprise"]],
-        ['Filiale :', mapData["filiale"]],
-        ['Entité :', mapData["entite"]],
-        ['Année :', "${mapData["annee"]}"]
+        ['${tr.company} :', mapData["entreprise"]], // company
+        ['${tr.subsidiarie} :', mapData["filiale"]],
+        ['${tr.entity} :', mapData["entite"]],
+        ['${tr.year} :', "${mapData["annee"]}"]
       ];
 
       int startRow = 3;
@@ -83,28 +95,28 @@ class ExportDataController {
 
       // Set header row
       final List<String> initialHeaders = [
-        'Reference',
-        'Indicateurs',
-        'Unite',
-        'Realisé_$annee',
-        'Janvier $annee',
-        'Fevrier $annee',
-        'Mars $annee',
-        'Avril $annee',
-        'Mai $annee',
-        'Juin $annee',
-        'Juillet $annee',
-        'Aout $annee',
-        'Septembre $annee',
-        'Octobre $annee',
-        'Novembre $annee',
-        'Decembre $annee',
+        (tr.reference),
+        (tr.indicators),
+        (tr.unit),
+        '${tr.completed} $annee',
+        '${tr.monthLong("january")} $annee',
+        '${tr.monthLong("february")} $annee',
+        '${tr.monthLong("march")} $annee',
+        '${tr.monthLong("april")} $annee',
+        '${tr.monthLong("may")} $annee',
+        '${tr.monthLong("june")} $annee',
+        '${tr.monthLong("july")} $annee',
+        '${tr.monthLong("august")} $annee',
+        '${tr.monthLong("september")} $annee',
+        '${tr.monthLong("october")} $annee',
+        '${tr.monthLong("november")} $annee',
+        '${tr.monthLong("december")} $annee',
       ];
 
       if (sousEntites.isNotEmpty) {
         initialHeaders.add("###");
         for (String sousEntiteName in sousEntitesNames) {
-          initialHeaders.add("$sousEntiteName\n Realise $annee");
+          initialHeaders.add("$sousEntiteName\n ${tr.completed} $annee");
         }
       }
       final List<String> finalHeaders = initialHeaders;
@@ -178,81 +190,68 @@ class ExportDataController {
           sheet.getRangeByIndex(row + startRow + 1, 3).cellStyle = cellStyle;
         }
         if (item["realise"] != null) {
-          sheet
-              .getRangeByIndex(row + startRow + 1, 4)
-              .setText(formatValue(item["realise"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 4).setText(
+              formatValue(item["realise"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 4).cellStyle = cellStyle;
         }
         if (item["dataJan"] != null) {
-          sheet
-              .getRangeByIndex(row + startRow + 1, 5)
-              .setText(formatValue(item["dataJan"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 5).setText(
+              formatValue(item["dataJan"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 5).cellStyle = cellStyle;
         }
         if (item["dataFeb"] != null) {
-          sheet
-              .getRangeByIndex(row + startRow + 1, 6)
-              .setText(formatValue(item["dataFeb"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 6).setText(
+              formatValue(item["dataFeb"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 6).cellStyle = cellStyle;
         }
         if (item["dataMar"] != null) {
-          sheet
-              .getRangeByIndex(row + startRow + 1, 7)
-              .setText(formatValue(item["dataMar"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 7).setText(
+              formatValue(item["dataMar"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 7).cellStyle = cellStyle;
         }
         if (item["dataApr"] != null) {
-          sheet
-              .getRangeByIndex(row + startRow + 1, 8)
-              .setText(formatValue(item["dataApr"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 8).setText(
+              formatValue(item["dataApr"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 8).cellStyle = cellStyle;
         }
         if (item["dataMay"] != null) {
-          sheet
-              .getRangeByIndex(row + startRow + 1, 9)
-              .setText(formatValue(item["dataMay"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 9).setText(
+              formatValue(item["dataMay"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 9).cellStyle = cellStyle;
         }
         if (item["dataJun"] != null) {
-          sheet
-              .getRangeByIndex(row + startRow + 1, 10)
-              .setText(formatValue(item["dataJun"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 10).setText(
+              formatValue(item["dataJun"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 10).cellStyle = cellStyle;
         }
         if (item["dataJul"] != null) {
-          sheet
-              .getRangeByIndex(row + startRow + 1, 11)
-              .setText(formatValue(item["dataJul"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 11).setText(
+              formatValue(item["dataJul"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 11).cellStyle = cellStyle;
         }
         if (item["dataAug"] != null) {
-          sheet
-              .getRangeByIndex(row + startRow + 1, 12)
-              .setText(formatValue(item["dataAug"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 12).setText(
+              formatValue(item["dataAug"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 12).cellStyle = cellStyle;
         }
         if (item["dataSep"] != null) {
-          sheet
-              .getRangeByIndex(row + startRow + 1, 13)
-              .setText(formatValue(item["dataSep"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 13).setText(
+              formatValue(item["dataSep"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 13).cellStyle = cellStyle;
         }
         if (item["dataOct"] != null) {
-          sheet
-              .getRangeByIndex(row + startRow + 1, 14)
-              .setText(formatValue(item["dataOct"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 14).setText(
+              formatValue(item["dataOct"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 14).cellStyle = cellStyle;
         }
         if (item["dataNov"] != null) {
-          sheet
-              .getRangeByIndex(row + startRow + 1, 15)
-              .setText(formatValue(item["dataNov"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 15).setText(
+              formatValue(item["dataNov"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 15).cellStyle = cellStyle;
         }
         if (item["dataDec"] != null) {
-          sheet
-              .getRangeByIndex(row + startRow + 1, 16)
-              .setText(formatValue(item["dataDec"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 16).setText(
+              formatValue(item["dataDec"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 16).cellStyle = cellStyle;
         }
 
@@ -265,9 +264,9 @@ class ExportDataController {
           }
           for (int i = 0; i < sousEntites.length; i++) {
             if (item["sousEntite$i"] != null) {
-              sheet
-                  .getRangeByIndex(row + startRow + 1, j++)
-                  .setText(formatValue(item["sousEntite$i"], item["type"], item["unite"]));
+              sheet.getRangeByIndex(row + startRow + 1, j++).setText(
+                  formatValue(
+                      item["sousEntite$i"], item["type"], item["unite"]));
               sheet.getRangeByIndex(row + startRow + 1, j).cellStyle =
                   cellStyle;
             }
@@ -293,6 +292,7 @@ class ExportDataController {
       print(e);
     }
   }
+  
 
   String? formatValue(double value, String? type, String unite) {
     if (type == "Test") {

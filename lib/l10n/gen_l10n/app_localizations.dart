@@ -1868,6 +1868,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please select at least one item.'**
   String get checkboxListAlertMessage;
+
+  /// No description provided for @excelFileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CSR Performance Indicators'**
+  String get excelFileTitle;
+
+  /// No description provided for @company.
+  ///
+  /// In en, this message translates to:
+  /// **'Company'**
+  String get company;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

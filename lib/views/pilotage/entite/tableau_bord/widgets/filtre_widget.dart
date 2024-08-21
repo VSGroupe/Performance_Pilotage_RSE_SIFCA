@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:perf_rse/constants/constant_translation_maps.dart';
 import 'package:perf_rse/models/pilotage/acces_pilotage_model.dart';
 import 'package:perf_rse/utils/i18n.dart';
 import 'package:popover/popover.dart';
@@ -131,6 +132,13 @@ class _EntityWidgetWidgetState extends State<FiltreTableauBord> {
                 onTap: isLoadingPrint
                     ? null
                     : () async {
+                        // showPopover(
+                        //   context: context,
+                        //   bodyBuilder: (context) => popoverWidgetExcel(context),
+                        //   direction: PopoverDirection.bottom,
+                        //   width: 200,
+                        //   height: 300,
+                        // );
                         setState(() {
                           isLoadingExcel = true;
                         });
@@ -204,7 +212,7 @@ class _EntityWidgetWidgetState extends State<FiltreTableauBord> {
       return tr.typeacccesList("admin");
     }
     if (acces.estValidateur == true) {
-      return  tr.typeacccesList("validator");
+      return tr.typeacccesList("validator");
     }
     if (acces.estEditeur == true) {
       return tr.typeacccesList("editor");
@@ -272,8 +280,9 @@ class _YearFiltreWidgetState extends State<YearFiltreWidget> {
       height: 50,
       child: Row(
         children: [
-           Text(tr.year,
-            style: TextStyle(fontSize: 18),
+          Text(
+            tr.year,
+            style: const TextStyle(fontSize: 18),
           ),
           Container(
             height: 40,
@@ -372,8 +381,9 @@ class _MonthFiltreWidgetState extends State<MonthFiltreWidget> {
       height: 50,
       child: Row(
         children: [
-           Text(tr.month,
-            style: TextStyle(fontSize: 18),
+          Text(
+            tr.month,
+            style: const TextStyle(fontSize: 18),
           ),
           Container(
             height: 40,
@@ -387,7 +397,8 @@ class _MonthFiltreWidgetState extends State<MonthFiltreWidget> {
                   var currentMonth0 = tableauBordController.currentMonth.value;
                   var showMonth =
                       tableauBordController.listMonth[currentMonth0 - 1];
-                  return Text(tr.monthLong(showMonth), style: const TextStyle(fontSize: 15));
+                  return Text(tr.monthLong(showMonth),
+                      style: const TextStyle(fontSize: 15));
                 }),
                 const SizedBox(
                   width: 5,
@@ -404,7 +415,8 @@ class _MonthFiltreWidgetState extends State<MonthFiltreWidget> {
                     for (var i = 0; i < datetime.month; i++) {
                       monthList.add({
                         "id": i + 1,
-                        "month": tr.monthLong(tableauBordController.listMonth[i])
+                        "month":
+                            tr.monthLong(tableauBordController.listMonth[i])
                       });
                     }
                     return PopupMenuButton<Map<String, dynamic>>(
@@ -431,7 +443,8 @@ class _MonthFiltreWidgetState extends State<MonthFiltreWidget> {
                     for (var i = 0; i < 12; i++) {
                       monthList.add({
                         "id": i + 1,
-                        "month": tr.monthLong(tableauBordController.listMonth[i])
+                        "month":
+                            tr.monthLong(tableauBordController.listMonth[i])
                       });
                     }
                     return PopupMenuButton<Map<String, dynamic>>(
@@ -481,28 +494,9 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
   final ProfilPilotageController profilPilotageController = Get.find();
   final EntitePilotageController entitePilotageController = Get.find();
 
-  static const Map<String, String> translations = {
-  "Agricole": "Agricultural",
-  "Développement Durable": "Sustainable development",
-  "Finances": "Finance",
-  "Achats": "Purchases",
-  "Juridique": "legal",
-  "Ressources Humaines": "Human ressources",
-  "Médecin": "Doctor",
-  "Infrastructures": "Infrastructure",
-  "Ressources Humaines / Juridique": "Human ressources / Legal",
-  "Gestion des Stocks / Logistique": "Stock Management / Logistics",
-  "Emissions": "Emissions",
-  "Usine": "Factory",
-};
-
   @override
   void initState() {
     super.initState();
-  }
-
-  String getTranslation(String key) {
-    return translations[key]!;
   }
 
   @override
@@ -519,9 +513,10 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
           final filtreProcessus = dropDownController.filtreProcessus;
           return Row(
             children: [
-               SizedBox(
+              SizedBox(
                 width: 80,
-                child: Text(tr.process,
+                child: Text(
+                  tr.process,
                   style: const TextStyle(fontSize: 15),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -573,136 +568,133 @@ class _AxeFiltreWidgetState extends State<FiltreWidget> {
         profilPilotageController.accesPilotageModel.value.processus;
     bool isAdmin = profilPilotageController.accesPilotageModel.value.estAdmin!;
     return Container(
-      width: 200,
-      height: 100,
-      margin: const EdgeInsets.all(10),
-      child: 
-      tr.abrLange.toLowerCase() == "fr"
-       ? Column(
-        children: [
-          if (isAdmin)
-            const Expanded(
-                child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CheckBoxWidget(processus: 'Agricole'),
-                      CheckBoxWidget(processus: 'Finances'),
-                      CheckBoxWidget(processus: 'DD'),
-                      CheckBoxWidget(processus: 'Juridique'),
-                      CheckBoxWidget(processus: 'Achats'),
-                      CheckBoxWidget(processus: 'RH')
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CheckBoxWidget(processus: 'GS / Logistique'),
-                      CheckBoxWidget(processus: 'Emissions'),
-                      CheckBoxWidget(processus: 'Usine'),
-                      CheckBoxWidget(processus: 'Médecin'),
-                      CheckBoxWidget(processus: 'Infrastructures'),
-                      CheckBoxWidget(processus: 'RH / Juridique')
-                    ],
-                  ),
-                )
-              ],
-            ))
-          else
-            Expanded(
-                child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+        width: 200,
+        height: 100,
+        margin: const EdgeInsets.all(10),
+        child: tr.abrLange.toLowerCase() == "fr"
+            ? Column(
                 children: [
-                  for (String process in processListUser ?? [])
-                    CheckBoxWidget(processus: process),
+                  if (isAdmin)
+                    const Expanded(
+                        child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CheckBoxWidget(processus: 'Agricole'),
+                              CheckBoxWidget(processus: 'Finances'),
+                              CheckBoxWidget(processus: 'DD'),
+                              CheckBoxWidget(processus: 'Juridique'),
+                              CheckBoxWidget(processus: 'Achats'),
+                              CheckBoxWidget(processus: 'RH')
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CheckBoxWidget(processus: 'GS / Logistique'),
+                              CheckBoxWidget(processus: 'Emissions'),
+                              CheckBoxWidget(processus: 'Usine'),
+                              CheckBoxWidget(processus: 'Médecin'),
+                              CheckBoxWidget(processus: 'Infrastructures'),
+                              CheckBoxWidget(processus: 'RH / Juridique')
+                            ],
+                          ),
+                        )
+                      ],
+                    ))
+                  else
+                    Expanded(
+                        child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          for (String process in processListUser ?? [])
+                            CheckBoxWidget(processus: process),
+                        ],
+                      ),
+                    )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.black),
+                          onPressed: () {
+                            dropDownController.effacerFiltreProcessus();
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(tr.uncheckAll)),
+                    ],
+                  )
                 ],
-              ),
-            )),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OutlinedButton(
-                  style:
-                      OutlinedButton.styleFrom(foregroundColor: Colors.black),
-                  onPressed: () {
-                    dropDownController.effacerFiltreProcessus();
-                    Navigator.of(context).pop();
-                  },
-                  child:  Text(tr.uncheckAll)),
-            ],
-          )
-        ],
-      )
-      : Column(
-        children: [
-          if (isAdmin)
-            const Expanded(
-                child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CheckBoxWidget(processus: 'Agricultural'),
-                      CheckBoxWidget(processus: 'Finance'),
-                      CheckBoxWidget(processus: 'SD'),
-                      CheckBoxWidget(processus: 'legal'),
-                      CheckBoxWidget(processus: 'Purchases'),
-                      CheckBoxWidget(processus: 'HR')
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CheckBoxWidget(processus: 'SM / Logistics'),
-                      CheckBoxWidget(processus: 'Emissions'),
-                      CheckBoxWidget(processus: 'Factory'),
-                      CheckBoxWidget(processus: 'Doctor'),
-                      CheckBoxWidget(processus: 'Infrastructure'),
-                      CheckBoxWidget(processus: 'HR / Legal')
-                    ],
-                  ),
-                )
-              ],
-            ))
-          else
-            Expanded(
-                child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+              )
+            : Column(
                 children: [
-                  for (String process in processListUser ?? [])
-                    CheckBoxWidget(processus: getTranslation(process)),
+                  if (isAdmin)
+                    const Expanded(
+                        child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CheckBoxWidget(processus: 'Agricultural'),
+                              CheckBoxWidget(processus: 'Finance'),
+                              CheckBoxWidget(processus: 'SD'),
+                              CheckBoxWidget(processus: 'legal'),
+                              CheckBoxWidget(processus: 'Purchases'),
+                              CheckBoxWidget(processus: 'HR')
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              CheckBoxWidget(processus: 'SM / Logistics'),
+                              CheckBoxWidget(processus: 'Emissions'),
+                              CheckBoxWidget(processus: 'Factory'),
+                              CheckBoxWidget(processus: 'Doctor'),
+                              CheckBoxWidget(processus: 'Infrastructure'),
+                              CheckBoxWidget(processus: 'HR / Legal')
+                            ],
+                          ),
+                        )
+                      ],
+                    ))
+                  else
+                    Expanded(
+                        child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          for (String process in processListUser ?? [])
+                            CheckBoxWidget(processus: getTranslation(process)),
+                        ],
+                      ),
+                    )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.black),
+                          onPressed: () {
+                            dropDownController.effacerFiltreProcessus();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("Uncheck all")),
+                    ],
+                  )
                 ],
-              ),
-            )),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OutlinedButton(
-                  style:
-                      OutlinedButton.styleFrom(foregroundColor: Colors.black),
-                  onPressed: () {
-                    dropDownController.effacerFiltreProcessus();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Uncheck all")),
-            ],
-          )
-        ],
-      )
-    );
+              ));
   }
-
 }
 
 class CheckBoxWidget extends StatefulWidget {
@@ -728,22 +720,22 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
         child: Row(
           children: [
             tr.abrLange.toLowerCase() == "fr"
-            ? Checkbox(
-                checkColor: Colors.green,
-                value: filtreProcessus
-                    .contains(matchAbrProcess(abr: widget.processus)),
-                onChanged: (value) {
-                  dropDownController.addRemoveProcessus(
-                      matchAbrProcess(abr: widget.processus), value!);
-                })
-              : Checkbox(
-                checkColor: Colors.green,
-                value: filtreProcessus
-                    .contains(matchAbrProcessEN(abr: widget.processus)),
-                onChanged: (value) {
-                  dropDownController.addRemoveProcessus(
-                      matchAbrProcessEN(abr: widget.processus), value!);
-                }),
+                ? Checkbox(
+                    checkColor: Colors.green,
+                    value: filtreProcessus
+                        .contains(matchAbrProcess(abr: widget.processus)),
+                    onChanged: (value) {
+                      dropDownController.addRemoveProcessus(
+                          matchAbrProcess(abr: widget.processus), value!);
+                    })
+                : Checkbox(
+                    checkColor: Colors.green,
+                    value: filtreProcessus
+                        .contains(matchAbrProcessEN(abr: widget.processus)),
+                    onChanged: (value) {
+                      dropDownController.addRemoveProcessus(
+                          matchAbrProcessEN(abr: widget.processus), value!);
+                    }),
             const SizedBox(
               width: 10,
             ),
@@ -789,61 +781,152 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
   }
 }
 
-// class CheckBoxWidgetEn extends StatefulWidget {
-//   final String processus;
-//   const CheckBoxWidgetEn({super.key, required this.processus});
+class CheckBoxWidgetExcel extends StatefulWidget {
+  final String processus;
+  const CheckBoxWidgetExcel({super.key, required this.processus});
 
-//   @override
-//   State<CheckBoxWidgetEn> createState() => _CheckBoxWidgetEnState();
-// }
+  @override
+  State<CheckBoxWidgetExcel> createState() => _CheckBoxExcelState();
+}
 
-// class _CheckBoxWidgetEnState extends State<CheckBoxWidgetEn> {
-//   final DropDownController dropDownController = Get.find();
+class _CheckBoxExcelState extends State<CheckBoxWidgetExcel> {
+  final ExportDataController exportDataController = Get.find();
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Obx(() {
-//       final filtreProcessus = dropDownController.filtreProcessus;
-//       return Container(
-//         height: 40,
-//         width: double.infinity,
-//         margin: const EdgeInsets.all(2),
-//         child: Row(
-//           children: [
-//             Checkbox(
-//                 checkColor: Colors.green,
-//                 value: filtreProcessus
-//                     .contains(matchAbrProcess(abr: widget.processus)),
-//                 onChanged: (value) {
-//                   dropDownController.addRemoveProcessus(
-//                       matchAbrProcess(abr: widget.processus), value!);
-//                 }),
-//             const SizedBox(
-//               width: 10,
-//             ),
-//             Flexible(
-//                 child: CustomText(
-//               text: widget.processus,
-//               fontStyle: FontStyle.italic,
-//             ))
-//           ],
-//         ),
-//       );
-//     });
-//   }
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      return Container(
+        height: 40,
+        width: double.infinity,
+        margin: const EdgeInsets.all(2),
+        child: Row(
+          children: [
+            tr.abrLange.toLowerCase() == "fr"
+                ? Checkbox(
+                    checkColor: Colors.green,
+                    value: false,
+                    onChanged: (value) {
+                      exportDataController.addRemoveProcessus(
+                          matchAbrProcess(abr: widget.processus), value!);
+                    })
+                : Checkbox(
+                    checkColor: Colors.green,
+                    value: false,
+                    onChanged: (value) {
+                      exportDataController.addRemoveProcessus(
+                          matchAbrProcessEN(abr: widget.processus), value!);
+                    }),
+            const SizedBox(
+              width: 10,
+            ),
+            Flexible(
+                child: CustomText(
+              text: widget.processus,
+              fontStyle: FontStyle.italic,
+            ))
+          ],
+        ),
+      );
+    });
+  }
 
-//   String matchAbrProcess({required String abr}) {
-//     switch (abr) {
-//       case "HR":
-//         return "Human resources";
-//       case "HR / Legal":
-//         return "Human Resources/Legal";
-//       case "SD":
-//         return "Sustainable development";
-//       case "SM / Logistics":
-//         return "Stock Management/Logistics";
-//       default:
-//         return abr;
-//     }
-//   }
-// }
+  String matchAbrProcess({required String abr}) {
+    switch (abr) {
+      case "RH":
+        return "Ressources Humaines";
+      case "RH / Juridique":
+        return "Ressources Humaines / Juridique";
+      case "DD":
+        return "Développement Durable";
+      case "GS / Logistique":
+        return "Gestion des Stocks / Logistique";
+      default:
+        return abr;
+    }
+  }
+
+  String matchAbrProcessEN({required String abr}) {
+    switch (abr) {
+      case "HR":
+        return "Human ressources";
+      case "HR / Legal":
+        return "Human ressources / Legal";
+      case "SD":
+        return "Sustainable development";
+      case "SM / Logistics":
+        return "Stock Management / Logistics";
+      default:
+        return abr;
+    }
+  }
+}
+
+String getTranslation(String key) {
+  return translations[key]!;
+}
+
+Widget popoverWidgetExcel(BuildContext context) {
+  return Container(
+      width: 200,
+      height: 100,
+      margin: const EdgeInsets.all(10),
+      child:
+      tr.abrLange.toLowerCase() == "en" 
+      ? Column(
+        children: [
+          Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        for (String process in allProcess)
+                          CheckBoxWidgetExcel(processus: getTranslation(process)),
+                      ],
+                    ),
+                  ),
+                ),
+            Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.black),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("Telecharger")),
+                    ],
+                  )
+        ],
+      )
+      : Column(
+        children: [
+          Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        for (String process in allProcess)
+                          CheckBoxWidgetExcel(processus: process),
+                      ],
+                    ),
+                  ),
+                ),
+            Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.black),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("Telecharger")),
+                    ],
+                  )
+        ],
+      )
+          );
+}

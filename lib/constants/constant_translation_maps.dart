@@ -39,12 +39,42 @@ const Map<String, String> processTransEN = {
   "Gestion des Stocks / Logistique": "SM / Logistics",
 };
 
-  const Map<String, String> accesToDoc = {
-    "Spectateur": "est_spectateur",
-    "Editeur": "est_editeur",
-    "Validateur": "est_validateur",
-    "Admin": "est_admin",
-    "Validator": "est_validateur",
-    "Editor": "est_editeur",
-    "Spectator": "est_spectateur"
-  };
+const Map<String, String> accesToDoc = {
+  "Spectateur": "est_spectateur",
+  "Editeur": "est_editeur",
+  "Validateur": "est_validateur",
+  "Admin": "est_admin",
+  "Validator": "est_validateur",
+  "Editor": "est_editeur",
+  "Spectator": "est_spectateur"
+};
+
+const Map<String, String> translations = {
+  "Agricole": "Agricultural",
+  "Développement Durable": "Sustainable development",
+  "Finances": "Finance",
+  "Achats": "Purchases",
+  "Juridique": "legal",
+  "Ressources Humaines": "Human ressources",
+  "Médecin": "Doctor",
+  "Infrastructures": "Infrastructure",
+  "Ressources Humaines / Juridique": "Human ressources / Legal",
+  "Gestion des Stocks / Logistique": "Stock Management / Logistics",
+  "Emissions": "Emissions",
+  "Usine": "Factory",
+};
+
+const List<String> allProcess = [
+  "Agricole",
+  "Développement Durable",
+  "Finances",
+  "Achats",
+  "Juridique",
+  "Ressources Humaines",
+  "Médecin",
+  "Infrastructures",
+  "Ressources Humaines / Juridique",
+  "Gestion des Stocks / Logistique",
+  "Emissions",
+  "Usine"
+];

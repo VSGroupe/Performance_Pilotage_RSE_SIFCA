@@ -295,6 +295,8 @@
         "validatorEditAccesTooltip": "Validator capable of collecting",
         "validatorNoEditAccesTooltip": "Validator unable to collect",
         "alert": "Warning",
-        "checkboxListAlertMessage": "Please select at least one item."
+        "checkboxListAlertMessage": "Please select at least one item.",
+    "excelFileTitle": "CSR Performance Indicators",
+    "company" : "Company"
 
 }

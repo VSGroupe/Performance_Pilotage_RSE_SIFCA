@@ -295,6 +295,8 @@
     "validatorEditAccesTooltip": "Validateur pouvant collecter",
     "validatorNoEditAccesTooltip": "Validateur ne pouvant pas collecter",
     "alert": "Avertissement",
-    "checkboxListAlertMessage": "Veuillez sélectionner au moins un élément."
+    "checkboxListAlertMessage": "Veuillez sélectionner au moins un élément.",
+    "excelFileTitle": "Indicateurs de Performance RSE",
+    "company" : "Entreprise"
     
 }
