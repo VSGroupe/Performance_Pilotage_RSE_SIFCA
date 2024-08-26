@@ -1880,6 +1880,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Company'**
   String get company;
+
+  /// No description provided for @passwordLengthMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The password must contain at least 6 characters'**
+  String get passwordLengthMessage;
+
+  /// No description provided for @resetPasswortTitleForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset your password'**
+  String get resetPasswortTitleForm;
+
+  /// No description provided for @passwordEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a password'**
+  String get passwordEmpty;
+
+  /// No description provided for @recoverPasswordMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You should soon receive an e-mail with further instructions.'**
+  String get recoverPasswordMessage;
+
+  /// No description provided for @recoverPasswordFormMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'An email will be sent to you allowing you to create a new password.'**
+  String get recoverPasswordFormMessage;
+
+  /// No description provided for @goToLoginPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to login page'**
+  String get goToLoginPage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

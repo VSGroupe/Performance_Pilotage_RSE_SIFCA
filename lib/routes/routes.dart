@@ -8,6 +8,8 @@ import 'package:perf_rse/views/audit/overview/overview_evaluation_page.dart';
 import 'package:perf_rse/views/audit/panneau_admin/screen_admin.dart';
 import 'package:perf_rse/views/audit/screen_evaluation.dart';
 import 'package:perf_rse/views/audit/transiteAudit.dart';
+import 'package:perf_rse/views/common/forgot_password/password_reset.dart';
+import 'package:perf_rse/views/common/forgot_password/widgets/send_token_form.dart';
 import 'package:perf_rse/views/gestion/home/gestion_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../views/common/forgot_password/change_password.dart';
@@ -212,7 +214,7 @@ class RouteClass {
           pageBuilder: (context, state) => NoTransitionPage<void>(
                 key: state.pageKey,
                 restorationId: state.pageKey.value,
-                child: ChangePassWordScreen(event: state.extra.toString()),
+                child: const ChangePassWordScreen(),
               )),
       GoRoute(
           path: '/account/forgot-password',
@@ -220,6 +222,13 @@ class RouteClass {
                 key: state.pageKey,
                 restorationId: state.pageKey.value,
                 child: const ForgotPassword(),
+              )),
+      GoRoute(
+          path: '/account/password-reset',
+          pageBuilder: (context, state) => NoTransitionPage<void>(
+                key: state.pageKey,
+                restorationId: state.pageKey.value,
+                child: const ResetPasswordPage(), // No used
               )),
       GoRoute(
           path: '/mise-a-jour',
@@ -237,8 +246,9 @@ class RouteClass {
       supabase.auth.onAuthStateChange.listen((data) {
         final AuthChangeEvent event = data.event;
         var session = event.name;
+        print("session : $session");
         if (session == "passwordRecovery") {
-          context.go("/account/change-password", extra: "passowrdRecovery");
+          context.go("/account/password-reset", extra: "passwordRecovery");
         }
       });
 
@@ -248,7 +258,7 @@ class RouteClass {
       String? isInitTime = await storage.read(key: 'isInitTime');
 
       if (state.fullPath != null &&
-          state.fullPath == "/account/change-password") {
+          state.fullPath == "/account/password-reset") {
         return null;
       }
 
@@ -266,6 +276,7 @@ class RouteClass {
           GetUtils.isEmail(email)) {
         return null; // && sessionVerification ==true
       }
+      return null;
       // await supabase.auth.signOut();
       // return "/account/login";
     },

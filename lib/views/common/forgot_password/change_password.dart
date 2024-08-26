@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:perf_rse/views/common/forgot_password/widgets/change_password_form.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ChangePassWordScreen extends StatefulWidget {
-  final String  event;
-  const ChangePassWordScreen({super.key, required this.event});
+
+  const ChangePassWordScreen({super.key});
 
   @override
   State<ChangePassWordScreen> createState() => _ChangePassWordScreenState();
@@ -18,10 +17,10 @@ class _ChangePassWordScreenState extends State<ChangePassWordScreen> {
   
   @override
   void initState() {
-    if (widget.event != "passowrdRecovery"){
-      context.go("/account/login");
-    }
     super.initState();
+    // if (widget.event != "passwordRecovery"){
+    //   context.go("/account/login");
+    // }
   }
 
   @override

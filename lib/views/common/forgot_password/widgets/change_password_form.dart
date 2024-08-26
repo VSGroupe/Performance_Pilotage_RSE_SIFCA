@@ -1,6 +1,10 @@
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/utils/i18n.dart';
+import 'package:perf_rse/utils/localization_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../helper/helper_methods.dart';
 import '/widgets/custom_text.dart';
@@ -14,15 +18,15 @@ class ChangePasswordForm extends StatefulWidget {
 
 class _ChangePasswordFormState extends State<ChangePasswordForm> {
 
-  late final TextEditingController _newPassWord;
-  late final TextEditingController _confirmPassWord;
+  late TextEditingController _newPassWord = TextEditingController();
+  late TextEditingController _confirmPassWord = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoadedPage = false;
-  final RegExp regex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$');
+  final RegExp spaceRegex = RegExp(r'\s');
   final supabase = Supabase.instance.client;
 
-  bool _obscureNewPassWord = true;
-  bool _obscureConfirmPassWord = true;
+  bool _obscureNewPassWord = false;
+  bool _obscureConfirmPassWord = false;
 
   String? t = "";
 
@@ -39,7 +43,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
           password: _confirmPassWord.text.trim(),
         ));
         await Future.delayed(const Duration(seconds: 1));
-        ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Succès","Votre mot de passe a été modifié avec succès.",Colors.green));
+        ScaffoldMessenger.of(context).showSnackBar(showSnackBar(tr.success, tr.passwordSuccessfullyUpdatedMessage,Colors.green));
         context.go("/account/login");
         setState(() {
           isLoadedPage = false;
@@ -49,7 +53,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
         setState(() {
           isLoadedPage = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Echec","La mise à jour du mot de passe a échoué.",Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(showSnackBar(tr.fail, tr.updatingFailMessage,Colors.red));
       }
 
     } catch (e) {
@@ -58,13 +62,14 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
       setState(() {
         isLoadedPage = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Echec",message,Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(showSnackBar(tr.fail,message,Colors.red));
     }
 
   }
 
   @override
   void initState() {
+    super.initState();
     setState(() {
       supabase.auth.onAuthStateChange.listen((data) {
         final AuthChangeEvent event = data.event;
@@ -75,11 +80,11 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
 
     _newPassWord = TextEditingController();
     _confirmPassWord = TextEditingController();
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final providerLocal =  Provider.of<LocalizationProvider>(context);
     return Container(
       padding: const EdgeInsets.all(10),
       width: 700,
@@ -87,9 +92,25 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+                        Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          const Icon(Icons.language_rounded),
+                          SizedBox(
+                            height: 45,
+                            width: 150,
+                            child:  CustomDropdown(
+                                hintText:tr.abrLange.toLowerCase()=="en" ? "English":"Français",
+                                items:  const ["Français","English"],
+                                onChanged: (value)=>providerLocal.chnageLanguage(value),
+                            ),
+                        )
+                        ]
+
+                        ),
           Image.asset("assets/logos/perf_rse.png",width: 300,),
           const SizedBox(height: 30,),
-          const CustomText(text: "Changement du mot de passe",size: 25,weight: FontWeight.bold,),
+          CustomText(text: tr.resetPasswortTitleForm,size: 25,weight: FontWeight.bold,),
           const SizedBox(height: 20,),
           Card(
             elevation: 5,
@@ -99,9 +120,6 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CustomText(text: "Veuillez fournir ou confirmer les renseignements suivants :",size: 18,color: Colors.amber,),
-                  const SizedBox(height: 10,),
-                  const CustomText(text: "Inscrivez votre nouveau mot passe.",size: 13,),
                   Form(
                     autovalidateMode: AutovalidateMode.always,
                     key: _formKey,
@@ -114,8 +132,8 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                           children: [
                             TextFormField(
                               decoration: InputDecoration(
-                                  hintText: "Nouveau mot de passe",
-                                  prefixIcon: const Icon(Icons.password),
+                                  labelText: tr.newPassword,
+                                  prefixIcon: const Icon(Icons.vpn_key_sharp),
                                   suffixIcon: GestureDetector(
                                     onTap: () {
                                       setState(() {
@@ -128,29 +146,29 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                                         : Icons
                                         .visibility_off),
                                   ),
-                                  contentPadding: const EdgeInsets.only(
-                                      left: 20.0,
-                                      right: 20.0),
-                                  border: const OutlineInputBorder(),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Theme.of(
-                                              context)
-                                              .primaryColor,
-                                          width: 2))),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),),
                               controller: _newPassWord,
                               obscureText: _obscureNewPassWord,
-                              validator: (value) { if (value == null || value.isEmpty || !regex.hasMatch(value) ) {
-                                  return 'Le mot de passe doit avoir au moins de 8 caractères.';
-                                }
-                                return null;
+                              validator: (value) { 
+                                          if (value == null || value.isEmpty) {
+                                        return tr.passwordEmpty;
+                                      }
+                                      if (value.length < 6) {
+                                        return tr.passwordLengthMessage;
+                                      }
+                                      if (spaceRegex.hasMatch(value)) {
+                                        return tr.passwordMustNotContainSpace;
+                                      }
+                                      return null;
                               },
                             ),
                             const SizedBox(height: 20,),
                             TextFormField(
                               decoration: InputDecoration(
-                                  hintText: "Confirmer le nouveau mot de passe",
-                                  prefixIcon: const Icon(Icons.password),
+                                  labelText: tr.confirmPassword,
+                                  prefixIcon: const Icon(Icons.vpn_key_sharp),
                                   suffixIcon: GestureDetector(
                                     onTap: () {
                                       setState(() {
@@ -162,26 +180,20 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                                         : Icons
                                         .visibility_off),
                                   ),
-                                  contentPadding: const EdgeInsets.only(
-                                      left: 20.0,
-                                      right: 20.0),
-                                  border: const OutlineInputBorder(),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Theme.of(
-                                              context)
-                                              .primaryColor,
-                                          width: 2))),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  ),
                               controller: _confirmPassWord,
                               obscureText: _obscureConfirmPassWord,
                               validator: (value) {
-                                if(value == null || value.isEmpty) {
-                                  return "Ce champ est vide.";
-                                }
-                                if (value!=_newPassWord.text || !regex.hasMatch(value) ){
-                                  return "Les mots de passe renseignés ne sont identiques.";
-                                }
-                                return null;
+                                      if (value == null || value.isEmpty) {
+                                        return tr.passwordEmpty;
+                                      }
+                                      if (value != _newPassWord.text) {
+                                        return tr.passwordNoMatch;
+                                      }
+                                      return null;
                               },
                             ),
                           ],
@@ -202,8 +214,8 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                               width: double.maxFinite,
                               height: 40,
                               padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: isLoadedPage ? const SpinKitWave(color: Colors.amber, size: 20,) : const CustomText(
-                                text: "CONFIRMER",
+                              child: isLoadedPage ? const SpinKitWave(color: Colors.amber, size: 20,) : CustomText(
+                                text: tr.confirm,
                                 color: Colors.white,
                               ),
                             )),
@@ -220,8 +232,8 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               style: TextButton.styleFrom(foregroundColor: Colors.grey),
               onPressed: (){
                 context.go("/account/login");
-              }, child: const Text(
-            "« Retour à la connexion",style: TextStyle(fontSize: 22),
+              }, child: Text(
+            "« ${tr.goToLoginPage}",style: const TextStyle(fontSize: 22),
           ))
         ],
       ),

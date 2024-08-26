@@ -162,6 +162,9 @@ class _PasswordPiloteState extends State<PasswordPilote> {
                               if (spaceRegex.hasMatch(value!)) {
                                 return tr.passwordMustNotContainSpace;
                               }
+                              if (value.length < 6) {
+                                return tr.passwordLengthMessage;
+                              }
                               return null;
                             },
                             decoration: InputDecoration(

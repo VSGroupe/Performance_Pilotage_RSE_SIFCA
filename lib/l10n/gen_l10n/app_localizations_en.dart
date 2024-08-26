@@ -979,4 +979,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get company => 'Company';
+
+  @override
+  String get passwordLengthMessage => 'The password must contain at least 6 characters';
+
+  @override
+  String get resetPasswortTitleForm => 'Reset your password';
+
+  @override
+  String get passwordEmpty => 'Please enter a password';
+
+  @override
+  String get recoverPasswordMessage => 'You should soon receive an e-mail with further instructions.';
+
+  @override
+  String get recoverPasswordFormMessage => 'An email will be sent to you allowing you to create a new password.';
+
+  @override
+  String get goToLoginPage => 'Back to login page';
 }

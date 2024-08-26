@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:perf_rse/utils/i18n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../helper/helper_methods.dart';
 import '/widgets/custom_text.dart';
@@ -26,12 +27,13 @@ class _SendTokenToEmailFormState extends State<SendTokenToEmailForm> {
       isLoadedPage = true;
     });
     try {
-      await supabase.auth.resetPasswordForEmail(_emailController.text.trim(),redirectTo: 'https://performace-rse-sifca.web.app/');
+      await supabase.auth.resetPasswordForEmail(_emailController.text.trim(),redirectTo: 'https://performace-rse-sifca.web.app/#/account/password-reset'); // https://performace-rse-sifca.web.app/#/account/password-reset
+
       setState(() {
         isLoadedPage = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(showSnackBar("Vous devriez recevoir rapidement un courriel avec de plus amples instructions.","",Colors.blue));
-      context.go("/login");
+      ScaffoldMessenger.of(context).showSnackBar(showSnackBar(tr.recoverPasswordMessage,"",Colors.blue));
+      context.go("/account/login");
     } catch (e) {
       final message = e.toString().split("Exception: ").join("");
       await Future.delayed(const Duration(seconds: 2));
@@ -44,8 +46,8 @@ class _SendTokenToEmailFormState extends State<SendTokenToEmailForm> {
 
   @override
   void initState() {
-    _emailController = TextEditingController();
     super.initState();
+    _emailController = TextEditingController();
   }
 
   @override
@@ -59,7 +61,7 @@ class _SendTokenToEmailFormState extends State<SendTokenToEmailForm> {
         children: [
           Image.asset("assets/logos/perf_rse.png",width: 300,),
           const SizedBox(height: 30,),
-          const CustomText(text: "Mot de passe oublié ?",size: 25,weight: FontWeight.bold,),
+          CustomText(text: tr.passwordForgetten,size: 25,weight: FontWeight.bold,),
           const SizedBox(height: 20,),
           Card(
             elevation: 10,
@@ -69,9 +71,9 @@ class _SendTokenToEmailFormState extends State<SendTokenToEmailForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CustomText(text: "Entrez votre courriel",size: 20,color: Colors.amber,),
+                  CustomText(text: tr.email,size: 20,color: Colors.amber,),
                   const SizedBox(height: 10,),
-                  const CustomText(text: "Un courriel va vous être envoyé vous permettant de créer un nouveau mot de passe.",size: 16,),
+                  CustomText(text: tr.recoverPasswordFormMessage,size: 16,),
                   Form(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     key: _formKey,
@@ -85,12 +87,12 @@ class _SendTokenToEmailFormState extends State<SendTokenToEmailForm> {
                             TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty || !GetUtils.isEmail(value)) {
-                                return 'Svp veuillez entrer un e-mail correct.';
+                                return tr.checkEmailValueMessage;
                               }
                                   return null;
                                 },
                               decoration: InputDecoration(
-                                  hintText: "Adresse courriel",
+                                  hintText: tr.email,
                                   prefixIcon: const Icon(Icons.email),
                                   contentPadding: const EdgeInsets.only(
                                       left: 20.0,
@@ -122,8 +124,8 @@ class _SendTokenToEmailFormState extends State<SendTokenToEmailForm> {
                               width: double.maxFinite,
                               height: 40,
                               padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: isLoadedPage ? const SpinKitWave(color: Colors.amber, size: 20,):  const CustomText(
-                                text: "SOUMETTRE",
+                              child: isLoadedPage ? const SpinKitWave(color: Colors.amber, size: 20,):  CustomText(
+                                text: tr.confirm,
                                 color: Colors.white,
                               ),
                             )),
@@ -140,8 +142,8 @@ class _SendTokenToEmailFormState extends State<SendTokenToEmailForm> {
               style: TextButton.styleFrom(foregroundColor: Colors.grey),
               onPressed: (){
                 context.go("/account/login");
-              }, child: const Text(
-                "« Retour à la connexion",style: TextStyle(fontSize: 22),
+              }, child: Text(
+                "« ${tr.goToLoginPage}",style: TextStyle(fontSize: 22),
           ))
         ],
       ),

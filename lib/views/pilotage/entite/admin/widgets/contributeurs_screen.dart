@@ -1340,23 +1340,43 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                                 userAcces[accesToDoc[acces]] = true;
 
                                 try {
-                                  final res2 = await supabase
-                                      .from('AccesPilotage')
-                                      .insert(userAcces);
-
-                                  final res1 = await supabase
-                                      .from('Users')
-                                      .insert(userMap);
-
                                   String pwd = generatePassword();
+                                  dynamic res2;
+                                  dynamic res1;
                                   final AuthResponse res3 = await supabase.auth
                                       .signUp(
                                           email: emailEditingController.text,
                                           password: pwd,
                                           data: {"password": pwd});
-                                  final passwordMail =
+                                  if (res3.user != null) {
+                                    try {
+                                      res2 = await supabase
+                                          .from('AccesPilotage')
+                                          .insert(userAcces);
+
+                                      res1 = await supabase
+                                          .from('Users')
+                                          .insert(userMap);
+                                    } catch (e) {
+                                      return;
+                                    }
+                                    try {
                                       await sendMailController.sendPasswordMail(
                                           emailEditingController.text, pwd);
+                                    } catch (e) {
+                                      return; // Normalement supprimer utilisateur pour que admin reprenne le process
+                                    }
+                                  }
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.green,
+                                      content: Text(
+                                        tr.accountHasCreated(
+                                            emailEditingController.text),
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ),
+                                  );
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
@@ -1375,17 +1395,6 @@ class _AjoutContributeurState extends State<AjoutContributeur> {
                                 });
 
                                 Navigator.of(context).pop();
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    backgroundColor: Colors.green,
-                                    content: Text(
-                                      tr.accountHasCreated(
-                                          emailEditingController.text),
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                  ),
-                                );
                               }
                             },
                       child: Text(tr.submit))

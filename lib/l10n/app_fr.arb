@@ -297,6 +297,12 @@
     "alert": "Avertissement",
     "checkboxListAlertMessage": "Veuillez sélectionner au moins un élément.",
     "excelFileTitle": "Indicateurs de Performance RSE",
-    "company" : "Entreprise"
+    "company" : "Entreprise",
+    "passwordLengthMessage": "Le mot de passe doit contenir au moins 6 caractères",
+    "resetPasswortTitleForm": "Réinitialisez votre mot de passe",
+    "passwordEmpty": "Veuillez saisir un mot de passe",
+    "recoverPasswordMessage": "Vous devriez bientôt recevoir un e-mail contenant des instructions supplémentaires",
+    "recoverPasswordFormMessage": "Un courriel vous sera envoyé pour vous permettre de créer un nouveau mot de passe",
+    "goToLoginPage": "Retour à la page de connexion"
     
 }

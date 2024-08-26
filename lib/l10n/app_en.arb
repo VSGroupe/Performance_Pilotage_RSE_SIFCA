@@ -297,6 +297,12 @@
         "alert": "Warning",
         "checkboxListAlertMessage": "Please select at least one item.",
     "excelFileTitle": "CSR Performance Indicators",
-    "company" : "Company"
+    "company" : "Company",
+    "passwordLengthMessage": "The password must contain at least 6 characters",
+    "resetPasswortTitleForm": "Reset your password",
+    "passwordEmpty": "Please enter a password",
+    "recoverPasswordMessage": "You should soon receive an e-mail with further instructions.",
+    "recoverPasswordFormMessage": "An email will be sent to you allowing you to create a new password.",
+    "goToLoginPage": "Back to login page"
 
 }
