@@ -246,7 +246,6 @@ class RouteClass {
       supabase.auth.onAuthStateChange.listen((data) {
         final AuthChangeEvent event = data.event;
         var session = event.name;
-        print("session : $session");
         if (session == "passwordRecovery") {
           context.go("/account/password-reset", extra: "passwordRecovery");
         }

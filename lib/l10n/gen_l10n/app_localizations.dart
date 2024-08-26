@@ -1710,7 +1710,7 @@ abstract class AppLocalizations {
   /// No description provided for @recipient.
   ///
   /// In en, this message translates to:
-  /// **'Recipient'**
+  /// **'Recipient(s)'**
   String get recipient;
 
   /// No description provided for @succesSendMessage.
@@ -1916,6 +1916,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back to login page'**
   String get goToLoginPage;
+
+  /// No description provided for @addTechnicalToSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach technical support to recipients, Yes'**
+  String get addTechnicalToSupport;
+
+  /// No description provided for @enterAnEmailAndConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an email address and press ‘Enter’ to confirm'**
+  String get enterAnEmailAndConfirm;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

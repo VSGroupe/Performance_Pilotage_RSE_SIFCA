@@ -872,7 +872,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get seepActionMessage => 'Vous n\'avez pas dorit a cette action';
 
   @override
-  String get recipient => 'Destinataire';
+  String get recipient => 'Destinataire(s)';
 
   @override
   String get succesSendMessage => 'Votre réquête a été envoyé avec succès.';
@@ -997,4 +997,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get goToLoginPage => 'Retour à la page de connexion';
+
+  @override
+  String get addTechnicalToSupport => 'Joindre le support technique aux destinaires, Oui';
+
+  @override
+  String get enterAnEmailAndConfirm => 'Entrez un email et validez avec la touche \'Entrez\'';
 }

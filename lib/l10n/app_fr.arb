@@ -268,7 +268,7 @@
      "monthLong":"{mois, select ,  january{Janvier} february{Fevrier} march{Mars} april{Avril} may{Mai}  june{Juin} july{Juillet} august{Aout} september{Septembre} october{Octobre} november{Novembre} december{Décembre} other{Inconnu}}",
      "checkTheCheckboxMessage":"Cochez la checkbox pour ne voir que les indicateurs renseignés. Décochez pour revenir a l'état anterieur.",
      "seepActionMessage":"Vous n'avez pas dorit a cette action",
-     "recipient":"Destinataire",
+     "recipient":"Destinataire(s)",
      "succesSendMessage":"Votre réquête a été envoyé avec succès.",
      "occurredErrorMessage":"Une erreur est survenue.",
      "send":"Envoyer",
@@ -303,6 +303,8 @@
     "passwordEmpty": "Veuillez saisir un mot de passe",
     "recoverPasswordMessage": "Vous devriez bientôt recevoir un e-mail contenant des instructions supplémentaires",
     "recoverPasswordFormMessage": "Un courriel vous sera envoyé pour vous permettre de créer un nouveau mot de passe",
-    "goToLoginPage": "Retour à la page de connexion"
+    "goToLoginPage": "Retour à la page de connexion",
+    "addTechnicalToSupport": "Joindre le support technique aux destinaires, Oui",
+    "enterAnEmailAndConfirm": "Entrez un email et validez avec la touche 'Entrez'"
     
 }

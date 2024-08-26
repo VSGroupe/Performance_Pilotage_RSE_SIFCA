@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:get/get_utils/src/get_utils/get_utils.dart';
 import 'package:perf_rse/api/send_mail.dart';
 import 'package:perf_rse/utils/i18n.dart';
 import 'package:perf_rse/modules/styled_scrollview.dart';
@@ -106,9 +105,9 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Support client",
-                  style: TextStyle(
+                Text(
+                  tr.customerSupport,
+                  style: const TextStyle(
                       fontSize: 24,
                       color: Color(0xFF3C3D3F),
                       fontWeight: FontWeight.bold),
@@ -139,16 +138,16 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                "Destinataire(s)",
-                                style: TextStyle(
+                              Text(
+                                tr.recipient,
+                                style: const TextStyle(
                                     fontSize: 16, color: Color(0xFF3C3D3F)),
                               ),
                               const SizedBox(height: 20),
                               Row(
                                 children: [
-                                  const Text(
-                                      "Joindre le support technique, Oui"),
+                                  Text(
+                                      tr.addTechnicalToSupport),
                                   const SizedBox(width: 5),
                                   Checkbox(
                                     checkColor: Colors.green,
@@ -175,7 +174,7 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
                                 },
                                 decoration: InputDecoration(
                                   hintText:
-                                      "Entrez un email et validez avec la touche 'Entrez'",
+                                      tr.enterAnEmailAndConfirm,
                                   contentPadding: const EdgeInsets.only(
                                       left: 10.0, right: 10.0),
                                   border: const OutlineInputBorder(),
@@ -190,7 +189,7 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
                               const SizedBox(height: 20),
                               Row(
                                 children: [
-                                  const Text("Envoyé à :"),
+                                  Text(tr.sendTo),
                                   const SizedBox(width: 30),
                                   Expanded(
                                     child: Wrap(
@@ -208,17 +207,17 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
                                 ],
                               ),
                               const SizedBox(height: 20),
-                              const Text(
-                                "Sujet",
-                                style: TextStyle(
+                              Text(
+                                tr.subject,
+                                style: const TextStyle(
                                     fontSize: 16, color: Color(0xFF3C3D3F)),
                               ),
                               const SizedBox(height: 10),
                               sujetWidget(),
                               const SizedBox(height: 20),
-                              const Text(
-                                "Votre requête",
-                                style: TextStyle(
+                              Text(
+                                tr.yourRequest,
+                                style: const TextStyle(
                                     fontSize: 16, color: Color(0xFF3C3D3F)),
                               ),
                               const SizedBox(height: 20),
@@ -226,8 +225,8 @@ class _ScreenSupportClientState extends State<ScreenSupportClient> {
                               const SizedBox(height: 20),
                               Text(
                                 fileState == true
-                                    ? "Fichier : $messageFormFile"
-                                    : "Joindre un document",
+                                    ? "${tr.file} : $messageFormFile"
+                                    : tr.attachDocument,
                                 style: const TextStyle(
                                     fontSize: 16, color: Color(0xFF3C3D3F)),
                               ),

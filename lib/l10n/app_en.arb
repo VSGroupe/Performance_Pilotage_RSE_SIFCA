@@ -269,7 +269,7 @@
     "monthLong":"{mois, select ,  january{January} february{February} march{March} april{April} may{May}  june{June} july{July} august{August} september{September} october{October} november{November} december{December} other{Inconnu}}",
      "checkTheCheckboxMessage":"Check the checkbox to only see the indicated indicators. Uncheck to return to the previous state.",
     "seepActionMessage":"You did not sleep at this action",
-     "recipient":"Recipient",
+     "recipient":"Recipient(s)",
      "succesSendMessage":"Your request has been sent successfully.",
      "occurredErrorMessage":"An error has occurred.",
      "send":"Send",
@@ -303,6 +303,8 @@
     "passwordEmpty": "Please enter a password",
     "recoverPasswordMessage": "You should soon receive an e-mail with further instructions.",
     "recoverPasswordFormMessage": "An email will be sent to you allowing you to create a new password.",
-    "goToLoginPage": "Back to login page"
+    "goToLoginPage": "Back to login page",
+    "addTechnicalToSupport": "Attach technical support to recipients, Yes",
+    "enterAnEmailAndConfirm": "Enter an email address and press ‘Enter’ to confirm"
 
 }

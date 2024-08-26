@@ -872,7 +872,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get seepActionMessage => 'You did not sleep at this action';
 
   @override
-  String get recipient => 'Recipient';
+  String get recipient => 'Recipient(s)';
 
   @override
   String get succesSendMessage => 'Your request has been sent successfully.';
@@ -997,4 +997,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get goToLoginPage => 'Back to login page';
+
+  @override
+  String get addTechnicalToSupport => 'Attach technical support to recipients, Yes';
+
+  @override
+  String get enterAnEmailAndConfirm => 'Enter an email address and press ‘Enter’ to confirm';
 }
