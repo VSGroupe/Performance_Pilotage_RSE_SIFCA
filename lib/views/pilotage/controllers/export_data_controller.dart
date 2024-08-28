@@ -148,6 +148,9 @@ class ExportDataController extends GetxController {
       final xcel.Style calculatedIndicatorStyle =
           workbook.styles.add('calculatedIndicatorStyle');
       calculatedIndicatorStyle.backColor = '#EEDCCA';
+      final xcel.Style dataValidatedStyle =
+          workbook.styles.add('dataValidatedStyle');
+      dataValidatedStyle.backColor = '#7ED085';
       final xcel.Style defaultIndicatorStyle =
           workbook.styles.add('defaultIndicatorStyle');
       defaultIndicatorStyle.backColor = '#FFFFFF';
@@ -164,6 +167,7 @@ class ExportDataController extends GetxController {
           listDataProcessFilter(mapData["data"], processListExcel);
       for (var row = 0; row < listData.length; row++) {
         final item = listData[row];
+        List validationList = item["allValidationsList"];
         xcel.Style cellStyle;
 
         // Determine the style based on the indicator type
@@ -188,8 +192,7 @@ class ExportDataController extends GetxController {
               .getRangeByIndex(row + startRow + 1, 2)
               .setText(item["intitule"].toString());
           sheet.getRangeByIndex(row + startRow + 1, 2).cellStyle = cellStyle;
-        }
-        else {
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 2).cellStyle = cellStyle;
         }
         if (item["unite"] != null) {
@@ -197,8 +200,7 @@ class ExportDataController extends GetxController {
               .getRangeByIndex(row + startRow + 1, 3)
               .setText(item["unite"].toString());
           sheet.getRangeByIndex(row + startRow + 1, 3).cellStyle = cellStyle;
-        }
-        else {
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 3).cellStyle = cellStyle;
         }
         if (item["processus"] != null) {
@@ -206,117 +208,169 @@ class ExportDataController extends GetxController {
               .getRangeByIndex(row + startRow + 1, 4)
               .setText(item["processus"].toString());
           sheet.getRangeByIndex(row + startRow + 1, 4).cellStyle = cellStyle;
-        }
-        else {
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 4).cellStyle = cellStyle;
         }
         if (item["realise"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 5).setText(
               formatValue(item["realise"], item["type"], item["unite"]));
-          sheet.getRangeByIndex(row + startRow + 1, 5).cellStyle = cellStyle;
-        }
-        else {
+          if (validationList[0] == true) {
+            sheet.getRangeByIndex(row + startRow + 1, 5).cellStyle =
+                dataValidatedStyle;
+          } else {
+            sheet.getRangeByIndex(row + startRow + 1, 5).cellStyle = cellStyle;
+          }
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 5).cellStyle = cellStyle;
         }
         if (item["dataJan"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 6).setText(
               formatValue(item["dataJan"], item["type"], item["unite"]));
-          sheet.getRangeByIndex(row + startRow + 1, 6).cellStyle = cellStyle;
-        }
-        else {
+          if (validationList[1] == true) {
+            sheet.getRangeByIndex(row + startRow + 1, 6).cellStyle =
+                dataValidatedStyle;
+          } else {
+            sheet.getRangeByIndex(row + startRow + 1, 6).cellStyle = cellStyle;
+          }
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 6).cellStyle = cellStyle;
         }
         if (item["dataFeb"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 7).setText(
               formatValue(item["dataFeb"], item["type"], item["unite"]));
-          sheet.getRangeByIndex(row + startRow + 1, 7).cellStyle = cellStyle;
-        }
-        else {
+          if (validationList[2] == true) {
+            sheet.getRangeByIndex(row + startRow + 1, 7).cellStyle =
+                dataValidatedStyle;
+          } else {
+            sheet.getRangeByIndex(row + startRow + 1, 7).cellStyle = cellStyle;
+          }
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 7).cellStyle = cellStyle;
         }
         if (item["dataMar"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 8).setText(
               formatValue(item["dataMar"], item["type"], item["unite"]));
-          sheet.getRangeByIndex(row + startRow + 1, 8).cellStyle = cellStyle;
-        }
-        else {
+          if (validationList[3] == true) {
+            sheet.getRangeByIndex(row + startRow + 1, 8).cellStyle =
+                dataValidatedStyle;
+          } else {
+            sheet.getRangeByIndex(row + startRow + 1, 8).cellStyle = cellStyle;
+          }
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 8).cellStyle = cellStyle;
         }
         if (item["dataApr"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 9).setText(
               formatValue(item["dataApr"], item["type"], item["unite"]));
-          sheet.getRangeByIndex(row + startRow + 1, 9).cellStyle = cellStyle;
-        }
-        else {
+          if (validationList[4] == true) {
+            sheet.getRangeByIndex(row + startRow + 1, 9).cellStyle =
+                dataValidatedStyle;
+          } else {
+            sheet.getRangeByIndex(row + startRow + 1, 9).cellStyle = cellStyle;
+          }
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 9).cellStyle = cellStyle;
         }
         if (item["dataMay"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 10).setText(
               formatValue(item["dataMay"], item["type"], item["unite"]));
-          sheet.getRangeByIndex(row + startRow + 1, 10).cellStyle = cellStyle;
-        }
-        else {
+          if (validationList[5] == true) {
+            sheet.getRangeByIndex(row + startRow + 1, 10).cellStyle =
+                dataValidatedStyle;
+          } else {
+            sheet.getRangeByIndex(row + startRow + 1, 10).cellStyle = cellStyle;
+          }
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 10).cellStyle = cellStyle;
         }
         if (item["dataJun"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 11).setText(
               formatValue(item["dataJun"], item["type"], item["unite"]));
-          sheet.getRangeByIndex(row + startRow + 1, 11).cellStyle = cellStyle;
-        }
-        else {
+          if (validationList[6] == true) {
+            sheet.getRangeByIndex(row + startRow + 1, 11).cellStyle =
+                dataValidatedStyle;
+          } else {
+            sheet.getRangeByIndex(row + startRow + 1, 11).cellStyle = cellStyle;
+          }
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 11).cellStyle = cellStyle;
         }
         if (item["dataJul"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 12).setText(
               formatValue(item["dataJul"], item["type"], item["unite"]));
-          sheet.getRangeByIndex(row + startRow + 1, 12).cellStyle = cellStyle;
-        }
-        else {
+          if (validationList[7] == true) {
+            sheet.getRangeByIndex(row + startRow + 1, 12).cellStyle =
+                dataValidatedStyle;
+          } else {
+            sheet.getRangeByIndex(row + startRow + 1, 12).cellStyle = cellStyle;
+          }
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 12).cellStyle = cellStyle;
         }
         if (item["dataAug"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 13).setText(
               formatValue(item["dataAug"], item["type"], item["unite"]));
-          sheet.getRangeByIndex(row + startRow + 1, 13).cellStyle = cellStyle;
-        }
-        else {
+          if (validationList[8] == true) {
+            sheet.getRangeByIndex(row + startRow + 1, 13).cellStyle =
+                dataValidatedStyle;
+          } else {
+            sheet.getRangeByIndex(row + startRow + 1, 13).cellStyle = cellStyle;
+          }
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 13).cellStyle = cellStyle;
         }
         if (item["dataSep"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 14).setText(
               formatValue(item["dataSep"], item["type"], item["unite"]));
-          sheet.getRangeByIndex(row + startRow + 1, 14).cellStyle = cellStyle;
-        }
-        else {
+          if (validationList[9] == true) {
+            sheet.getRangeByIndex(row + startRow + 1, 14).cellStyle =
+                dataValidatedStyle;
+          } else {
+            sheet.getRangeByIndex(row + startRow + 1, 14).cellStyle = cellStyle;
+          }
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 14).cellStyle = cellStyle;
         }
         if (item["dataOct"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 15).setText(
               formatValue(item["dataOct"], item["type"], item["unite"]));
-          sheet.getRangeByIndex(row + startRow + 1, 15).cellStyle = cellStyle;
-        }
-        else {
+          if (validationList[10] == true) {
+            sheet.getRangeByIndex(row + startRow + 1, 15).cellStyle =
+                dataValidatedStyle;
+          } else {
+            sheet.getRangeByIndex(row + startRow + 1, 15).cellStyle = cellStyle;
+          }
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 15).cellStyle = cellStyle;
         }
         if (item["dataNov"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 16).setText(
               formatValue(item["dataNov"], item["type"], item["unite"]));
-          sheet.getRangeByIndex(row + startRow + 1, 16).cellStyle = cellStyle;
-        }
-        else {
+          if (validationList[11] == true) {
+            sheet.getRangeByIndex(row + startRow + 1, 16).cellStyle =
+                dataValidatedStyle;
+          } else {
+            sheet.getRangeByIndex(row + startRow + 1, 16).cellStyle = cellStyle;
+          }
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 16).cellStyle = cellStyle;
         }
         if (item["dataDec"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 17).setText(
               formatValue(item["dataDec"], item["type"], item["unite"]));
-          sheet.getRangeByIndex(row + startRow + 1, 17).cellStyle = cellStyle;
-        }
-        else {
+          if (validationList[12] == true) {
+            sheet.getRangeByIndex(row + startRow + 1, 17).cellStyle =
+                dataValidatedStyle;
+          } else {
+            sheet.getRangeByIndex(row + startRow + 1, 17).cellStyle = cellStyle;
+          }
+        } else {
           sheet.getRangeByIndex(row + startRow + 1, 17).cellStyle = cellStyle;
         }
 
         if (sousEntites.isNotEmpty) {
-          int j = 19;
+          int j = 19; // Sous Entites commencent a la 19e colonne
+          int k = 13; // a partir du 14e element dans valitionList
           if (item["###"] != null) {
             sheet
                 .getRangeByIndex(row + startRow + 1, 18)
@@ -327,12 +381,18 @@ class ExportDataController extends GetxController {
               sheet.getRangeByIndex(row + startRow + 1, j++).setText(
                   formatValue(
                       item["sousEntite$i"], item["type"], item["unite"]));
-              sheet.getRangeByIndex(row + startRow + 1, j).cellStyle =
+              if (validationList[k] == true) {
+                sheet.getRangeByIndex(row + startRow + 1, j).cellStyle =
+                    dataValidatedStyle;
+              } else {
+                sheet.getRangeByIndex(row + startRow + 1, j).cellStyle =
+                    cellStyle;
+              }
+              k++;
+            } else {
+              sheet.getRangeByIndex(row + startRow + 1, j++).cellStyle =
                   cellStyle;
             }
-            else {
-          sheet.getRangeByIndex(row + startRow + 1, j++).cellStyle = cellStyle;
-        }
           }
         }
       }
@@ -475,7 +535,7 @@ class ExportDataController extends GetxController {
                           width: 80, // Adjust width as needed
                           height: 40, // Adjust height as needed
                         ),
-                        pw.Text('Indicateurs de Performance RSE',
+                        pw.Text(tr.excelFileTitle,
                             style: pw.TextStyle(
                                 color: getColor(mapData["color"]),
                                 fontSize: 20,
