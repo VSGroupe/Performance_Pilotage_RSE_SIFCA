@@ -305,6 +305,8 @@
     "recoverPasswordFormMessage": "An email will be sent to you allowing you to create a new password.",
     "goToLoginPage": "Back to login page",
     "addTechnicalToSupport": "Attach technical support to recipients, Yes",
-    "enterAnEmailAndConfirm": "Enter an email address and press ‘Enter’ to confirm"
+    "enterAnEmailAndConfirm": "Enter an email address and press ‘Enter’ to confirm",
+    "excelButtonToolTip": "- Click on the download button without selecting an item for the default extraction\n- Select processes then click on the download button for a specific extraction per process",
+    "download": "Download"
 
 }

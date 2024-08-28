@@ -12,10 +12,11 @@ import 'entite_pilotage_controler.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xcel;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-class ExportDataController {
+class ExportDataController extends GetxController {
   final DataBaseController dataBaseController = DataBaseController();
   final EntitePilotageController entitePilotageController = Get.find();
   var processListExcel = <String>[].obs;
+  final isLoadingExcel = false.obs;
 
   Future<Map<String, dynamic>?> loadDataExport(String entite, int annee) async {
     final result = await dataBaseController.getExportEntite(entite, annee);
@@ -85,7 +86,7 @@ class ExportDataController {
         ['${tr.year} :', "${mapData["annee"]}"]
       ];
 
-      int startRow = 3;
+      int startRow = 4;
       for (var detail in details) {
         sheet.getRangeByIndex(startRow, 1).setText(detail[0]);
         sheet.getRangeByIndex(startRow, 2).setText(detail[1]);
@@ -98,6 +99,7 @@ class ExportDataController {
         (tr.reference),
         (tr.indicators),
         (tr.unit),
+        (tr.process),
         '${tr.completed} $annee',
         '${tr.monthLong("january")} $annee',
         '${tr.monthLong("february")} $annee',
@@ -133,8 +135,9 @@ class ExportDataController {
       sheet.getRangeByIndex(startRow, 1).columnWidth = 15;
       sheet.getRangeByIndex(startRow, 2).columnWidth = 100;
       sheet.getRangeByIndex(startRow, 3).columnWidth = 15;
-      sheet.getRangeByIndex(startRow, 4).columnWidth = 15;
-      for (int col = 5; col <= 16; col++) {
+      sheet.getRangeByIndex(startRow, 4).columnWidth = 25;
+      sheet.getRangeByIndex(startRow, 5).columnWidth = 15;
+      for (int col = 6; col <= 17; col++) {
         sheet.getRangeByIndex(startRow, col).columnWidth = 15;
       }
 
@@ -144,20 +147,21 @@ class ExportDataController {
       testIndicatorStyle.backColor = '#AEAEAE';
       final xcel.Style calculatedIndicatorStyle =
           workbook.styles.add('calculatedIndicatorStyle');
-      calculatedIndicatorStyle.backColor = '#00ff00';
+      calculatedIndicatorStyle.backColor = '#EEDCCA';
       final xcel.Style defaultIndicatorStyle =
           workbook.styles.add('defaultIndicatorStyle');
       defaultIndicatorStyle.backColor = '#FFFFFF';
 
       if (sousEntites.isNotEmpty) {
-        sheet.getRangeByIndex(startRow, 17).columnWidth = 5;
+        sheet.getRangeByIndex(startRow, 18).columnWidth = 5;
         for (int col = 18; col <= finalHeaders.length; col++) {
           sheet.getRangeByIndex(startRow, col).columnWidth = 23;
         }
       }
 
       // Add data
-      final List<dynamic> listData = mapData["data"];
+      final List<dynamic> listData =
+          listDataProcessFilter(mapData["data"], processListExcel);
       for (var row = 0; row < listData.length; row++) {
         final item = listData[row];
         xcel.Style cellStyle;
@@ -176,11 +180,16 @@ class ExportDataController {
               .getRangeByIndex(row + startRow + 1, 1)
               .setText(item["reference"].toString());
           sheet.getRangeByIndex(row + startRow + 1, 1).cellStyle = cellStyle;
+        } else {
+          sheet.getRangeByIndex(row + startRow + 1, 1).cellStyle = cellStyle;
         }
         if (item["intitule"] != null) {
           sheet
               .getRangeByIndex(row + startRow + 1, 2)
               .setText(item["intitule"].toString());
+          sheet.getRangeByIndex(row + startRow + 1, 2).cellStyle = cellStyle;
+        }
+        else {
           sheet.getRangeByIndex(row + startRow + 1, 2).cellStyle = cellStyle;
         }
         if (item["unite"] != null) {
@@ -189,77 +198,128 @@ class ExportDataController {
               .setText(item["unite"].toString());
           sheet.getRangeByIndex(row + startRow + 1, 3).cellStyle = cellStyle;
         }
-        if (item["realise"] != null) {
-          sheet.getRangeByIndex(row + startRow + 1, 4).setText(
-              formatValue(item["realise"], item["type"], item["unite"]));
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 3).cellStyle = cellStyle;
+        }
+        if (item["processus"] != null) {
+          sheet
+              .getRangeByIndex(row + startRow + 1, 4)
+              .setText(item["processus"].toString());
           sheet.getRangeByIndex(row + startRow + 1, 4).cellStyle = cellStyle;
         }
-        if (item["dataJan"] != null) {
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 4).cellStyle = cellStyle;
+        }
+        if (item["realise"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 5).setText(
-              formatValue(item["dataJan"], item["type"], item["unite"]));
+              formatValue(item["realise"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 5).cellStyle = cellStyle;
         }
-        if (item["dataFeb"] != null) {
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 5).cellStyle = cellStyle;
+        }
+        if (item["dataJan"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 6).setText(
-              formatValue(item["dataFeb"], item["type"], item["unite"]));
+              formatValue(item["dataJan"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 6).cellStyle = cellStyle;
         }
-        if (item["dataMar"] != null) {
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 6).cellStyle = cellStyle;
+        }
+        if (item["dataFeb"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 7).setText(
-              formatValue(item["dataMar"], item["type"], item["unite"]));
+              formatValue(item["dataFeb"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 7).cellStyle = cellStyle;
         }
-        if (item["dataApr"] != null) {
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 7).cellStyle = cellStyle;
+        }
+        if (item["dataMar"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 8).setText(
-              formatValue(item["dataApr"], item["type"], item["unite"]));
+              formatValue(item["dataMar"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 8).cellStyle = cellStyle;
         }
-        if (item["dataMay"] != null) {
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 8).cellStyle = cellStyle;
+        }
+        if (item["dataApr"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 9).setText(
-              formatValue(item["dataMay"], item["type"], item["unite"]));
+              formatValue(item["dataApr"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 9).cellStyle = cellStyle;
         }
-        if (item["dataJun"] != null) {
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 9).cellStyle = cellStyle;
+        }
+        if (item["dataMay"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 10).setText(
-              formatValue(item["dataJun"], item["type"], item["unite"]));
+              formatValue(item["dataMay"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 10).cellStyle = cellStyle;
         }
-        if (item["dataJul"] != null) {
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 10).cellStyle = cellStyle;
+        }
+        if (item["dataJun"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 11).setText(
-              formatValue(item["dataJul"], item["type"], item["unite"]));
+              formatValue(item["dataJun"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 11).cellStyle = cellStyle;
         }
-        if (item["dataAug"] != null) {
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 11).cellStyle = cellStyle;
+        }
+        if (item["dataJul"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 12).setText(
-              formatValue(item["dataAug"], item["type"], item["unite"]));
+              formatValue(item["dataJul"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 12).cellStyle = cellStyle;
         }
-        if (item["dataSep"] != null) {
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 12).cellStyle = cellStyle;
+        }
+        if (item["dataAug"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 13).setText(
-              formatValue(item["dataSep"], item["type"], item["unite"]));
+              formatValue(item["dataAug"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 13).cellStyle = cellStyle;
         }
-        if (item["dataOct"] != null) {
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 13).cellStyle = cellStyle;
+        }
+        if (item["dataSep"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 14).setText(
-              formatValue(item["dataOct"], item["type"], item["unite"]));
+              formatValue(item["dataSep"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 14).cellStyle = cellStyle;
         }
-        if (item["dataNov"] != null) {
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 14).cellStyle = cellStyle;
+        }
+        if (item["dataOct"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 15).setText(
-              formatValue(item["dataNov"], item["type"], item["unite"]));
+              formatValue(item["dataOct"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 15).cellStyle = cellStyle;
         }
-        if (item["dataDec"] != null) {
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 15).cellStyle = cellStyle;
+        }
+        if (item["dataNov"] != null) {
           sheet.getRangeByIndex(row + startRow + 1, 16).setText(
-              formatValue(item["dataDec"], item["type"], item["unite"]));
+              formatValue(item["dataNov"], item["type"], item["unite"]));
           sheet.getRangeByIndex(row + startRow + 1, 16).cellStyle = cellStyle;
+        }
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 16).cellStyle = cellStyle;
+        }
+        if (item["dataDec"] != null) {
+          sheet.getRangeByIndex(row + startRow + 1, 17).setText(
+              formatValue(item["dataDec"], item["type"], item["unite"]));
+          sheet.getRangeByIndex(row + startRow + 1, 17).cellStyle = cellStyle;
+        }
+        else {
+          sheet.getRangeByIndex(row + startRow + 1, 17).cellStyle = cellStyle;
         }
 
         if (sousEntites.isNotEmpty) {
-          int j = 17;
+          int j = 19;
           if (item["###"] != null) {
             sheet
-                .getRangeByIndex(row + startRow + 1, 17)
+                .getRangeByIndex(row + startRow + 1, 18)
                 .setText(item["###"].toString());
           }
           for (int i = 0; i < sousEntites.length; i++) {
@@ -270,6 +330,9 @@ class ExportDataController {
               sheet.getRangeByIndex(row + startRow + 1, j).cellStyle =
                   cellStyle;
             }
+            else {
+          sheet.getRangeByIndex(row + startRow + 1, j++).cellStyle = cellStyle;
+        }
           }
         }
       }
@@ -292,7 +355,19 @@ class ExportDataController {
       print(e);
     }
   }
-  
+
+  List<dynamic> listDataProcessFilter(
+      List<dynamic> allDatas, List filteredProcess) {
+    if (filteredProcess.isEmpty) {
+      return allDatas;
+    }
+
+    List<dynamic> result = allDatas.where((row) {
+      return filteredProcess.contains(row["processus"]);
+    }).toList();
+
+    return result;
+  }
 
   String? formatValue(double value, String? type, String unite) {
     if (type == "Test") {
@@ -473,5 +548,11 @@ class ExportDataController {
 
     // Save the PDF as a Uint8List
     return await pdf.save();
+  }
+
+  @override
+  void onInit() {
+    processListExcel.value = [];
+    super.onInit();
   }
 }

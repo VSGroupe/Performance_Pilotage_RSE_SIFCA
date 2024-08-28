@@ -24,7 +24,7 @@ class FiltreTableauBord extends StatefulWidget {
 class _EntityWidgetWidgetState extends State<FiltreTableauBord> {
   bool isLoadingPrint = false;
   bool isLoadingExcel = false;
-  final ExportDataController exportDataController = ExportDataController();
+  final ExportDataController exportDataController = Get.find();
   final EntitePilotageController entitePilotageController = Get.find();
   final TableauBordController tableauBordController = Get.find();
   final ProfilPilotageController profilPilotageController = Get.find();
@@ -33,6 +33,75 @@ class _EntityWidgetWidgetState extends State<FiltreTableauBord> {
   @override
   void initState() {
     super.initState();
+  }
+
+  Widget popoverWidgetExcel(BuildContext context, Function onDownloadPressed) {
+    return Container(
+        width: 200,
+        height: 100,
+        margin: const EdgeInsets.all(10),
+        child: tr.abrLange.toLowerCase() == "en"
+            ? Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          for (String process in allProcess)
+                            CheckBoxWidgetExcel(
+                                processus: abrProcessEN(
+                                    process: getTranslation(process))),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.black),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            onDownloadPressed();
+                          },
+                          child: Text(tr.download)),
+                    ],
+                  )
+                ],
+              )
+            : Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          for (String process in allProcess)
+                            CheckBoxWidgetExcel(
+                                processus: abrProcessFr(process: process)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.black),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            onDownloadPressed();
+                          },
+                          child: Text(tr.download)),
+                    ],
+                  )
+                ],
+              ));
   }
 
   @override
@@ -126,62 +195,72 @@ class _EntityWidgetWidgetState extends State<FiltreTableauBord> {
 //exportation en excel
           Padding(
               padding: const EdgeInsets.all(4.0),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(10),
-                hoverColor: Colors.blue.withOpacity(0.2),
-                onTap: isLoadingPrint
-                    ? null
-                    : () async {
-                        // showPopover(
-                        //   context: context,
-                        //   bodyBuilder: (context) => popoverWidgetExcel(context),
-                        //   direction: PopoverDirection.bottom,
-                        //   width: 200,
-                        //   height: 300,
-                        // );
-                        setState(() {
-                          isLoadingExcel = true;
-                        });
-                        final result =
-                            await exportDataController.loadDataExport(
-                                entitePilotageController.currentEntite.value,
-                                tableauBordController.currentYear.value);
-                        if (result != null) {
-                          await exportDataController.downloadExcel(result);
-                        }
-                        setState(() {
-                          isLoadingExcel = false;
-                        });
-                      },
-                child: Container(
-                  height: 40,
-                  width: 120,
-                  padding: const EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(20),
+              child: Tooltip(
+                message: tr.excelButtonToolTip,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  hoverColor: Colors.blue.withOpacity(0.2),
+                  onTap: isLoadingPrint
+                      ? null
+                      : () async {
+                          showPopover(
+                            context: context,
+                            bodyBuilder: (context) =>
+                                popoverWidgetExcel(context, () async {
+                              setState(() {
+                                isLoadingExcel = true;
+                              });
+                              final result =
+                                  await exportDataController.loadDataExport(
+                                      entitePilotageController
+                                          .currentEntite.value,
+                                      tableauBordController.currentYear.value);
+                              if (result != null) {
+                                await exportDataController.downloadExcel(result);
+                              }
+                              exportDataController.processListExcel.value = [];
+                              setState(() {
+                                isLoadingExcel = false;
+                              });
+                            }),
+                            direction: PopoverDirection.bottom,
+                            width: 200,
+                            height: 300,
+                            arrowHeight: 15,
+                            arrowWidth: 30,
+                          );
+                          exportDataController.processListExcel.value = [];
+                        },
+                  child: Container(
+                    height: 40,
+                    width: 120,
+                    padding: const EdgeInsets.all(4.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: isLoadingExcel
+                        ? const Center(
+                            child: SizedBox(
+                                width: 25,
+                                height: 25,
+                                child: CircularProgressIndicator()))
+                        : Row(
+                            children: [
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Image.asset('assets/icons/excel.png'),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text("Excel"),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                            ],
+                          ),
                   ),
-                  child: isLoadingExcel
-                      ? const Center(
-                          child: SizedBox(
-                              width: 25,
-                              height: 25,
-                              child: CircularProgressIndicator()))
-                      : Row(
-                          children: [
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Image.asset('assets/icons/excel.png'),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Text("Excel"),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                          ],
-                        ),
                 ),
               )),
           Obx(() {
@@ -793,41 +872,51 @@ class _CheckBoxExcelState extends State<CheckBoxWidgetExcel> {
   final ExportDataController exportDataController = Get.find();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return Container(
-        height: 40,
-        width: double.infinity,
-        margin: const EdgeInsets.all(2),
-        child: Row(
-          children: [
-            tr.abrLange.toLowerCase() == "fr"
-                ? Checkbox(
-                    checkColor: Colors.green,
-                    value: false,
-                    onChanged: (value) {
-                      exportDataController.addRemoveProcessus(
-                          matchAbrProcess(abr: widget.processus), value!);
-                    })
-                : Checkbox(
-                    checkColor: Colors.green,
-                    value: false,
-                    onChanged: (value) {
-                      exportDataController.addRemoveProcessus(
-                          matchAbrProcessEN(abr: widget.processus), value!);
-                    }),
-            const SizedBox(
-              width: 10,
-            ),
-            Flexible(
-                child: CustomText(
-              text: widget.processus,
-              fontStyle: FontStyle.italic,
-            ))
-          ],
-        ),
-      );
-    });
+    return Obx(
+      () {
+        final excelProcessList = exportDataController.processListExcel;
+        return Container(
+          height: 40,
+          width: double.infinity,
+          margin: const EdgeInsets.all(2),
+          child: Row(
+            children: [
+              tr.abrLange.toLowerCase() == "fr"
+                  ? Checkbox(
+                      checkColor: Colors.green,
+                      value: excelProcessList
+                          .contains(matchAbrProcess(abr: widget.processus)),
+                      onChanged: (value) {
+                        exportDataController.addRemoveProcessus(
+                            matchAbrProcess(abr: widget.processus), value!);
+                      })
+                  : Checkbox(
+                      checkColor: Colors.green,
+                      value: excelProcessList
+                          .contains(matchAbrProcessEN(abr: widget.processus)),
+                      onChanged: (value) {
+                        exportDataController.addRemoveProcessus(
+                            matchAbrProcessEN(abr: widget.processus), value!);
+                      }),
+              const SizedBox(
+                width: 10,
+              ),
+              Flexible(
+                  child: CustomText(
+                text: widget.processus,
+                fontStyle: FontStyle.italic,
+              ))
+            ],
+          ),
+        );
+      },
+    );
   }
 
   String matchAbrProcess({required String abr}) {
@@ -865,68 +954,32 @@ String getTranslation(String key) {
   return translations[key]!;
 }
 
-Widget popoverWidgetExcel(BuildContext context) {
-  return Container(
-      width: 200,
-      height: 100,
-      margin: const EdgeInsets.all(10),
-      child:
-      tr.abrLange.toLowerCase() == "en" 
-      ? Column(
-        children: [
-          Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        for (String process in allProcess)
-                          CheckBoxWidgetExcel(processus: getTranslation(process)),
-                      ],
-                    ),
-                  ),
-                ),
-            Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.black),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text("Telecharger")),
-                    ],
-                  )
-        ],
-      )
-      : Column(
-        children: [
-          Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        for (String process in allProcess)
-                          CheckBoxWidgetExcel(processus: process),
-                      ],
-                    ),
-                  ),
-                ),
-            Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.black),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text("Telecharger")),
-                    ],
-                  )
-        ],
-      )
-          );
+String abrProcessEN({required String process}) {
+  switch (process) {
+    case "Human ressources":
+      return "HR";
+    case "Human ressources / Legal":
+      return "HR / Legal";
+    case "Sustainable development":
+      return "SD";
+    case "Stock Management / Logistics":
+      return "SM / Logistics";
+    default:
+      return process;
+  }
+}
+
+String abrProcessFr({required String process}) {
+  switch (process) {
+    case "Ressources Humaines":
+      return "RH";
+    case "Ressources Humaines / Juridique":
+      return "RH / Juridique";
+    case "Développement Durable":
+      return "DD";
+    case "Gestion des Stocks / Logistique":
+      return "GS / Logistique";
+    default:
+      return process;
+  }
 }

@@ -1928,6 +1928,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter an email address and press ‘Enter’ to confirm'**
   String get enterAnEmailAndConfirm;
+
+  /// No description provided for @excelButtonToolTip.
+  ///
+  /// In en, this message translates to:
+  /// **'- Click on the download button without selecting an item for the default extraction\n- Select processes then click on the download button for a specific extraction per process'**
+  String get excelButtonToolTip;
+
+  /// No description provided for @download.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get download;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

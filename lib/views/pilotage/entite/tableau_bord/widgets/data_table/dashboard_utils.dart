@@ -629,19 +629,20 @@ class _ContentEditionState extends State<ContentEdition> {
                 if (value < 0) {
                   return tr.negativeData;
                 }
-                bool checkAVGdenominateur = AVGcontrolDenominateurValue(
-                    value, widget.colonne, widget.numeroLigne + 1);
-                bool checkAVGnumerateur = AVGcontrolNumerateurValue(
-                    value, widget.colonne, widget.numeroLigne + 1);
-                bool checkSubDatas = SUBcontrolValue(
-                    value, widget.colonne, widget.numeroLigne + 1);
-                if (checkAVGdenominateur &&
-                    checkAVGnumerateur &&
-                    checkSubDatas) {
-                  return null;
-                } else {
-                  return tr.erroneousCalculation;
-                }
+                // bool checkAVGdenominateur = AVGcontrolDenominateurValue(
+                //     value, widget.colonne, widget.numeroLigne + 1);
+                // bool checkAVGnumerateur = AVGcontrolNumerateurValue(
+                //     value, widget.colonne, widget.numeroLigne + 1);
+                // bool checkSubDatas = SUBcontrolValue(
+                //     value, widget.colonne, widget.numeroLigne + 1);
+                // if (checkAVGdenominateur &&
+                //     checkAVGnumerateur &&
+                //     checkSubDatas) {
+                //   return null;
+                // } else {
+                //   return tr.erroneousCalculation;
+                // }
+                return null;
               },
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),

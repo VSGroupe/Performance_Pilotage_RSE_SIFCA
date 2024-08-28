@@ -1003,4 +1003,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get enterAnEmailAndConfirm => 'Enter an email address and press ‘Enter’ to confirm';
+
+  @override
+  String get excelButtonToolTip => '- Click on the download button without selecting an item for the default extraction\n- Select processes then click on the download button for a specific extraction per process';
+
+  @override
+  String get download => 'Download';
 }

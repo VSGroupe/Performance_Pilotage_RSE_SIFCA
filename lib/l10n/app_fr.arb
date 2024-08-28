@@ -305,6 +305,8 @@
     "recoverPasswordFormMessage": "Un courriel vous sera envoyé pour vous permettre de créer un nouveau mot de passe",
     "goToLoginPage": "Retour à la page de connexion",
     "addTechnicalToSupport": "Joindre le support technique aux destinaires, Oui",
-    "enterAnEmailAndConfirm": "Entrez un email et validez avec la touche 'Entrez'"
+    "enterAnEmailAndConfirm": "Entrez un email et validez avec la touche 'Entrez'",
+    "excelButtonToolTip": "- Cliquez sur le bouton télécharger sans sélectionner d'élément pour l'extraction par défaut\n- Sélectionnez des processus puis cliquez sur le bouton télécharger pour une extraction spécifique par processus",
+    "download": "Télécharger"
     
 }
